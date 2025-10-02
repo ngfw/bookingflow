@@ -184,7 +184,7 @@ class Appointments extends Component
             $query->where('staff_id', $this->staffFilter);
         }
 
-        return $query->selectRaw('HOUR(appointment_time) as hour, COUNT(*) as count')
+        return $query->selectRaw('HOUR(appointment_date) as hour, COUNT(*) as count')
             ->groupBy('hour')
             ->orderBy('hour')
             ->get()
