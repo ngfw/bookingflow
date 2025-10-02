@@ -71,7 +71,7 @@ class Index extends Component
 
     public function render()
     {
-        $clients = Client::with(['user', 'appointments'])
+        $query = Client::with(['user', 'appointments'])
             ->when($this->search, function ($query) {
                 $query->whereHas('user', function ($q) {
                     $q->where('name', 'like', '%' . $this->search . '%')
@@ -84,9 +84,18 @@ class Index extends Component
             })
             ->when($this->filters['visit_count_min'], function ($query) {
                 $query->where('visit_count', '>=', $this->filters['visit_count_min']);
-            })
-            ->orderBy($this->sortField, $this->sortDirection)
-            ->paginate($this->perPage);
+            });
+
+        // Handle sorting with proper joins
+        if ($this->sortField === 'users.name') {
+            $query->join('users', 'clients.user_id', '=', 'users.id')
+                  ->select('clients.*')
+                  ->orderBy('users.name', $this->sortDirection);
+        } else {
+            $query->orderBy($this->sortField, $this->sortDirection);
+        }
+
+        $clients = $query->paginate($this->perPage);
 
         return view('livewire.admin.clients.index', [
             'clients' => $clients,
