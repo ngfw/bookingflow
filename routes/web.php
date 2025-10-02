@@ -57,6 +57,7 @@ Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->grou
     Route::get('/schedule', \App\Livewire\Staff\Schedule::class)->name('schedule');
     Route::get('/clients', \App\Livewire\Staff\Clients::class)->name('clients');
     Route::get('/performance', \App\Livewire\Staff\Performance::class)->name('performance');
+    Route::get('/pos', \App\Livewire\Staff\POS::class)->name('pos');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {

@@ -81,6 +81,12 @@
                                 </svg>
                                 Performance
                             </a>
+                            <a href="{{ route('staff.pos') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m4.5-5a2 2 0 11-4 0 2 2 0 014 0zm10 0a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                </svg>
+                                POS
+                            </a>
                         </div>
 
                         <!-- Right side -->
@@ -124,6 +130,9 @@
                         </a>
                         <a href="{{ route('staff.performance') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
                             Performance
+                        </a>
+                        <a href="{{ route('staff.pos') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                            POS
                         </a>
                     </div>
                 </div>
