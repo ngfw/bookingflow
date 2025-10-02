@@ -129,7 +129,7 @@ class DynamicPageController extends Controller
         $this->analyticsService->trackPageView($request, 'Services');
 
         $services = \App\Models\Service::where('is_active', true)
-                                     ->orderBy('sort_order')
+                                     ->orderBy('name')
                                      ->get();
 
         $settings = SalonSetting::getDefault();
