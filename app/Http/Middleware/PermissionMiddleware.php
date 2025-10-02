@@ -6,14 +6,14 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class RoleMiddleware
+class PermissionMiddleware
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string $role, string $guard = null): Response
+    public function handle(Request $request, Closure $next, string $permission, string $guard = null): Response
     {
         if (auth($guard)->guest()) {
             if ($request->expectsJson()) {
@@ -24,23 +24,12 @@ class RoleMiddleware
 
         $user = auth($guard)->user();
 
-        // Handle multiple roles separated by pipe
-        $roles = explode('|', $role);
-        $hasRole = false;
-
-        foreach ($roles as $singleRole) {
-            if ($user->hasRole(trim($singleRole))) {
-                $hasRole = true;
-                break;
-            }
-        }
-
-        if (!$hasRole) {
+        if (!$user->hasPermission($permission)) {
             if ($request->expectsJson()) {
-                return response()->json(['message' => 'Access denied. Insufficient role privileges.'], 403);
+                return response()->json(['message' => 'Access denied. Insufficient permissions.'], 403);
             }
             
-            abort(403, 'Access denied. You do not have the required role to access this resource.');
+            abort(403, 'Access denied. You do not have permission to access this resource.');
         }
 
         return $next($request);

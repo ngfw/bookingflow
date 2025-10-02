@@ -51,30 +51,30 @@ Route::view('profile', 'profile')
 
 // Admin Routes
 // Staff Portal Routes
-Route::middleware(['auth', 'role:staff'])->prefix('staff')->name('staff.')->group(function () {
-    Route::get('/dashboard', \App\Livewire\Staff\Dashboard::class)->name('dashboard');
-    Route::get('/appointments', \App\Livewire\Staff\Appointments::class)->name('appointments');
-    Route::get('/schedule', \App\Livewire\Staff\Schedule::class)->name('schedule');
-    Route::get('/clients', \App\Livewire\Staff\Clients::class)->name('clients');
-    Route::get('/performance', \App\Livewire\Staff\Performance::class)->name('performance');
-    Route::get('/pos', \App\Livewire\Staff\POS::class)->name('pos');
+Route::middleware(['auth', 'role:staff|admin|super_admin'])->prefix('staff')->name('staff.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\Staff\Dashboard::class)->name('dashboard')->middleware('permission:view_dashboard');
+    Route::get('/appointments', \App\Livewire\Staff\Appointments::class)->name('appointments')->middleware('permission:view_appointments');
+    Route::get('/schedule', \App\Livewire\Staff\Schedule::class)->name('schedule')->middleware('permission:view_appointments');
+    Route::get('/clients', \App\Livewire\Staff\Clients::class)->name('clients')->middleware('permission:view_clients');
+    Route::get('/performance', \App\Livewire\Staff\Performance::class)->name('performance')->middleware('permission:view_dashboard');
+    Route::get('/pos', \App\Livewire\Staff\POS::class)->name('pos')->middleware('permission:use_pos');
 });
 
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard');
+Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\Admin\Dashboard::class)->name('dashboard')->middleware('permission:view_dashboard');
     
     // Client Management
-    Route::get('/clients', \App\Livewire\Admin\Clients\Index::class)->name('clients.index');
-    Route::get('/clients/create', \App\Livewire\Admin\Clients\Create::class)->name('clients.create');
-    Route::get('/clients/{client}/edit', \App\Livewire\Admin\Clients\Edit::class)->name('clients.edit');
+    Route::get('/clients', \App\Livewire\Admin\Clients\Index::class)->name('clients.index')->middleware('permission:view_clients');
+    Route::get('/clients/create', \App\Livewire\Admin\Clients\Create::class)->name('clients.create')->middleware('permission:create_clients');
+    Route::get('/clients/{client}/edit', \App\Livewire\Admin\Clients\Edit::class)->name('clients.edit')->middleware('permission:edit_clients');
     
     // Service Management
-    Route::get('/services', \App\Livewire\Admin\Services\Index::class)->name('services.index');
-    Route::get('/services/create', \App\Livewire\Admin\Services\Create::class)->name('services.create');
-    Route::get('/services/{service}/edit', \App\Livewire\Admin\Services\Edit::class)->name('services.edit');
+    Route::get('/services', \App\Livewire\Admin\Services\Index::class)->name('services.index')->middleware('permission:view_services');
+    Route::get('/services/create', \App\Livewire\Admin\Services\Create::class)->name('services.create')->middleware('permission:create_services');
+    Route::get('/services/{service}/edit', \App\Livewire\Admin\Services\Edit::class)->name('services.edit')->middleware('permission:edit_services');
     
     // Category Management
-    Route::get('/categories', \App\Livewire\Admin\Categories\Index::class)->name('categories.index');
+    Route::get('/categories', \App\Livewire\Admin\Categories\Index::class)->name('categories.index')->middleware('permission:view_services');
     
     // Staff Management
     Route::get('/staff', \App\Livewire\Admin\Staff\Index::class)->name('staff.index');

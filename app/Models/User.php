@@ -115,4 +115,145 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Location::class, 'staff', 'user_id', 'location_id');
     }
+
+    // New Role-Based Permission System
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles');
+    }
+
+    public function primaryRole()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles')->wherePivot('is_primary', true)->first();
+    }
+
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'user_permissions');
+    }
+
+    public function hasRole(string $role): bool
+    {
+        // Check new role system first
+        if ($this->roles()->where('name', $role)->exists()) {
+            return true;
+        }
+        
+        // Fallback to old role system for backward compatibility
+        return $this->role === $role;
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        // Check direct user permissions
+        if ($this->permissions()->where('name', $permission)->exists()) {
+            return true;
+        }
+
+        // Check role-based permissions
+        foreach ($this->roles as $role) {
+            if ($role->hasPermission($permission)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function hasAnyPermission(array $permissions): bool
+    {
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasAllPermissions(array $permissions): bool
+    {
+        foreach ($permissions as $permission) {
+            if (!$this->hasPermission($permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public function assignRole(string|Role $role): void
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+
+        if (!$this->roles()->where('role_id', $role->id)->exists()) {
+            $this->roles()->attach($role->id, ['is_primary' => $this->roles()->count() === 0]);
+        }
+    }
+
+    public function removeRole(string|Role $role): void
+    {
+        if (is_string($role)) {
+            $role = Role::where('name', $role)->firstOrFail();
+        }
+
+        $this->roles()->detach($role->id);
+    }
+
+    public function givePermissionTo(string|Permission $permission): void
+    {
+        if (is_string($permission)) {
+            $permission = Permission::where('name', $permission)->firstOrFail();
+        }
+
+        if (!$this->permissions()->where('permission_id', $permission->id)->exists()) {
+            $this->permissions()->attach($permission->id);
+        }
+    }
+
+    public function revokePermissionTo(string|Permission $permission): void
+    {
+        if (is_string($permission)) {
+            $permission = Permission::where('name', $permission)->firstOrFail();
+        }
+
+        $this->permissions()->detach($permission->id);
+    }
+
+    // Helper methods for common role checks
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('super_admin');
+    }
+
+    public function isAdminLevel(): bool
+    {
+        return $this->hasRole('admin') || $this->hasRole('super_admin');
+    }
+
+    public function isStaffLevel(): bool
+    {
+        return $this->hasRole('staff') || $this->isAdminLevel();
+    }
+
+    public function isCustomerOnly(): bool
+    {
+        return $this->hasRole('customer') && !$this->isStaffLevel();
+    }
+
+    // Get user's primary role name for display
+    public function getRoleName(): string
+    {
+        $primaryRole = $this->primaryRole();
+        return $primaryRole ? $primaryRole->display_name : ucfirst($this->role ?? 'Customer');
+    }
+
+    // Get user's highest privilege level
+    public function getHighestRole(): string
+    {
+        if ($this->isSuperAdmin()) return 'super_admin';
+        if ($this->hasRole('admin')) return 'admin';
+        if ($this->hasRole('staff')) return 'staff';
+        return 'customer';
+    }
 }
