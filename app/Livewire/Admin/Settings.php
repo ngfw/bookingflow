@@ -21,6 +21,13 @@ class Settings extends Component
     public $salon_city;
     public $salon_state;
     public $salon_zip;
+    public $salon_country;
+    public $salon_latitude;
+    public $salon_longitude;
+    public $service_radius;
+    public $service_radius_unit = 'miles';
+    public $enable_location_restriction = false;
+    public $location_verification_message;
     public $salon_website;
     public $primary_color;
     public $secondary_color;
@@ -79,6 +86,13 @@ class Settings extends Component
         'salon_city' => 'nullable|string|max:100',
         'salon_state' => 'nullable|string|max:100',
         'salon_zip' => 'nullable|string|max:20',
+        'salon_country' => 'nullable|string|max:100',
+        'salon_latitude' => 'nullable|numeric|between:-90,90',
+        'salon_longitude' => 'nullable|numeric|between:-180,180',
+        'service_radius' => 'nullable|numeric|min:1|max:500',
+        'service_radius_unit' => 'required|in:miles,kilometers',
+        'enable_location_restriction' => 'boolean',
+        'location_verification_message' => 'nullable|string',
         'salon_website' => 'nullable|url|max:255',
         'primary_color' => 'required|string|size:7',
         'secondary_color' => 'required|string|size:7',
@@ -157,6 +171,13 @@ class Settings extends Component
         $this->salon_city = $this->settings->salon_city ?? '';
         $this->salon_state = $this->settings->salon_state ?? '';
         $this->salon_zip = $this->settings->salon_zip ?? '';
+        $this->salon_country = $this->settings->salon_country ?? 'United States';
+        $this->salon_latitude = $this->settings->salon_latitude ?? '';
+        $this->salon_longitude = $this->settings->salon_longitude ?? '';
+        $this->service_radius = $this->settings->service_radius ?? 25;
+        $this->service_radius_unit = $this->settings->service_radius_unit ?? 'miles';
+        $this->enable_location_restriction = $this->settings->enable_location_restriction ?? false;
+        $this->location_verification_message = $this->settings->location_verification_message ?? 'Please confirm you are located within our service area before booking.';
         $this->salon_website = $this->settings->salon_website ?? '';
         
         // Theme Colors
@@ -213,6 +234,46 @@ class Settings extends Component
         $this->privacy_policy = $this->settings->privacy_policy ?? '';
     }
 
+    public function geocodeAddress()
+    {
+        if (!$this->salon_address || !$this->salon_city || !$this->salon_state) {
+            session()->flash('error', 'Please fill in address, city, and state to get coordinates.');
+            return;
+        }
+
+        $fullAddress = $this->salon_address . ', ' . $this->salon_city . ', ' . $this->salon_state . ', ' . $this->salon_zip;
+        
+        // Using OpenStreetMap Nominatim API (free alternative to Google Maps API)
+        $encodedAddress = urlencode($fullAddress);
+        $url = "https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q={$encodedAddress}";
+        
+        try {
+            $response = file_get_contents($url, false, stream_context_create([
+                'http' => [
+                    'timeout' => 10,
+                    'user_agent' => 'Salon Booking System'
+                ]
+            ]));
+            
+            if ($response === false) {
+                session()->flash('error', 'Unable to connect to geocoding service.');
+                return;
+            }
+            
+            $data = json_decode($response, true);
+            
+            if (!empty($data)) {
+                $this->salon_latitude = round($data[0]['lat'], 6);
+                $this->salon_longitude = round($data[0]['lon'], 6);
+                session()->flash('success', 'Coordinates found! Latitude: ' . $this->salon_latitude . ', Longitude: ' . $this->salon_longitude);
+            } else {
+                session()->flash('error', 'Address not found. Please check the address details.');
+            }
+        } catch (Exception $e) {
+            session()->flash('error', 'Error getting coordinates: ' . $e->getMessage());
+        }
+    }
+
     public function saveSettings()
     {
         $this->validate();
@@ -227,6 +288,13 @@ class Settings extends Component
             'salon_city' => $this->salon_city,
             'salon_state' => $this->salon_state,
             'salon_zip' => $this->salon_zip,
+            'salon_country' => $this->salon_country,
+            'salon_latitude' => $this->salon_latitude,
+            'salon_longitude' => $this->salon_longitude,
+            'service_radius' => $this->service_radius,
+            'service_radius_unit' => $this->service_radius_unit,
+            'enable_location_restriction' => $this->enable_location_restriction,
+            'location_verification_message' => $this->location_verification_message,
             'salon_website' => $this->salon_website,
             
             // Theme Colors

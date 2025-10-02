@@ -78,7 +78,7 @@
 
                 <!-- Address Section -->
                 <div class="mt-8">
-                    <h3 class="text-md font-medium text-gray-900 mb-4">Address Information</h3>
+                    <h3 class="text-md font-medium text-gray-900 mb-4">Address Information & Location</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="md:col-span-2">
                             <label for="salon_address" class="block text-sm font-medium text-gray-700 mb-2">Street Address</label>
@@ -103,7 +103,114 @@
                             <input wire:model="salon_zip" type="text" id="salon_zip" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
                             @error('salon_zip') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
                         </div>
+
+                        <div>
+                            <label for="salon_country" class="block text-sm font-medium text-gray-700 mb-2">Country</label>
+                            <input wire:model="salon_country" type="text" id="salon_country" class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                            @error('salon_country') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                        </div>
                     </div>
+
+                    <!-- Coordinates & Geocoding -->
+                    <div class="mt-6">
+                        <h4 class="text-sm font-medium text-gray-900 mb-4">Coordinates & Mapping</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div>
+                                <label for="salon_latitude" class="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
+                                <input wire:model="salon_latitude" type="number" step="0.000001" id="salon_latitude" 
+                                       class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500" 
+                                       placeholder="40.712776">
+                                @error('salon_latitude') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label for="salon_longitude" class="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
+                                <input wire:model="salon_longitude" type="number" step="0.000001" id="salon_longitude" 
+                                       class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500" 
+                                       placeholder="-74.005974">
+                                @error('salon_longitude') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div class="flex items-end">
+                                <button type="button" wire:click="geocodeAddress" 
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium">
+                                    Get Coordinates
+                                </button>
+                            </div>
+                        </div>
+                        <p class="mt-2 text-sm text-gray-500">
+                            Fill in the address above and click "Get Coordinates" to automatically populate latitude and longitude for map display.
+                        </p>
+                    </div>
+
+                    <!-- Service Area Settings -->
+                    <div class="mt-6">
+                        <h4 class="text-sm font-medium text-gray-900 mb-4">Service Area Restrictions</h4>
+                        
+                        <div class="flex items-center mb-4">
+                            <input wire:model="enable_location_restriction" type="checkbox" id="enable_location_restriction" 
+                                   class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <label for="enable_location_restriction" class="ml-2 block text-sm text-gray-900">
+                                Enable location-based booking restrictions
+                            </label>
+                        </div>
+
+                        @if($enable_location_restriction)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                                <div>
+                                    <label for="service_radius" class="block text-sm font-medium text-gray-700 mb-2">Service Radius</label>
+                                    <input wire:model="service_radius" type="number" min="1" max="500" id="service_radius" 
+                                           class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                    @error('service_radius') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label for="service_radius_unit" class="block text-sm font-medium text-gray-700 mb-2">Unit</label>
+                                    <select wire:model="service_radius_unit" id="service_radius_unit" 
+                                            class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                        <option value="miles">Miles</option>
+                                        <option value="kilometers">Kilometers</option>
+                                    </select>
+                                    @error('service_radius_unit') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="location_verification_message" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Location Verification Message
+                                </label>
+                                <textarea wire:model="location_verification_message" id="location_verification_message" rows="3" 
+                                          class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500" 
+                                          placeholder="Please confirm you are located within our service area before booking."></textarea>
+                                <p class="mt-1 text-sm text-gray-500">This message will be shown to customers during booking to confirm their location.</p>
+                                @error('location_verification_message') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- Map Display -->
+                    @if($salon_latitude && $salon_longitude)
+                        <div class="mt-6">
+                            <h4 class="text-sm font-medium text-gray-900 mb-4">Location Preview</h4>
+                            <div class="bg-gray-100 rounded-lg p-4">
+                                <div id="salon-map" class="h-64 rounded-lg bg-gray-200 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div class="text-lg font-medium text-gray-600">Interactive Map</div>
+                                        <div class="text-sm text-gray-500">Coordinates: {{ $salon_latitude }}, {{ $salon_longitude }}</div>
+                                        <a href="https://www.google.com/maps?q={{ $salon_latitude }},{{ $salon_longitude }}" 
+                                           target="_blank" class="text-blue-600 hover:text-blue-800 text-sm">
+                                            View on Google Maps
+                                        </a>
+                                    </div>
+                                </div>
+                                @if($enable_location_restriction && $service_radius)
+                                    <p class="mt-2 text-sm text-gray-600 text-center">
+                                        Service area: {{ $service_radius }} {{ $service_radius_unit }} radius
+                                    </p>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Social Media Section -->
