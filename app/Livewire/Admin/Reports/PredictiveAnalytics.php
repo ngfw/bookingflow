@@ -217,7 +217,7 @@ class PredictiveAnalytics extends Component
         for ($i = 0; $i < 12; $i++) {
             if (isset($monthlyData[$i]) && count($monthlyData[$i]) > 0) {
                 $monthAverage = array_sum($monthlyData[$i]) / count($monthlyData[$i]);
-                $factors[$i] = $monthAverage / $overallAverage;
+                $factors[$i] = $overallAverage > 0 ? $monthAverage / $overallAverage : 1;
             } else {
                 $factors[$i] = 1;
             }
@@ -255,7 +255,7 @@ class PredictiveAnalytics extends Component
             return pow($x - $mean, 2); 
         }, $revenues)) / count($revenues);
         
-        $cv = sqrt($variance) / $mean;
+        $cv = $mean > 0 ? sqrt($variance) / $mean : 0;
         return max(0, min(100, 100 - ($cv * 30)));
     }
 
@@ -315,7 +315,7 @@ class PredictiveAnalytics extends Component
         $patterns['peak_days'] = $dayPatterns->take(3)->pluck('day_of_week')->toArray();
         
         // Analyze hour patterns
-        $hourPatterns = Appointment::selectRaw('HOUR(appointment_time) as hour, COUNT(*) as count')
+        $hourPatterns = Appointment::selectRaw('HOUR(appointment_date) as hour, COUNT(*) as count')
             ->where('appointment_date', '>=', Carbon::now()->subMonths(6))
             ->groupBy('hour')
             ->orderBy('count', 'desc')
@@ -427,7 +427,7 @@ class PredictiveAnalytics extends Component
         $avgBookings = $servicePerformance->avg('appointments_count');
         
         return $servicePerformance->map(function ($service) use ($avgBookings) {
-            $performance = $service->appointments_count / $avgBookings;
+            $performance = $avgBookings > 0 ? $service->appointments_count / $avgBookings : 0;
             return [
                 'service' => $service,
                 'performance_ratio' => $performance,
@@ -470,7 +470,7 @@ class PredictiveAnalytics extends Component
         
         if ($olderAppointments == 0) return 'new';
         
-        $trend = ($recentAppointments - $olderAppointments) / $olderAppointments;
+        $trend = $olderAppointments > 0 ? ($recentAppointments - $olderAppointments) / $olderAppointments : 0;
         
         return $trend > 0.1 ? 'improving' : ($trend < -0.1 ? 'declining' : 'stable');
     }
