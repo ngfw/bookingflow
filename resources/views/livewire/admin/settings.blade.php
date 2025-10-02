@@ -428,6 +428,71 @@
                     </div>
                 </div>
 
+                <!-- Google reCAPTCHA -->
+                <div class="mb-8">
+                    <h3 class="text-md font-medium text-gray-900 mb-4">Google reCAPTCHA</h3>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-start">
+                            <svg class="w-5 h-5 text-blue-400 mt-0.5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            <div class="text-sm text-blue-700">
+                                <p class="font-medium">reCAPTCHA Setup Instructions:</p>
+                                <ol class="mt-2 list-decimal list-inside space-y-1">
+                                    <li>Visit <a href="https://www.google.com/recaptcha/admin" target="_blank" class="underline">Google reCAPTCHA Console</a></li>
+                                    <li>Create a new site and choose "reCAPTCHA v2" → "I'm not a robot"</li>
+                                    <li>Add your domain to the list</li>
+                                    <li>Copy the Site Key and Secret Key below</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center mb-4">
+                            <input wire:model="recaptcha_enabled" type="checkbox" id="recaptcha_enabled"
+                                   class="h-4 w-4 text-pink-600 focus:ring-pink-500 border-gray-300 rounded">
+                            <label for="recaptcha_enabled" class="ml-2 block text-sm text-gray-900 font-medium">
+                                Enable reCAPTCHA for registration page
+                            </label>
+                        </div>
+
+                        @if($recaptcha_enabled)
+                            <div class="grid grid-cols-1 gap-6">
+                                <div>
+                                    <label for="recaptcha_site_key" class="block text-sm font-medium text-gray-700 mb-2">Site Key (Public)</label>
+                                    <input wire:model="recaptcha_site_key" type="text" id="recaptcha_site_key" 
+                                           placeholder="6Lc..." 
+                                           class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                    <p class="mt-1 text-sm text-gray-500">This key is used in the HTML code your site serves to users</p>
+                                    @error('recaptcha_site_key') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label for="recaptcha_secret_key" class="block text-sm font-medium text-gray-700 mb-2">Secret Key (Private)</label>
+                                    <input wire:model="recaptcha_secret_key" type="password" id="recaptcha_secret_key" 
+                                           placeholder="6Lc..." 
+                                           class="w-full border-gray-300 rounded-lg shadow-sm focus:ring-pink-500 focus:border-pink-500">
+                                    <p class="mt-1 text-sm text-gray-500">This key is used for communication between your site and reCAPTCHA. Keep this secret!</p>
+                                    @error('recaptcha_secret_key') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+
+                            @if($recaptcha_site_key && $recaptcha_secret_key)
+                                <div class="bg-green-50 border border-green-200 rounded-lg p-4">
+                                    <div class="flex items-center">
+                                        <svg class="w-5 h-5 text-green-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="text-sm font-medium text-green-800">reCAPTCHA is configured and ready!</span>
+                                    </div>
+                                    <p class="mt-2 text-sm text-green-700">reCAPTCHA will now be displayed on the registration page to prevent spam registrations.</p>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
+                </div>
+
                 <!-- SEO Settings -->
                 <div>
                     <h3 class="text-md font-medium text-gray-900 mb-4">SEO Settings</h3>

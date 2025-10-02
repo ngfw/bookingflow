@@ -44,6 +44,11 @@ class Settings extends Component
     public $google_analytics_id;
     public $google_analytics_enabled;
     
+    // Google reCAPTCHA
+    public $recaptcha_site_key;
+    public $recaptcha_secret_key;
+    public $recaptcha_enabled = false;
+    
     // Translations & Localization
     public $default_language;
     public $available_languages = [];
@@ -106,6 +111,9 @@ class Settings extends Component
         'cancellation_deadline_hours' => 'required|integer|min:0|max:168',
         'google_analytics_id' => 'nullable|string|max:50',
         'google_analytics_enabled' => 'boolean',
+        'recaptcha_site_key' => 'nullable|string|max:255',
+        'recaptcha_secret_key' => 'nullable|string|max:255',
+        'recaptcha_enabled' => 'boolean',
         'default_language' => 'required|string|max:10',
         'enable_multi_language' => 'boolean',
         'timezone' => 'required|string|max:50',
@@ -198,6 +206,11 @@ class Settings extends Component
         // Google Analytics
         $this->google_analytics_id = $this->settings->google_analytics_id ?? '';
         $this->google_analytics_enabled = $this->settings->google_analytics_enabled ?? false;
+        
+        // Google reCAPTCHA
+        $this->recaptcha_site_key = $this->settings->recaptcha_site_key ?? '';
+        $this->recaptcha_secret_key = $this->settings->recaptcha_secret_key ?? '';
+        $this->recaptcha_enabled = $this->settings->recaptcha_enabled ?? false;
         
         // Localization
         $this->default_language = $this->settings->default_language ?? 'en';
@@ -305,6 +318,11 @@ class Settings extends Component
             // Google Analytics
             'google_analytics_id' => $this->google_analytics_id,
             'google_analytics_enabled' => $this->google_analytics_enabled,
+            
+            // Google reCAPTCHA
+            'recaptcha_site_key' => $this->recaptcha_site_key,
+            'recaptcha_secret_key' => $this->recaptcha_secret_key,
+            'recaptcha_enabled' => $this->recaptcha_enabled,
             
             // Localization
             'default_language' => $this->default_language,
