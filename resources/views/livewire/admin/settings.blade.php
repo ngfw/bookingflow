@@ -289,6 +289,88 @@
                     </div>
                 </div>
 
+                <!-- Logo Upload Section -->
+                <div class="mt-8">
+                    <h3 class="text-md font-medium text-gray-900 mb-4">Logo Management</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Current Logo Display -->
+                        @if($current_logo_path)
+                            <div class="flex items-center space-x-4">
+                                <div class="flex-shrink-0">
+                                    <img src="{{ asset('storage/' . $current_logo_path) }}" 
+                                         alt="Current Logo" 
+                                         class="h-16 w-auto max-w-32 object-contain border border-gray-200 rounded-lg p-2">
+                                </div>
+                                <div class="flex-1">
+                                    <p class="text-sm text-gray-600">Current logo</p>
+                                    <p class="text-xs text-gray-500">{{ basename($current_logo_path) }}</p>
+                                </div>
+                                <button type="button" 
+                                        wire:click="removeLogo"
+                                        wire:confirm="Are you sure you want to remove the current logo?"
+                                        class="inline-flex items-center px-3 py-2 border border-red-300 text-sm leading-4 font-medium rounded-md text-red-700 bg-white hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                    Remove Logo
+                                </button>
+                            </div>
+                        @else
+                            <div class="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
+                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                <p class="mt-2 text-sm text-gray-600">No logo uploaded</p>
+                            </div>
+                        @endif
+
+                        <!-- Logo Upload Form -->
+                        <div class="space-y-4">
+                            <div>
+                                <label for="logo" class="block text-sm font-medium text-gray-700 mb-2">
+                                    {{ $current_logo_path ? 'Replace Logo' : 'Upload Logo' }}
+                                </label>
+                                <input wire:model="logo" 
+                                       type="file" 
+                                       id="logo" 
+                                       accept="image/*"
+                                       class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-pink-50 file:text-pink-700 hover:file:bg-pink-100">
+                                @error('logo') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                            </div>
+
+                            @if($logo)
+                                <div class="flex items-center space-x-4">
+                                    <div class="text-sm text-gray-600">
+                                        Selected: {{ $logo->getClientOriginalName() }}
+                                        ({{ number_format($logo->getSize() / 1024, 1) }} KB)
+                                    </div>
+                                    <button type="button" 
+                                            wire:click="uploadLogo"
+                                            wire:loading.attr="disabled"
+                                            wire:target="uploadLogo"
+                                            class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-pink-600 hover:bg-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 disabled:opacity-50">
+                                        <span wire:loading.remove wire:target="uploadLogo">Upload Logo</span>
+                                        <span wire:loading wire:target="uploadLogo" class="flex items-center">
+                                            <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                            Uploading...
+                                        </span>
+                                    </button>
+                                </div>
+                            @endif
+
+                            <div class="text-xs text-gray-500">
+                                <p>• Supported formats: JPG, PNG, GIF, SVG</p>
+                                <p>• Maximum file size: 2MB</p>
+                                <p>• Recommended dimensions: 300x100px (3:1 ratio)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Business Hours -->
                 <div class="mt-8">
                     <h3 class="text-md font-medium text-gray-900 mb-4">Business Hours</h3>

@@ -5,10 +5,12 @@ namespace App\Livewire\Admin;
 use App\Models\SalonSetting;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\WithFileUploads;
 
 #[Layout('layouts.admin')]
 class Settings extends Component
 {
+    use WithFileUploads;
     public $settings;
     public $booking_settings = [];
     
@@ -48,6 +50,10 @@ class Settings extends Component
     public $recaptcha_site_key;
     public $recaptcha_secret_key;
     public $recaptcha_enabled = false;
+    
+    // Logo Settings
+    public $logo;
+    public $current_logo_path;
     
     // Translations & Localization
     public $default_language;
@@ -114,6 +120,8 @@ class Settings extends Component
         'recaptcha_site_key' => 'nullable|string|max:255',
         'recaptcha_secret_key' => 'nullable|string|max:255',
         'recaptcha_enabled' => 'boolean',
+        'logo' => 'nullable|image|max:2048',
+        'current_logo_path' => 'nullable|string|max:255',
         'default_language' => 'required|string|max:10',
         'enable_multi_language' => 'boolean',
         'timezone' => 'required|string|max:50',
@@ -211,6 +219,9 @@ class Settings extends Component
         $this->recaptcha_site_key = $this->settings->recaptcha_site_key ?? '';
         $this->recaptcha_secret_key = $this->settings->recaptcha_secret_key ?? '';
         $this->recaptcha_enabled = $this->settings->recaptcha_enabled ?? false;
+        
+        // Logo
+        $this->current_logo_path = $this->settings->logo_path ?? '';
         
         // Localization
         $this->default_language = $this->settings->default_language ?? 'en';
@@ -324,6 +335,9 @@ class Settings extends Component
             'recaptcha_secret_key' => $this->recaptcha_secret_key,
             'recaptcha_enabled' => $this->recaptcha_enabled,
             
+            // Logo
+            'logo_path' => $this->current_logo_path,
+            
             // Localization
             'default_language' => $this->default_language,
             'enable_multi_language' => $this->enable_multi_language,
@@ -369,6 +383,47 @@ class Settings extends Component
         ]);
 
         session()->flash('message', 'Settings updated successfully!');
+    }
+    
+    public function uploadLogo()
+    {
+        $this->validate([
+            'logo' => 'required|image|max:2048'
+        ]);
+        
+        // Delete old logo if exists
+        if ($this->current_logo_path && \Storage::disk('public')->exists($this->current_logo_path)) {
+            \Storage::disk('public')->delete($this->current_logo_path);
+        }
+        
+        // Store the new logo
+        $logoPath = $this->logo->store('logos', 'public');
+        $this->current_logo_path = $logoPath;
+        
+        // Update the settings
+        $this->settings->update([
+            'logo_path' => $logoPath
+        ]);
+        
+        // Reset the logo property
+        $this->logo = null;
+        
+        session()->flash('message', 'Logo uploaded successfully!');
+    }
+    
+    public function removeLogo()
+    {
+        if ($this->current_logo_path && \Storage::disk('public')->exists($this->current_logo_path)) {
+            \Storage::disk('public')->delete($this->current_logo_path);
+        }
+        
+        $this->current_logo_path = '';
+        
+        $this->settings->update([
+            'logo_path' => null
+        ]);
+        
+        session()->flash('message', 'Logo removed successfully!');
     }
 
     public function getTimezones()
