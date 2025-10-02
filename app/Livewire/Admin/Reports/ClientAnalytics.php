@@ -122,8 +122,11 @@ class ClientAnalytics extends Component
     public function getClientLifetimeValue()
     {
         $dateRange = [$this->dateFrom, $this->dateTo];
+        $perPage = 20;
+        $page = request()->get('page', 1);
         
-        return Client::with(['user', 'appointments', 'invoices'])
+        // Get all clients and their data first
+        $allClients = Client::with(['user', 'appointments', 'invoices'])
             ->whereHas('invoices', function ($query) use ($dateRange) {
                 $query->whereBetween('created_at', $dateRange);
             })
@@ -159,9 +162,30 @@ class ClientAnalytics extends Component
                     'last_appointment' => $lastAppointment?->appointment_date,
                     'days_since_last' => $lastAppointment ? Carbon::parse($lastAppointment->appointment_date)->diffInDays(Carbon::now()) : null,
                 ];
-            })
-            ->sortByDesc($this->sortBy)
-            ->paginate(20);
+            });
+
+        // Sort the collection
+        if ($this->sortDirection === 'desc') {
+            $sortedClients = $allClients->sortByDesc($this->sortBy);
+        } else {
+            $sortedClients = $allClients->sortBy($this->sortBy);
+        }
+
+        // Manual pagination
+        $total = $sortedClients->count();
+        $offset = ($page - 1) * $perPage;
+        $items = $sortedClients->slice($offset, $perPage)->values();
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'pageName' => 'page',
+            ]
+        );
     }
 
     public function getClientRetentionRate()
@@ -247,7 +271,7 @@ class ClientAnalytics extends Component
             
             'peak_booking_times' => Appointment::whereBetween('appointment_date', $dateRange)
                 ->where('status', 'completed')
-                ->selectRaw('HOUR(appointment_time) as hour, COUNT(*) as count')
+                ->selectRaw('HOUR(appointment_date) as hour, COUNT(*) as count')
                 ->groupBy('hour')
                 ->orderBy('count', 'desc')
                 ->limit(3)
