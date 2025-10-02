@@ -16,15 +16,30 @@
         @livewireStyles
     </head>
     <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/" wire:navigate>
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
+        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-pink-50 via-white to-purple-50">
+            <!-- Logo Section -->
+            <div class="mb-8">
+                <a href="/" wire:navigate class="flex flex-col items-center">
+                    <x-application-logo class="w-16 h-16 fill-current text-pink-600 mb-2" />
+                    <h1 class="text-2xl font-bold text-gray-900">Beauty Salon</h1>
+                    <p class="text-sm text-gray-600">Management System</p>
                 </a>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
+            <!-- Main Content Card -->
+            <div class="w-full sm:max-w-md">
+                <div class="bg-white shadow-xl rounded-2xl overflow-hidden border border-gray-100">
+                    <div class="px-8 py-8">
+                        {{ $slot }}
+                    </div>
+                </div>
+                
+                <!-- Footer -->
+                <div class="text-center mt-6">
+                    <p class="text-xs text-gray-500">
+                        © {{ date('Y') }} Beauty Salon Management System. All rights reserved.
+                    </p>
+                </div>
             </div>
         </div>
         @livewireScripts

@@ -15,5 +15,5 @@ file lists bugs found on the app.
 [x] https://book.vai.me/admin/reports/predictive-analytics - DivisionByZeroError Division by zero, line 220                $factors[$i] = $monthAverage / $overallAverage; ✅ COMPLETED v1.9.4
 [x] we are missing page managment in admin, how can admins edit pages for the frontend? ✅ COMPLETED v1.10.0
 [x] make sure Stuff seciton is more comprehansive, alow to upload photo, add biography, experiance, etc... from admin setting we should be able to make staff page public on FE, and if admin desires, make "Staff" page public where customer can view who they are booking the appointment with. ✅ COMPLETED v1.10.1
-[ ] we have to make sure we have address (ditailed) with map in setting, so that customer can view and make sure they are in close range with the Salon before booking, I don't want to book customer from other states or cities. (if they desier, city is still ok, but I need them to confirm they can come), makes sense?
+[x] we have to make sure we have address (ditailed) with map in setting, so that customer can view and make sure they are in close range with the Salon before booking, I don't want to book customer from other states or cities. (if they desier, city is still ok, but I need them to confirm they can come), makes sense? ✅ COMPLETED v1.10.2
   
