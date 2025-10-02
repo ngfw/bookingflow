@@ -1,0 +1,93 @@
+config:
+  target: 'http://localhost:8000'
+  phases:
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm up"
+    - duration: 120
+      arrivalRate: 10
+      name: "Ramp up load"
+    - duration: 300
+      arrivalRate: 20
+      name: "Sustained load"
+    - duration: 60
+      arrivalRate: 5
+      name: "Ramp down"
+  defaults:
+    headers:
+      User-Agent: "Artillery Load Test"
+  plugins:
+    metrics-by-endpoint:
+      useOnlyRequestNames: true
+
+scenarios:
+  - name: "Homepage Load Test"
+    weight: 30
+    flow:
+      - get:
+          url: "/"
+          name: "Homepage"
+      - think: 2
+      - get:
+          url: "/book"
+          name: "Booking Page"
+
+  - name: "Authentication Load Test"
+    weight: 25
+    flow:
+      - get:
+          url: "/login"
+          name: "Login Page"
+      - think: 1
+      - post:
+          url: "/login"
+          name: "Login Attempt"
+          json:
+            email: "test@example.com"
+            password: "password"
+      - think: 2
+
+  - name: "API Load Test"
+    weight: 20
+    flow:
+      - get:
+          url: "/api/services"
+          name: "Get Services API"
+          headers:
+            Authorization: "Bearer {{ $randomString() }}"
+      - think: 1
+      - get:
+          url: "/api/appointments"
+          name: "Get Appointments API"
+          headers:
+            Authorization: "Bearer {{ $randomString() }}"
+
+  - name: "Admin Dashboard Load Test"
+    weight: 15
+    flow:
+      - get:
+          url: "/admin/dashboard"
+          name: "Admin Dashboard"
+          headers:
+            Authorization: "Bearer {{ $randomString() }}"
+      - think: 3
+      - get:
+          url: "/admin/reports"
+          name: "Admin Reports"
+          headers:
+            Authorization: "Bearer {{ $randomString() }}"
+
+  - name: "Client Portal Load Test"
+    weight: 10
+    flow:
+      - get:
+          url: "/client/dashboard"
+          name: "Client Dashboard"
+          headers:
+            Authorization: "Bearer {{ $randomString() }}"
+      - think: 2
+      - get:
+          url: "/client/appointments"
+          name: "Client Appointments"
+          headers:
+            Authorization: "Bearer {{ $randomString() }}"
