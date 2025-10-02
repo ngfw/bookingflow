@@ -130,6 +130,11 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->grou
         // Franchises
         Route::get('/franchises', \App\Livewire\Admin\Franchises\Index::class)->name('franchises.index');
         
+        // Page Management
+        Route::get('/pages', \App\Livewire\Admin\Pages\Index::class)->name('pages.index');
+        Route::get('/pages/create', \App\Livewire\Admin\Pages\Create::class)->name('pages.create');
+        Route::get('/pages/{page}/edit', \App\Livewire\Admin\Pages\Edit::class)->name('pages.edit');
+        
         // Settings
         Route::get('/settings', \App\Livewire\Admin\Settings::class)->name('settings.index');
         
