@@ -106,9 +106,15 @@ class CustomReports extends Component
         
         switch ($this->reportType) {
             case 'appointments':
+                $totalRevenue = Invoice::whereHas('appointment', function ($q) {
+                    $query = $this->buildQuery();
+                    $appointmentIds = $query->pluck('id');
+                    $q->whereIn('id', $appointmentIds);
+                })->sum('total_amount');
+                
                 return [
                     'total_count' => $query->count(),
-                    'total_revenue' => $query->sum('total_amount'),
+                    'total_revenue' => $totalRevenue,
                     'avg_duration' => $query->avg('duration'),
                     'completion_rate' => $query->where('status', 'completed')->count() / max($query->count(), 1) * 100,
                 ];
@@ -341,7 +347,6 @@ class CustomReports extends Component
             case 'appointments':
                 return [
                     'appointment_date' => 'Appointment Date',
-                    'appointment_time' => 'Appointment Time',
                     'status' => 'Status',
                     'duration' => 'Duration',
                     'service_id' => 'Service',
