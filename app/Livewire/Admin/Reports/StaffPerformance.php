@@ -53,6 +53,8 @@ class StaffPerformance extends Component
     public function getStaffPerformanceData()
     {
         $dateRange = [$this->dateFrom, $this->dateTo];
+        $perPage = 10;
+        $page = request()->get('page', 1);
         
         $query = Staff::with(['user', 'services', 'appointments' => function ($q) use ($dateRange) {
             $q->whereBetween('appointment_date', $dateRange);
@@ -62,7 +64,7 @@ class StaffPerformance extends Component
             $query->where('id', $this->staffFilter);
         }
 
-        return $query->get()->map(function ($staff) use ($dateRange) {
+        $allStaff = $query->get()->map(function ($staff) use ($dateRange) {
             $appointments = $staff->appointments()
                 ->whereBetween('appointment_date', $dateRange)
                 ->get();
@@ -98,7 +100,7 @@ class StaffPerformance extends Component
 
             // Calculate hourly performance
             $hourlyPerformance = $completedAppointments->groupBy(function ($appointment) {
-                return Carbon::parse($appointment->appointment_time)->format('H');
+                return Carbon::parse($appointment->appointment_date)->format('H');
             })->map(function ($hourAppointments) {
                 return $hourAppointments->count();
             });
@@ -117,7 +119,30 @@ class StaffPerformance extends Component
                 'service_breakdown' => $serviceBreakdown,
                 'hourly_performance' => $hourlyPerformance,
             ];
-        })->sortByDesc($this->sortBy)->paginate(10);
+        });
+
+        // Sort the collection
+        if ($this->sortDirection === 'desc') {
+            $sortedStaff = $allStaff->sortByDesc($this->sortBy);
+        } else {
+            $sortedStaff = $allStaff->sortBy($this->sortBy);
+        }
+
+        // Manual pagination
+        $total = $sortedStaff->count();
+        $offset = ($page - 1) * $perPage;
+        $items = $sortedStaff->slice($offset, $perPage)->values();
+
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            [
+                'path' => request()->url(),
+                'pageName' => 'page',
+            ]
+        );
     }
 
     public function getOverallStats()
