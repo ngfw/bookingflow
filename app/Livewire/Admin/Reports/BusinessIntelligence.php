@@ -199,7 +199,7 @@ class BusinessIntelligence extends Component
     {
         $hourlyAppointments = Appointment::whereBetween('appointment_date', $period)
             ->where('status', 'completed')
-            ->selectRaw('HOUR(appointment_time) as hour, COUNT(*) as count')
+            ->selectRaw('HOUR(appointment_date) as hour, COUNT(*) as count')
             ->groupBy('hour')
             ->orderBy('count', 'desc')
             ->get();
