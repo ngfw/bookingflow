@@ -6,6 +6,12 @@
                 <p class="text-gray-600">Manage retail products and inventory</p>
             </div>
             <div class="flex space-x-4">
+                <button wire:click="openCreateModal" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex items-center">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Add Product
+                </button>
                 <a href="{{ route('admin.pos.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m0 0L7 13m0 0l-2.5 5M7 13l2.5 5m6-5v6a2 2 0 01-2 2H9a2 2 0 01-2-2v-6m8 0V9a2 2 0 00-2-2H9a2 2 0 00-2 2v4.01"></path>
@@ -224,20 +230,45 @@
                             @endif
                         </div>
 
-                        <div class="flex space-x-2">
+                        <div class="flex space-x-1">
                             <button 
                                 wire:click="viewProduct({{ $product->id }})" 
-                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-3 rounded text-sm font-medium"
+                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2 px-2 rounded text-xs font-medium"
                             >
-                                View Details
+                                View
+                            </button>
+                            <button 
+                                wire:click="openEditModal({{ $product->id }})" 
+                                class="flex-1 bg-yellow-600 hover:bg-yellow-700 text-white py-2 px-2 rounded text-xs font-medium"
+                            >
+                                Edit
                             </button>
                             <button 
                                 wire:click="toggleProductStatus({{ $product->id }})" 
-                                class="px-3 py-2 border border-gray-300 rounded text-sm font-medium hover:bg-gray-50"
+                                class="flex-1 bg-gray-600 hover:bg-gray-700 text-white py-2 px-2 rounded text-xs font-medium"
                             >
-                                {{ $product->is_active ? 'Deactivate' : 'Activate' }}
+                                {{ $product->is_active ? 'Hide' : 'Show' }}
+                            </button>
+                            <button 
+                                wire:click="deleteProduct({{ $product->id }})" 
+                                wire:confirm="Are you sure you want to delete this product?"
+                                class="flex-1 bg-red-600 hover:bg-red-700 text-white py-2 px-2 rounded text-xs font-medium"
+                            >
+                                Delete
                             </button>
                         </div>
+
+                        <!-- Stock Adjustment -->
+                        @if($product->is_active)
+                            <div class="mt-2 flex items-center justify-between">
+                                <span class="text-xs text-gray-500">Quick Stock:</span>
+                                <div class="flex space-x-1">
+                                    <button wire:click="adjustStock({{ $product->id }}, -1)" class="bg-red-100 hover:bg-red-200 text-red-800 px-2 py-1 rounded text-xs">-1</button>
+                                    <button wire:click="adjustStock({{ $product->id }}, 1)" class="bg-green-100 hover:bg-green-200 text-green-800 px-2 py-1 rounded text-xs">+1</button>
+                                    <button wire:click="adjustStock({{ $product->id }}, 5)" class="bg-green-100 hover:bg-green-200 text-green-800 px-2 py-1 rounded text-xs">+5</button>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 @empty
                     <div class="col-span-full text-center py-12">
@@ -349,6 +380,349 @@
                     </div>
                 </div>
             </div>
+        </div>
+    @endif
+
+    <!-- Create Product Modal -->
+    @if($showCreateModal)
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-10 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">Add New Product</h3>
+                    
+                    <form wire:submit.prevent="createProduct" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Basic Information -->
+                            <div class="space-y-4">
+                                <h4 class="text-md font-medium text-gray-900">Basic Information</h4>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Product Name *</label>
+                                    <input type="text" wire:model="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">SKU *</label>
+                                    <div class="mt-1 flex rounded-md shadow-sm">
+                                        <input type="text" wire:model="sku" class="flex-1 rounded-l-md border-gray-300 focus:border-blue-500 focus:ring-blue-500">
+                                        <button type="button" wire:click="generateSKU" class="inline-flex items-center px-3 py-2 border border-l-0 border-gray-300 rounded-r-md bg-gray-50 text-gray-500 text-sm">
+                                            Generate
+                                        </button>
+                                    </div>
+                                    @error('sku') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea wire:model="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                                    @error('description') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Brand</label>
+                                    <input type="text" wire:model="brand" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('brand') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                                    <select wire:model="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">Select Category</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Supplier</label>
+                                    <select wire:model="supplier_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">Select Supplier</option>
+                                        @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('supplier_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+
+                            <!-- Pricing & Inventory -->
+                            <div class="space-y-4">
+                                <h4 class="text-md font-medium text-gray-900">Pricing & Inventory</h4>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Retail Price *</label>
+                                        <input type="number" step="0.01" wire:model="retail_price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('retail_price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Cost Price *</label>
+                                        <input type="number" step="0.01" wire:model="cost_price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('cost_price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Stock Quantity *</label>
+                                        <input type="number" wire:model="stock_quantity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('stock_quantity') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Minimum Stock *</label>
+                                        <input type="number" wire:model="minimum_stock" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('minimum_stock') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Barcode</label>
+                                    <input type="text" wire:model="barcode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('barcode') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Unit *</label>
+                                    <select wire:model="unit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="piece">Piece</option>
+                                        <option value="bottle">Bottle</option>
+                                        <option value="tube">Tube</option>
+                                        <option value="box">Box</option>
+                                        <option value="pack">Pack</option>
+                                        <option value="ml">ML</option>
+                                        <option value="gram">Gram</option>
+                                        <option value="kg">Kilogram</option>
+                                    </select>
+                                    @error('unit') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Weight (grams)</label>
+                                    <input type="number" step="0.01" wire:model="weight" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('weight') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Dimensions</label>
+                                    <input type="text" wire:model="dimensions" placeholder="L x W x H" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('dimensions') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Usage Notes</label>
+                                    <textarea wire:model="usage_notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                                    @error('usage_notes') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Product Image</label>
+                                    <input type="file" wire:model="newImage" accept="image/*" class="mt-1 block w-full">
+                                    @error('newImage') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" wire:model="is_active" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm text-gray-700">Product is active</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 pt-6 border-t">
+                            <button type="button" wire:click="closeCreateModal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                                Create Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Edit Product Modal -->
+    @if($showEditModal)
+        <div class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div class="relative top-10 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
+                <div class="mt-3">
+                    <h3 class="text-lg font-medium text-gray-900 mb-6">Edit Product</h3>
+                    
+                    <form wire:submit.prevent="updateProduct" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Basic Information -->
+                            <div class="space-y-4">
+                                <h4 class="text-md font-medium text-gray-900">Basic Information</h4>
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Product Name *</label>
+                                    <input type="text" wire:model="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('name') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">SKU *</label>
+                                    <input type="text" wire:model="sku" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('sku') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                                    <textarea wire:model="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                                    @error('description') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Brand</label>
+                                    <input type="text" wire:model="brand" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('brand') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                                    <select wire:model="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">Select Category</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('category_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Supplier</label>
+                                    <select wire:model="supplier_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="">Select Supplier</option>
+                                        @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('supplier_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+                            </div>
+
+                            <!-- Pricing & Inventory -->
+                            <div class="space-y-4">
+                                <h4 class="text-md font-medium text-gray-900">Pricing & Inventory</h4>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Retail Price *</label>
+                                        <input type="number" step="0.01" wire:model="retail_price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('retail_price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Cost Price *</label>
+                                        <input type="number" step="0.01" wire:model="cost_price" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('cost_price') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Stock Quantity *</label>
+                                        <input type="number" wire:model="stock_quantity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('stock_quantity') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700">Minimum Stock *</label>
+                                        <input type="number" wire:model="minimum_stock" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        @error('minimum_stock') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Barcode</label>
+                                    <input type="text" wire:model="barcode" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('barcode') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Unit *</label>
+                                    <select wire:model="unit" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <option value="piece">Piece</option>
+                                        <option value="bottle">Bottle</option>
+                                        <option value="tube">Tube</option>
+                                        <option value="box">Box</option>
+                                        <option value="pack">Pack</option>
+                                        <option value="ml">ML</option>
+                                        <option value="gram">Gram</option>
+                                        <option value="kg">Kilogram</option>
+                                    </select>
+                                    @error('unit') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Weight (grams)</label>
+                                    <input type="number" step="0.01" wire:model="weight" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('weight') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Dimensions</label>
+                                    <input type="text" wire:model="dimensions" placeholder="L x W x H" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    @error('dimensions') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Usage Notes</label>
+                                    <textarea wire:model="usage_notes" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"></textarea>
+                                    @error('usage_notes') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Product Image</label>
+                                    @if($image)
+                                        <div class="mt-1 mb-2">
+                                            <img src="{{ Storage::url($image) }}" alt="Current image" class="h-20 w-20 object-cover rounded">
+                                        </div>
+                                    @endif
+                                    <input type="file" wire:model="newImage" accept="image/*" class="mt-1 block w-full">
+                                    @error('newImage') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                                </div>
+
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" wire:model="is_active" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm text-gray-700">Product is active</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-end space-x-3 pt-6 border-t">
+                            <button type="button" wire:click="closeEditModal" class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md">
+                                Cancel
+                            </button>
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md">
+                                Update Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <!-- Flash Messages -->
+    @if (session()->has('success'))
+        <div class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if (session()->has('error'))
+        <div class="fixed bottom-4 right-4 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg z-50">
+            {{ session('error') }}
         </div>
     @endif
 </div>

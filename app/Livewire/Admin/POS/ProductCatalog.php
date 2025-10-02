@@ -4,14 +4,16 @@ namespace App\Livewire\Admin\POS;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\WithFileUploads;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Supplier;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductCatalog extends Component
 {
-    use WithPagination;
+    use WithPagination, WithFileUploads;
 
     public $search = '';
     public $categoryFilter = '';
@@ -24,6 +26,49 @@ class ProductCatalog extends Component
 
     public $selectedProduct = null;
     public $showProductModal = false;
+    public $showCreateModal = false;
+    public $showEditModal = false;
+    public $editingProduct = null;
+
+    // Form fields for product creation/editing
+    public $name = '';
+    public $sku = '';
+    public $description = '';
+    public $brand = '';
+    public $category_id = '';
+    public $supplier_id = '';
+    public $retail_price = '';
+    public $cost_price = '';
+    public $stock_quantity = 0;
+    public $minimum_stock = 0;
+    public $barcode = '';
+    public $unit = 'piece';
+    public $weight = '';
+    public $dimensions = '';
+    public $usage_notes = '';
+    public $is_active = true;
+    public $image = null;
+    public $newImage = null;
+
+    protected $rules = [
+        'name' => 'required|string|max:255',
+        'sku' => 'required|string|max:100|unique:products,sku',
+        'description' => 'nullable|string|max:1000',
+        'brand' => 'nullable|string|max:255',
+        'category_id' => 'nullable|exists:categories,id',
+        'supplier_id' => 'nullable|exists:suppliers,id',
+        'retail_price' => 'required|numeric|min:0',
+        'cost_price' => 'required|numeric|min:0',
+        'stock_quantity' => 'required|integer|min:0',
+        'minimum_stock' => 'required|integer|min:0',
+        'barcode' => 'nullable|string|max:255',
+        'unit' => 'required|string|max:50',
+        'weight' => 'nullable|numeric|min:0',
+        'dimensions' => 'nullable|string|max:255',
+        'usage_notes' => 'nullable|string|max:1000',
+        'is_active' => 'boolean',
+        'newImage' => 'nullable|image|max:2048',
+    ];
 
     public function mount()
     {
@@ -81,6 +126,182 @@ class ProductCatalog extends Component
     {
         $this->showProductModal = false;
         $this->selectedProduct = null;
+    }
+
+    public function openCreateModal()
+    {
+        $this->resetForm();
+        $this->showCreateModal = true;
+    }
+
+    public function openEditModal($productId)
+    {
+        $this->editingProduct = Product::findOrFail($productId);
+        $this->loadProductData($this->editingProduct);
+        $this->showEditModal = true;
+    }
+
+    public function closeCreateModal()
+    {
+        $this->showCreateModal = false;
+        $this->resetForm();
+    }
+
+    public function closeEditModal()
+    {
+        $this->showEditModal = false;
+        $this->editingProduct = null;
+        $this->resetForm();
+    }
+
+    private function resetForm()
+    {
+        $this->name = '';
+        $this->sku = '';
+        $this->description = '';
+        $this->brand = '';
+        $this->category_id = '';
+        $this->supplier_id = '';
+        $this->retail_price = '';
+        $this->cost_price = '';
+        $this->stock_quantity = 0;
+        $this->minimum_stock = 0;
+        $this->barcode = '';
+        $this->unit = 'piece';
+        $this->weight = '';
+        $this->dimensions = '';
+        $this->usage_notes = '';
+        $this->is_active = true;
+        $this->image = null;
+        $this->newImage = null;
+        $this->resetErrorBag();
+    }
+
+    private function loadProductData(Product $product)
+    {
+        $this->name = $product->name;
+        $this->sku = $product->sku;
+        $this->description = $product->description;
+        $this->brand = $product->brand;
+        $this->category_id = $product->category_id;
+        $this->supplier_id = $product->supplier_id;
+        $this->retail_price = $product->retail_price;
+        $this->cost_price = $product->cost_price;
+        $this->stock_quantity = $product->stock_quantity;
+        $this->minimum_stock = $product->minimum_stock;
+        $this->barcode = $product->barcode;
+        $this->unit = $product->unit;
+        $this->weight = $product->weight;
+        $this->dimensions = $product->dimensions;
+        $this->usage_notes = $product->usage_notes;
+        $this->is_active = $product->is_active;
+        $this->image = $product->image;
+    }
+
+    public function generateSKU()
+    {
+        $prefix = 'PRD';
+        $randomNumber = str_pad(mt_rand(1, 999999), 6, '0', STR_PAD_LEFT);
+        $this->sku = $prefix . $randomNumber;
+    }
+
+    public function createProduct()
+    {
+        $this->validate();
+
+        $imagePath = null;
+        if ($this->newImage) {
+            $imagePath = $this->newImage->store('products', 'public');
+        }
+
+        Product::create([
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'description' => $this->description,
+            'brand' => $this->brand,
+            'category_id' => $this->category_id ?: null,
+            'supplier_id' => $this->supplier_id ?: null,
+            'retail_price' => $this->retail_price,
+            'cost_price' => $this->cost_price,
+            'stock_quantity' => $this->stock_quantity,
+            'minimum_stock' => $this->minimum_stock,
+            'barcode' => $this->barcode,
+            'unit' => $this->unit,
+            'weight' => $this->weight,
+            'dimensions' => $this->dimensions,
+            'usage_notes' => $this->usage_notes,
+            'is_active' => $this->is_active,
+            'image' => $imagePath,
+            'type' => 'retail',
+        ]);
+
+        session()->flash('success', 'Product created successfully!');
+        $this->closeCreateModal();
+    }
+
+    public function updateProduct()
+    {
+        $this->validate($this->getRulesForUpdate());
+
+        $imagePath = $this->image;
+        if ($this->newImage) {
+            if ($this->image) {
+                Storage::disk('public')->delete($this->image);
+            }
+            $imagePath = $this->newImage->store('products', 'public');
+        }
+
+        $this->editingProduct->update([
+            'name' => $this->name,
+            'sku' => $this->sku,
+            'description' => $this->description,
+            'brand' => $this->brand,
+            'category_id' => $this->category_id ?: null,
+            'supplier_id' => $this->supplier_id ?: null,
+            'retail_price' => $this->retail_price,
+            'cost_price' => $this->cost_price,
+            'stock_quantity' => $this->stock_quantity,
+            'minimum_stock' => $this->minimum_stock,
+            'barcode' => $this->barcode,
+            'unit' => $this->unit,
+            'weight' => $this->weight,
+            'dimensions' => $this->dimensions,
+            'usage_notes' => $this->usage_notes,
+            'is_active' => $this->is_active,
+            'image' => $imagePath,
+        ]);
+
+        session()->flash('success', 'Product updated successfully!');
+        $this->closeEditModal();
+    }
+
+    private function getRulesForUpdate()
+    {
+        $rules = $this->rules;
+        $rules['sku'] = 'required|string|max:100|unique:products,sku,' . $this->editingProduct->id;
+        return $rules;
+    }
+
+    public function deleteProduct($productId)
+    {
+        $product = Product::findOrFail($productId);
+        
+        if ($product->image) {
+            Storage::disk('public')->delete($product->image);
+        }
+        
+        $product->delete();
+        session()->flash('success', 'Product deleted successfully.');
+    }
+
+    public function adjustStock($productId, $adjustment, $reason = 'Manual adjustment')
+    {
+        $product = Product::findOrFail($productId);
+        $newStock = max(0, $product->stock_quantity + $adjustment);
+        
+        $product->update(['stock_quantity' => $newStock]);
+        
+        session()->flash('success', "Stock adjusted. New quantity: {$newStock}");
     }
 
     public function toggleProductStatus($productId)
