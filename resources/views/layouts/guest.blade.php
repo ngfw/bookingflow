@@ -20,8 +20,11 @@
             <!-- Logo Section -->
             <div class="mb-8">
                 <a href="/" wire:navigate class="flex flex-col items-center">
-                    <x-application-logo class="w-16 h-16 fill-current text-pink-600 mb-2" />
-                    <h1 class="text-2xl font-bold text-gray-900">Beauty Salon</h1>
+                    <x-salon-logo class="w-16 h-16 fill-current text-pink-600 mb-2" />
+                    @php
+                        $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'Beauty Salon';
+                    @endphp
+                    <h1 class="text-2xl font-bold text-gray-900">{{ $salonName }}</h1>
                     <p class="text-sm text-gray-600">Management System</p>
                 </a>
             </div>

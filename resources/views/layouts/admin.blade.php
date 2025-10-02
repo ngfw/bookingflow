@@ -43,9 +43,13 @@
 
                         <!-- Logo -->
                         <div class="flex-shrink-0 flex items-center">
-                            <a href="{{ route('admin.dashboard') }}" class="text-lg lg:text-xl font-bold text-gray-900">
-                                <span class="hidden sm:inline">Beauty Salon Admin</span>
-                                <span class="sm:hidden">BSA</span>
+                            <a href="{{ route('admin.dashboard') }}" class="flex items-center">
+                                <x-salon-logo class="h-8 w-auto mr-3" />
+                                @php
+                                    $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'Beauty Salon';
+                                @endphp
+                                <span class="hidden sm:inline text-lg lg:text-xl font-bold text-gray-900">{{ $salonName }} Admin</span>
+                                <span class="sm:hidden text-lg font-bold text-gray-900">Admin</span>
                             </a>
                         </div>
 

@@ -18,8 +18,12 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16">
                 <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                        <h1 class="text-2xl font-bold text-pink-600">Beauty Salon</h1>
+                    <div class="flex-shrink-0 flex items-center">
+                        <x-salon-logo class="h-8 w-auto mr-3 fill-current text-pink-600" />
+                        @php
+                            $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'Beauty Salon';
+                        @endphp
+                        <h1 class="text-2xl font-bold text-pink-600">{{ $salonName }}</h1>
                     </div>
                 </div>
                 
@@ -46,8 +50,11 @@
     <section class="bg-gradient-to-r from-pink-100 to-purple-100 py-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
+                @php
+                    $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'Beauty Salon';
+                @endphp
                 <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                    Welcome to <span class="text-pink-600">Beauty Salon</span>
+                    Welcome to <span class="text-pink-600">{{ $salonName }}</span>
                 </h1>
                 <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
                     Experience luxury beauty services in a relaxing environment. Our professional team is dedicated to making you look and feel your absolute best.
