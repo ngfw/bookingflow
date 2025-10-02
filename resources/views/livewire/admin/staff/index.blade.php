@@ -60,9 +60,27 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
+                                    <div class="flex-shrink-0 h-10 w-10">
+                                        @if($staffMember->profile_image)
+                                            <img class="h-10 w-10 rounded-full object-cover" 
+                                                 src="{{ Storage::url($staffMember->profile_image) }}" 
+                                                 alt="{{ $staffMember->user->name }}">
+                                        @else
+                                            <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                                <span class="text-sm font-medium text-gray-600">
+                                                    {{ substr($staffMember->user->name, 0, 1) }}
+                                                </span>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <div class="ml-4">
                                         <div class="text-sm font-medium text-gray-900">{{ $staffMember->user->name }}</div>
-                                        <div class="text-sm text-gray-500">{{ $staffMember->specialization ?? 'General' }}</div>
+                                        <div class="text-sm text-gray-500">
+                                            {{ $staffMember->position ?? 'Staff Member' }}
+                                            @if($staffMember->experience_years)
+                                                • {{ $staffMember->experience_years }} years exp.
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
                             </td>

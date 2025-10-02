@@ -24,6 +24,13 @@ class Staff extends Model
         'can_book_online',
         'bio',
         'profile_image',
+        'experience_years',
+        'certifications',
+        'education',
+        'achievements',
+        'social_media',
+        'languages',
+        'hobbies',
     ];
 
     protected function casts(): array
@@ -37,6 +44,7 @@ class Staff extends Model
             'default_end_time' => 'datetime:H:i',
             'working_days' => 'array',
             'can_book_online' => 'boolean',
+            'social_media' => 'array',
         ];
     }
 

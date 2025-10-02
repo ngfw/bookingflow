@@ -105,6 +105,97 @@
             </div>
         </div>
 
+        <!-- Professional Profile -->
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-6">Professional Profile</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="experience_years" class="block text-sm font-medium text-gray-700">Years of Experience</label>
+                    <input type="number" wire:model="experience_years" id="experience_years" min="0" max="50" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                           placeholder="5">
+                    @error('experience_years') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+
+                <div>
+                    <label for="languages" class="block text-sm font-medium text-gray-700">Languages Spoken</label>
+                    <input type="text" wire:model="languages" id="languages" 
+                           class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                           placeholder="English, Spanish, French">
+                    <p class="mt-1 text-sm text-gray-500">Separate languages with commas</p>
+                    @error('languages') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <label for="education" class="block text-sm font-medium text-gray-700">Education & Training</label>
+                <textarea wire:model="education" id="education" rows="3" 
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                          placeholder="Cosmetology School, Beauty Academy certification, etc."></textarea>
+                @error('education') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="mt-6">
+                <label for="certifications" class="block text-sm font-medium text-gray-700">Certifications & Licenses</label>
+                <textarea wire:model="certifications" id="certifications" rows="3" 
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                          placeholder="State Cosmetology License, Advanced Color Certification, etc."></textarea>
+                @error('certifications') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            </div>
+
+            <div class="mt-6">
+                <label for="achievements" class="block text-sm font-medium text-gray-700">Awards & Achievements</label>
+                <textarea wire:model="achievements" id="achievements" rows="3" 
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                          placeholder="Best Stylist Award 2023, Customer Service Excellence Award, etc."></textarea>
+                @error('achievements') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-4">Social Media Profiles</label>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="instagram" class="block text-sm font-medium text-gray-600">Instagram</label>
+                        <input type="url" wire:model="social_media.instagram" id="instagram" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                               placeholder="https://instagram.com/username">
+                    </div>
+                    
+                    <div>
+                        <label for="facebook" class="block text-sm font-medium text-gray-600">Facebook</label>
+                        <input type="url" wire:model="social_media.facebook" id="facebook" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                               placeholder="https://facebook.com/username">
+                    </div>
+                    
+                    <div>
+                        <label for="linkedin" class="block text-sm font-medium text-gray-600">LinkedIn</label>
+                        <input type="url" wire:model="social_media.linkedin" id="linkedin" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                               placeholder="https://linkedin.com/in/username">
+                    </div>
+                    
+                    <div>
+                        <label for="tiktok" class="block text-sm font-medium text-gray-600">TikTok</label>
+                        <input type="url" wire:model="social_media.tiktok" id="tiktok" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                               placeholder="https://tiktok.com/@username">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6">
+                <label for="hobbies" class="block text-sm font-medium text-gray-700">Hobbies & Interests</label>
+                <textarea wire:model="hobbies" id="hobbies" rows="2" 
+                          class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" 
+                          placeholder="Photography, traveling, fitness, cooking, etc."></textarea>
+                <p class="mt-1 text-sm text-gray-500">Help clients connect with staff on a personal level</p>
+                @error('hobbies') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
+            </div>
+        </div>
+
         <!-- Account Settings -->
         <div class="bg-white rounded-lg shadow p-6">
             <h3 class="text-lg font-medium text-gray-900 mb-4">Account Settings</h3>

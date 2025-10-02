@@ -42,6 +42,15 @@ class Edit extends Component
     public $profile_image;
     public $new_profile_image;
     
+    // Experience and professional information
+    public $experience_years;
+    public $certifications;
+    public $education;
+    public $achievements;
+    public $social_media = [];
+    public $languages;
+    public $hobbies;
+    
     // Available options
     public $availableServices = [];
     public $selectedServices = [];
@@ -64,6 +73,13 @@ class Edit extends Component
         'can_book_online' => 'boolean',
         'bio' => 'nullable|string',
         'new_profile_image' => 'nullable|image|max:2048',
+        'experience_years' => 'nullable|integer|min:0|max:50',
+        'certifications' => 'nullable|string',
+        'education' => 'nullable|string',
+        'achievements' => 'nullable|string',
+        'social_media' => 'nullable|array',
+        'languages' => 'nullable|string',
+        'hobbies' => 'nullable|string',
     ];
 
     public function mount($staffId)
@@ -91,6 +107,15 @@ class Edit extends Component
         $this->can_book_online = $this->staff->can_book_online ?? true;
         $this->bio = $this->staff->bio;
         $this->profile_image = $this->staff->profile_image;
+        
+        // Load experience and professional information
+        $this->experience_years = $this->staff->experience_years;
+        $this->certifications = $this->staff->certifications;
+        $this->education = $this->staff->education;
+        $this->achievements = $this->staff->achievements;
+        $this->social_media = $this->staff->social_media ?? [];
+        $this->languages = $this->staff->languages;
+        $this->hobbies = $this->staff->hobbies;
         
         // Load available services and selected services
         $this->availableServices = Service::all();
@@ -165,6 +190,13 @@ class Edit extends Component
                 'can_book_online' => $this->can_book_online,
                 'bio' => $this->bio,
                 'profile_image' => $profileImagePath,
+                'experience_years' => $this->experience_years,
+                'certifications' => $this->certifications,
+                'education' => $this->education,
+                'achievements' => $this->achievements,
+                'social_media' => $this->social_media,
+                'languages' => $this->languages,
+                'hobbies' => $this->hobbies,
             ]);
 
             // Update services
