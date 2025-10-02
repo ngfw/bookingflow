@@ -30,6 +30,7 @@ class Create extends Component
     public $availableTimeSlots = [];
     public $selectedDate = '';
     public $selectedStaff = '';
+    public $quickTimeSelection = false;
 
     protected $rules = [
         'client_id' => 'required|exists:clients,id',
@@ -70,6 +71,13 @@ class Create extends Component
             $query->where('is_active', true);
         })->get();
 
+        // If no staff assigned to service, get all active staff as fallback
+        if ($availableStaff->isEmpty()) {
+            $availableStaff = Staff::whereHas('user', function($query) {
+                $query->where('is_active', true);
+            })->get();
+        }
+
         if ($availableStaff->isEmpty()) {
             $this->availableTimeSlots = [];
             return;
@@ -86,11 +94,16 @@ class Create extends Component
             return;
         }
 
-        // Get staff schedule for the selected date
+        // Get staff schedule for the selected date or use default working hours
         $schedule = Schedule::where('staff_id', $staff->id)
-            ->where('day_of_week', $appointmentDate->dayOfWeek)
-            ->where('is_active', true)
+            ->where('date', $appointmentDate->format('Y-m-d'))
+            ->where('status', 'scheduled')
             ->first();
+
+        // If no specific schedule, create a default schedule based on staff working days
+        if (!$schedule) {
+            $schedule = $this->createDefaultSchedule($staff, $appointmentDate);
+        }
 
         if (!$schedule) {
             $this->availableTimeSlots = [];
@@ -101,6 +114,28 @@ class Create extends Component
         $this->generateTimeSlots($schedule, $service, $appointmentDate);
     }
 
+    private function createDefaultSchedule($staff, $appointmentDate)
+    {
+        // Check if staff works on this day of week
+        $dayOfWeek = $appointmentDate->format('l'); // Monday, Tuesday, etc.
+        
+        if (!$staff->working_days || !in_array($dayOfWeek, $staff->working_days)) {
+            return null;
+        }
+
+        // Create a temporary schedule object with default hours
+        $defaultStartTime = $staff->default_start_time ?: '09:00';
+        $defaultEndTime = $staff->default_end_time ?: '17:00';
+
+        return (object) [
+            'staff_id' => $staff->id,
+            'start_time' => $defaultStartTime,
+            'end_time' => $defaultEndTime,
+            'break_start' => null,
+            'break_end' => null,
+        ];
+    }
+
     public function generateTimeSlots($schedule, $service, $appointmentDate)
     {
         $timeSlots = [];
@@ -108,7 +143,7 @@ class Create extends Component
         $endTime = Carbon::parse($schedule->end_time);
         $serviceDuration = $service->duration_minutes;
         $bufferTime = $service->buffer_time_minutes ?? 0;
-        $slotDuration = $serviceDuration + $bufferTime;
+        $slotInterval = 30; // 30-minute intervals
 
         // Get existing appointments for this staff on this date
         $existingAppointments = Appointment::where('staff_id', $schedule->staff_id)
@@ -118,14 +153,26 @@ class Create extends Component
 
         $currentTime = $startTime->copy();
         
-        while ($currentTime->addMinutes($slotDuration)->lte($endTime)) {
-            $slotStart = $currentTime->copy()->subMinutes($slotDuration);
-            $slotEnd = $currentTime->copy();
+        // Generate time slots in 30-minute intervals
+        while ($currentTime->copy()->addMinutes($serviceDuration)->lte($endTime)) {
+            $slotStart = $currentTime->copy();
+            $slotEnd = $slotStart->copy()->addMinutes($serviceDuration);
+            
+            // Skip break time if defined
+            if ($schedule->break_start && $schedule->break_end) {
+                $breakStart = Carbon::parse($schedule->break_start);
+                $breakEnd = Carbon::parse($schedule->break_end);
+                
+                if ($slotStart->lt($breakEnd) && $slotEnd->gt($breakStart)) {
+                    $currentTime->addMinutes($slotInterval);
+                    continue;
+                }
+            }
             
             // Check if this time slot conflicts with existing appointments
-            $hasConflict = $existingAppointments->some(function($appointment) use ($slotStart, $slotEnd, $serviceDuration) {
+            $hasConflict = $existingAppointments->some(function($appointment) use ($slotStart, $slotEnd) {
                 $appointmentStart = Carbon::parse($appointment->appointment_date);
-                $appointmentEnd = $appointmentStart->copy()->addMinutes($appointment->service->duration_minutes);
+                $appointmentEnd = $appointmentStart->copy()->addMinutes($appointment->service->duration_minutes + ($appointment->service->buffer_time_minutes ?? 0));
                 
                 return $slotStart->lt($appointmentEnd) && $slotEnd->gt($appointmentStart);
             });
@@ -137,9 +184,66 @@ class Create extends Component
                     'end_time' => $slotEnd->format('g:i A'),
                 ];
             }
+            
+            $currentTime->addMinutes($slotInterval);
         }
 
         $this->availableTimeSlots = $timeSlots;
+    }
+
+    // Add suggested times feature
+    public function getSuggestedTimes()
+    {
+        if (empty($this->availableTimeSlots)) {
+            return [];
+        }
+
+        $suggestedTimes = [];
+        $now = Carbon::now();
+        
+        // Morning slots (9 AM - 12 PM)
+        $morningSlots = array_filter($this->availableTimeSlots, function($slot) {
+            $time = Carbon::parse($slot['time']);
+            return $time->hour >= 9 && $time->hour < 12;
+        });
+        
+        if (!empty($morningSlots)) {
+            $suggestedTimes['Morning'] = array_slice($morningSlots, 0, 3);
+        }
+        
+        // Afternoon slots (12 PM - 5 PM)
+        $afternoonSlots = array_filter($this->availableTimeSlots, function($slot) {
+            $time = Carbon::parse($slot['time']);
+            return $time->hour >= 12 && $time->hour < 17;
+        });
+        
+        if (!empty($afternoonSlots)) {
+            $suggestedTimes['Afternoon'] = array_slice($afternoonSlots, 0, 3);
+        }
+        
+        // Evening slots (5 PM onwards)
+        $eveningSlots = array_filter($this->availableTimeSlots, function($slot) {
+            $time = Carbon::parse($slot['time']);
+            return $time->hour >= 17;
+        });
+        
+        if (!empty($eveningSlots)) {
+            $suggestedTimes['Evening'] = array_slice($eveningSlots, 0, 3);
+        }
+        
+        return $suggestedTimes;
+    }
+
+    public function selectQuickTime($time)
+    {
+        $this->appointment_time = $time;
+        $this->quickTimeSelection = true;
+    }
+
+    public function mount()
+    {
+        // Set default appointment date to today
+        $this->appointment_date = Carbon::today()->format('Y-m-d');
     }
 
     public function save()
@@ -254,18 +358,19 @@ class Create extends Component
     {
         $clients = Client::with('user')->whereHas('user', function($query) {
             $query->where('is_active', true);
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
 
         $services = Service::where('is_active', true)->orderBy('name')->get();
 
         $staff = Staff::with('user')->whereHas('user', function($query) {
             $query->where('is_active', true);
-        })->get();
+        })->orderBy('created_at', 'desc')->get();
 
         return view('livewire.admin.appointments.create', [
             'clients' => $clients,
             'services' => $services,
             'staff' => $staff,
+            'suggestedTimes' => $this->getSuggestedTimes(),
         ])->layout('layouts.admin');
     }
 }

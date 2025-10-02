@@ -51,7 +51,12 @@
                             <select wire:model="staff_id" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 @error('staff_id') border-red-300 @enderror">
                                 <option value="">Auto-assign (first available)</option>
                                 @foreach($staff as $staffMember)
-                                    <option value="{{ $staffMember->id }}">{{ $staffMember->user->name }} - {{ $staffMember->specialization }}</option>
+                                    <option value="{{ $staffMember->id }}">
+                                        {{ $staffMember->user->name }}
+                                        @if($staffMember->specializations && is_array($staffMember->specializations))
+                                            - {{ implode(', ', $staffMember->specializations) }}
+                                        @endif
+                                    </option>
                                 @endforeach
                             </select>
                             @error('staff_id') <p class="mt-1 text-sm text-red-600">{{ $message }}</p> @enderror
@@ -144,6 +149,64 @@
                     
                     @if($service_id && $appointment_date)
                         @if(count($availableTimeSlots) > 0)
+                            
+                            <!-- Quick Time Selection -->
+                            <div class="mb-6">
+                                <h3 class="text-lg font-medium text-gray-900 mb-4">Quick Selection</h3>
+                                <div class="grid grid-cols-4 gap-2 mb-4">
+                                    @php
+                                        $quickTimes = ['09:00', '12:00', '14:00', '16:00'];
+                                    @endphp
+                                    @foreach($quickTimes as $quickTime)
+                                        @php
+                                            $isAvailable = collect($availableTimeSlots)->contains('time', $quickTime);
+                                        @endphp
+                                        <button wire:click="selectQuickTime('{{ $quickTime }}')" 
+                                                @if(!$isAvailable) disabled @endif
+                                                class="p-2 text-sm rounded-lg border-2 transition-colors
+                                                @if($isAvailable)
+                                                    @if($appointment_time === $quickTime)
+                                                        border-green-500 bg-green-100 text-green-800
+                                                    @else
+                                                        border-gray-300 bg-white hover:border-blue-300 hover:bg-blue-50
+                                                    @endif
+                                                @else
+                                                    border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed
+                                                @endif">
+                                            {{ Carbon\Carbon::parse($quickTime)->format('g:i A') }}
+                                        </button>
+                                    @endforeach
+                                </div>
+                            </div>
+
+                            <!-- Suggested Time Slots -->
+                            @if(!empty($suggestedTimes))
+                                <div class="mb-6">
+                                    <h3 class="text-lg font-medium text-gray-900 mb-4">Suggested Times</h3>
+                                    @foreach($suggestedTimes as $period => $slots)
+                                        <div class="mb-4">
+                                            <h4 class="text-sm font-medium text-gray-700 mb-2">{{ $period }}</h4>
+                                            <div class="grid grid-cols-3 gap-2">
+                                                @foreach($slots as $slot)
+                                                    <label class="relative">
+                                                        <input wire:model="appointment_time" type="radio" value="{{ $slot['time'] }}" 
+                                                               class="sr-only peer">
+                                                        <div class="p-2 border-2 border-blue-200 bg-blue-50 rounded-lg cursor-pointer hover:border-blue-400 peer-checked:border-blue-600 peer-checked:bg-blue-100 transition-colors">
+                                                            <div class="text-sm font-medium text-blue-900 text-center">{{ $slot['display'] }}</div>
+                                                        </div>
+                                                    </label>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                                
+                                <div class="border-t pt-4">
+                                    <h3 class="text-lg font-medium text-gray-900 mb-4">All Available Times</h3>
+                                </div>
+                            @endif
+                            
+                            <!-- All Available Time Slots -->
                             <div class="grid grid-cols-2 gap-3">
                                 @foreach($availableTimeSlots as $slot)
                                     <label class="relative">
