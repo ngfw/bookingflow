@@ -63,7 +63,7 @@
 
                 <!-- Desktop navigation -->
                 <div class="hidden md:flex items-center space-x-6">
-                    <a href="{{ route('welcome') }}" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Home</a>
+                    <a href="{{ route('home') }}" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Home</a>
                     <a href="{{ route('services') }}" class="text-pink-600 font-medium">Services</a>
                     <a href="{{ route('booking') }}" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg">
                         Book Now
@@ -80,7 +80,7 @@
         <!-- Mobile menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
             <div class="px-4 py-4 space-y-3">
-                <a href="{{ route('welcome') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Home</a>
+                <a href="{{ route('home') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Home</a>
                 <a href="{{ route('services') }}" class="block text-pink-600 font-medium">Services</a>
                 <a href="{{ route('booking') }}" class="block bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-center">Book Now</a>
             </div>
@@ -166,7 +166,7 @@
                 <div>
                     <h4 class="font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="{{ route('welcome') }}" class="hover:text-pink-400">Home</a></li>
+                        <li><a href="{{ route('home') }}" class="hover:text-pink-400">Home</a></li>
                         <li><a href="{{ route('services') }}" class="hover:text-pink-400">Services</a></li>
                         <li><a href="{{ route('booking') }}" class="hover:text-pink-400">Book Now</a></li>
                     </ul>
