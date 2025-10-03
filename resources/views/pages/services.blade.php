@@ -130,12 +130,25 @@
                             </span>
                         </div>
                         <h3 class="text-2xl font-bold text-gray-900 mb-3">{{ $service->name }}</h3>
-                        <p class="text-gray-600 mb-6 leading-relaxed">{{ $service->description }}</p>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            @php
+                                $description = $service->description;
+                                // Check if description is JSON and decode it
+                                if (is_string($description) && (str_starts_with($description, '{') || str_starts_with($description, '['))) {
+                                    $decoded = json_decode($description, true);
+                                    if (json_last_error() === JSON_ERROR_NONE) {
+                                        // If it's an array or object, display first text value found
+                                        $description = is_array($decoded) ? (reset($decoded) ?? $description) : $description;
+                                    }
+                                }
+                            @endphp
+                            {{ is_string($description) ? Str::limit($description, 150) : '' }}
+                        </p>
                         <div class="flex items-center justify-between pt-4 border-t border-gray-100">
                             <div>
                                 <div class="text-3xl font-bold text-pink-600">${{ number_format($service->price, 2) }}</div>
                                 @if($service->category)
-                                    <div class="text-sm text-gray-500 mt-1">{{ $service->category }}</div>
+                                    <div class="text-sm text-gray-500 mt-1">{{ $service->category->name ?? $service->category }}</div>
                                 @endif
                             </div>
                             <a href="{{ route('booking') }}" class="inline-flex items-center bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-4 py-2 rounded-full text-sm font-semibold transition-all">
