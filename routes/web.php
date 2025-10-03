@@ -183,11 +183,8 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
         Route::get('/referrals', \App\Livewire\Admin\Referrals\ReferralManagement::class)->name('referrals');
         Route::get('/membership/tiers', \App\Livewire\Admin\Membership\MembershipTierManagement::class)->name('membership.tiers');
         Route::get('/specials/birthday-anniversary', \App\Livewire\Admin\Specials\BirthdayAnniversarySpecialManagement::class)->name('specials.birthday-anniversary');
-        
+
         // Content Management
-        Route::get('/pages', \App\Livewire\Admin\PageManager::class)->name('pages.index');
-        Route::get('/pages/create', \App\Livewire\Admin\PageEditor::class)->name('pages.create');
-        Route::get('/pages/{page}/edit', \App\Livewire\Admin\PageEditor::class)->name('pages.edit');
         Route::get('/content', \App\Livewire\Admin\ContentManager::class)->name('content.index');
         Route::get('/seo', \App\Livewire\Admin\SEOManager::class)->name('seo.index');
         Route::get('/gallery', \App\Livewire\Admin\GalleryManager::class)->name('gallery.index');
