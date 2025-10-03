@@ -58,28 +58,40 @@
                             <a href="{{ route('admin.dashboard') }}" class="border-indigo-400 text-gray-900 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                                 Dashboard
                             </a>
-                            <a href="{{ route('admin.clients.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                Clients
-                            </a>
-                            <a href="{{ route('admin.staff.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                Staff
-                            </a>
-                            <a href="{{ route('admin.appointments.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                Appointments
-                            </a>
-                            <a href="{{ route('admin.pos.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                POS
-                            </a>
-                            <a href="{{ route('admin.settings.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                Settings
-                            </a>
-                            <a href="{{ route('admin.reports.dashboard') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                                Reports
-                            </a>
+                            @if(auth()->user()->hasPermission('view_clients'))
+                                <a href="{{ route('admin.clients.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    Clients
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasPermission('view_staff'))
+                                <a href="{{ route('admin.staff.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    Staff
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasPermission('view_appointments'))
+                                <a href="{{ route('admin.appointments.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    Appointments
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasPermission('use_pos'))
+                                <a href="{{ route('admin.pos.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    POS
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasRole('super_admin'))
+                                <a href="{{ route('admin.settings.index') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Settings
+                                </a>
+                            @endif
+                            @if(auth()->user()->hasRole('super_admin'))
+                                <a href="{{ route('admin.reports.dashboard') }}" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                                    Reports
+                                </a>
+                            @endif
                         </div>
 
                         <!-- Right side -->
@@ -115,48 +127,70 @@
                         <a href="{{ route('admin.dashboard') }}" class="text-gray-900 hover:bg-gray-50 block px-3 py-2 rounded-md text-base font-medium">
                             Dashboard
                         </a>
-                        <a href="{{ route('admin.clients.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Clients
-                        </a>
-                        <a href="{{ route('admin.staff.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Staff
-                        </a>
-                        <a href="{{ route('admin.staff.schedule') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Schedule
-                        </a>
-                        <a href="{{ route('admin.staff.performance') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Performance
-                        </a>
-                        <a href="{{ route('admin.staff.commission') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Commission
-                        </a>
-                        <a href="{{ route('admin.staff.payroll') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Payroll
-                        </a>
-                        <a href="{{ route('admin.services.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Services
-                        </a>
-                        <a href="{{ route('admin.appointments.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Appointments
-                        </a>
-                        <a href="{{ route('admin.inventory.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Inventory
-                        </a>
-                        <a href="{{ route('admin.reports.dashboard') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            Reports
-                        </a>
-                        <a href="{{ route('admin.pos.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            POS
-                        </a>
-                        <a href="{{ route('admin.settings.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                Settings
-                            </div>
-                        </a>
+                        @if(auth()->user()->hasPermission('view_clients'))
+                            <a href="{{ route('admin.clients.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Clients
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('view_staff'))
+                            <a href="{{ route('admin.staff.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Staff
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('manage_staff_schedules'))
+                            <a href="{{ route('admin.staff.schedule') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Schedule
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('view_staff_performance'))
+                            <a href="{{ route('admin.staff.performance') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Performance
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('manage_staff_payroll'))
+                            <a href="{{ route('admin.staff.commission') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Commission
+                            </a>
+                            <a href="{{ route('admin.staff.payroll') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Payroll
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('view_services'))
+                            <a href="{{ route('admin.services.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Services
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('view_appointments'))
+                            <a href="{{ route('admin.appointments.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Appointments
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('view_products'))
+                            <a href="{{ route('admin.inventory.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Inventory
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasRole('super_admin'))
+                            <a href="{{ route('admin.reports.dashboard') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                Reports
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasPermission('use_pos'))
+                            <a href="{{ route('admin.pos.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                POS
+                            </a>
+                        @endif
+                        @if(auth()->user()->hasRole('super_admin'))
+                            <a href="{{ route('admin.settings.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                                <div class="flex items-center">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    </svg>
+                                    Settings
+                                </div>
+                            </a>
+                        @endif
                         <a href="{{ route('admin.notifications.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
                             Notifications
                         </a>

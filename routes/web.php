@@ -77,16 +77,16 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
     Route::get('/categories', \App\Livewire\Admin\Categories\Index::class)->name('categories.index')->middleware('permission:view_services');
     
     // Staff Management
-    Route::get('/staff', \App\Livewire\Admin\Staff\Index::class)->name('staff.index');
-    Route::get('/staff/create', \App\Livewire\Admin\Staff\Create::class)->name('staff.create');
-    Route::get('/staff/{staff}/edit', \App\Livewire\Admin\Staff\Edit::class)->name('staff.edit');
+    Route::get('/staff', \App\Livewire\Admin\Staff\Index::class)->name('staff.index')->middleware('permission:view_staff');
+    Route::get('/staff/create', \App\Livewire\Admin\Staff\Create::class)->name('staff.create')->middleware('permission:create_staff');
+    Route::get('/staff/{staff}/edit', \App\Livewire\Admin\Staff\Edit::class)->name('staff.edit')->middleware('permission:edit_staff');
     // Staff schedule and performance routes
-    Route::get('/staff/schedule', \App\Livewire\Admin\Staff\StaffSchedule::class)->name('staff.schedule');
-    Route::get('/staff/schedule/mobile', \App\Livewire\Admin\Staff\MobileStaffSchedule::class)->name('staff.schedule.mobile');
-    Route::get('/staff/performance', \App\Livewire\Admin\Staff\StaffPerformanceTracking::class)->name('staff.performance');
-    Route::get('/staff/performance/mobile', \App\Livewire\Admin\Staff\MobileStaffPerformance::class)->name('staff.performance.mobile');
-    Route::get('/staff/commission', \App\Livewire\Admin\Staff\StaffCommissionSettings::class)->name('staff.commission');
-    Route::get('/staff/payroll', \App\Livewire\Admin\Staff\StaffPayrollManagement::class)->name('staff.payroll');
+    Route::get('/staff/schedule', \App\Livewire\Admin\Staff\StaffSchedule::class)->name('staff.schedule')->middleware('permission:manage_staff_schedules');
+    Route::get('/staff/schedule/mobile', \App\Livewire\Admin\Staff\MobileStaffSchedule::class)->name('staff.schedule.mobile')->middleware('permission:manage_staff_schedules');
+    Route::get('/staff/performance', \App\Livewire\Admin\Staff\StaffPerformanceTracking::class)->name('staff.performance')->middleware('permission:view_staff_performance');
+    Route::get('/staff/performance/mobile', \App\Livewire\Admin\Staff\MobileStaffPerformance::class)->name('staff.performance.mobile')->middleware('permission:view_staff_performance');
+    Route::get('/staff/commission', \App\Livewire\Admin\Staff\StaffCommissionSettings::class)->name('staff.commission')->middleware('permission:manage_staff_payroll');
+    Route::get('/staff/payroll', \App\Livewire\Admin\Staff\StaffPayrollManagement::class)->name('staff.payroll')->middleware('permission:manage_staff_payroll');
     
         // Appointment Management
         Route::get('/appointments', \App\Livewire\Admin\Appointments\Index::class)->name('appointments.index');
@@ -136,19 +136,21 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
         Route::get('/pages/create', \App\Livewire\Admin\Pages\Create::class)->name('pages.create');
         Route::get('/pages/{page}/edit', \App\Livewire\Admin\Pages\Edit::class)->name('pages.edit');
         
-        // Settings
-        Route::get('/settings', \App\Livewire\Admin\Settings::class)->name('settings.index');
+        // Settings (Super Admin Only)
+        Route::get('/settings', \App\Livewire\Admin\Settings::class)->name('settings.index')->middleware('role:super_admin');
         
-        // Reports & Analytics
-        Route::get('/reports', \App\Livewire\Admin\Reports\Dashboard::class)->name('reports.dashboard');
-        Route::get('/reports/financial', \App\Livewire\Admin\Reports\Financial::class)->name('reports.financial');
-        Route::get('/reports/appointments', \App\Livewire\Admin\Reports\Appointments::class)->name('reports.appointments');
-        Route::get('/reports/clients', \App\Livewire\Admin\Reports\ClientAnalytics::class)->name('reports.clients');
-        Route::get('/reports/staff', \App\Livewire\Admin\Reports\StaffPerformance::class)->name('reports.staff');
-        Route::get('/reports/business-intelligence', \App\Livewire\Admin\Reports\BusinessIntelligence::class)->name('reports.business-intelligence');
-        Route::get('/reports/predictive-analytics', \App\Livewire\Admin\Reports\PredictiveAnalytics::class)->name('reports.predictive-analytics');
-        Route::get('/reports/custom', \App\Livewire\Admin\Reports\CustomReports::class)->name('reports.custom');
-        Route::get('/reports/export', \App\Livewire\Admin\Reports\DataExport::class)->name('reports.export');
+        // Reports & Analytics (Super Admin Only)
+        Route::middleware('role:super_admin')->group(function () {
+            Route::get('/reports', \App\Livewire\Admin\Reports\Dashboard::class)->name('reports.dashboard');
+            Route::get('/reports/financial', \App\Livewire\Admin\Reports\Financial::class)->name('reports.financial');
+            Route::get('/reports/appointments', \App\Livewire\Admin\Reports\Appointments::class)->name('reports.appointments');
+            Route::get('/reports/clients', \App\Livewire\Admin\Reports\ClientAnalytics::class)->name('reports.clients');
+            Route::get('/reports/staff', \App\Livewire\Admin\Reports\StaffPerformance::class)->name('reports.staff');
+            Route::get('/reports/business-intelligence', \App\Livewire\Admin\Reports\BusinessIntelligence::class)->name('reports.business-intelligence');
+            Route::get('/reports/predictive-analytics', \App\Livewire\Admin\Reports\PredictiveAnalytics::class)->name('reports.predictive-analytics');
+            Route::get('/reports/custom', \App\Livewire\Admin\Reports\CustomReports::class)->name('reports.custom');
+            Route::get('/reports/export', \App\Livewire\Admin\Reports\DataExport::class)->name('reports.export');
+        });
 
         // Point of Sale (POS)
         Route::get('/pos', \App\Livewire\Admin\POS\Index::class)->name('pos.index');
