@@ -5,14 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{{ $settings->salon_name ?? 'Beauty Salon' }} - Our Services</title>
 
-    <!-- SEO Meta Tags -->
     @if(isset($seoData))
-        {!! $seoData !!}
-    @endif
+        <meta name="description" content="{{ $seoData['description'] ?? '' }}">
+        <meta name="keywords" content="{{ $seoData['keywords'] ?? '' }}">
 
-    <!-- Structured Data -->
-    @if(isset($structuredData))
-        {!! $structuredData !!}
+        <!-- Open Graph -->
+        <meta property="og:title" content="{{ $seoData['og_title'] ?? '' }}">
+        <meta property="og:description" content="{{ $seoData['og_description'] ?? '' }}">
+        <meta property="og:image" content="{{ $seoData['og_image'] ?? '' }}">
+        <meta property="og:url" content="{{ $seoData['og_url'] ?? '' }}">
+        <meta property="og:type" content="{{ $seoData['og_type'] ?? 'website' }}">
+
+        <!-- Twitter Card -->
+        <meta name="twitter:card" content="{{ $seoData['twitter_card'] ?? 'summary_large_image' }}">
+        <meta name="twitter:title" content="{{ $seoData['twitter_title'] ?? '' }}">
+        <meta name="twitter:description" content="{{ $seoData['twitter_description'] ?? '' }}">
+        <meta name="twitter:image" content="{{ $seoData['twitter_image'] ?? '' }}">
     @endif
 
     <!-- Fonts -->
