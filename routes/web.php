@@ -42,8 +42,14 @@ Route::get('/dashboard', function () {
     } elseif ($user && $user->hasRole('staff')) {
         return redirect()->route('staff.dashboard');
     }
-    return view('dashboard');
+    // Client dashboard
+    return redirect()->route('client.dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Client Dashboard
+Route::middleware(['auth'])->prefix('client')->name('client.')->group(function () {
+    Route::get('/dashboard', \App\Livewire\Client\Dashboard::class)->name('dashboard');
+});
 
 Route::view('profile', 'profile')
     ->middleware(['auth'])
