@@ -4,4 +4,4 @@
 [x] uploaded logo should be available acroll FE, Staff panel and admin panel
 [x] should staff portal have POS? maybe not product managment
 [x] maybe we should have unAuthenticated users (customers), Staff, Admin, and super admin? Admin should be more adminitrativ person, who doesn't have access to say, sait settings or reports but can manage the products and appointments, maybe staff too..
-[ ] improve FE
+[x] improve FE
