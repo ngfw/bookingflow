@@ -200,6 +200,9 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
 
         // About Us Management
         Route::get('/about-us', \App\Livewire\Admin\AboutUsManager::class)->name('about-us.index');
+
+        // Menu Management
+        Route::get('/menus', \App\Livewire\Admin\MenuManager::class)->name('menus.index');
 });
 
 // Dynamic pages
