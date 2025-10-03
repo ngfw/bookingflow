@@ -66,6 +66,7 @@
                     <a href="{{ route('home') }}" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Home</a>
                     <a href="{{ route('services') }}" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Services</a>
                     <a href="{{ route('gallery') }}" class="text-pink-600 font-medium">Gallery</a>
+                    <a href="{{ route('blog') }}" class="text-gray-700 hover:text-pink-600 font-medium transition-colors">Blog</a>
                     <a href="{{ route('booking') }}" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-6 py-2.5 rounded-full font-semibold transition-all shadow-md hover:shadow-lg">
                         Book Now
                     </a>
@@ -84,6 +85,7 @@
                 <a href="{{ route('home') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Home</a>
                 <a href="{{ route('services') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Services</a>
                 <a href="{{ route('gallery') }}" class="block text-pink-600 font-medium">Gallery</a>
+                <a href="{{ route('blog') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Blog</a>
                 <a href="{{ route('booking') }}" class="block bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-center">Book Now</a>
             </div>
         </div>
