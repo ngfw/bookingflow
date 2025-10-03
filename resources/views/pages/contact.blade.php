@@ -107,9 +107,26 @@
         </div>
     </section>
 
-    <!-- Contact Information -->
+    <!-- Contact Form Section -->
     <section class="py-20 bg-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Send Us a Message</h2>
+                <p class="text-lg text-gray-600">Fill out the form below and we'll get back to you as soon as possible</p>
+            </div>
+            <div class="bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                @livewire('contact-form')
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Information -->
+    <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Other Ways to Reach Us</h2>
+                <p class="text-lg text-gray-600">Prefer another method? Here's how you can contact us</p>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 @if($settings->salon_address)
                 <div class="text-center p-8 bg-gradient-to-br from-pink-50 to-white rounded-2xl border border-pink-100">

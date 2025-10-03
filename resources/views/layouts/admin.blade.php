@@ -218,6 +218,9 @@
                         <a href="{{ route('admin.promotions.campaigns') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
                             Campaigns
                         </a>
+                        <a href="{{ route('admin.contact-submissions.index') }}" class="text-gray-500 hover:bg-gray-50 hover:text-gray-900 block px-3 py-2 rounded-md text-base font-medium">
+                            Contact Messages
+                        </a>
                     </div>
                 </div>
             </nav>

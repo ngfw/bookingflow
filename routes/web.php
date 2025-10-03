@@ -188,6 +188,9 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
         Route::get('/blog', \App\Livewire\Admin\BlogManager::class)->name('blog.index');
         Route::get('/social-media', \App\Livewire\Admin\SocialMediaManager::class)->name('social-media.index');
         Route::get('/analytics', \App\Livewire\Admin\AnalyticsDashboard::class)->name('analytics.index');
+
+        // Contact Submissions
+        Route::get('/contact-submissions', \App\Livewire\Admin\ContactSubmissions::class)->name('contact-submissions.index');
 });
 
 // Dynamic pages
