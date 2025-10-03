@@ -82,10 +82,10 @@ class Edit extends Component
         'hobbies' => 'nullable|string',
     ];
 
-    public function mount($staffId)
+    public function mount(Staff $staff)
     {
-        $this->staffId = $staffId;
-        $this->staff = Staff::with(['user', 'services'])->findOrFail($staffId);
+        $this->staffId = $staff->id;
+        $this->staff = $staff->load(['user', 'services']);
         
         // Load user data
         $this->name = $this->staff->user->name;
