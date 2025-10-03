@@ -82,6 +82,12 @@
                 <a href="{{ route('blog') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Blog</a>
                 <a href="{{ route('contact') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Contact</a>
                 <a href="{{ route('booking') }}" class="block bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-center">Book Now</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Register</a>
+                @endauth
             </div>
         </div>
     </nav>
@@ -315,17 +321,27 @@
                 <div>
                     <h4 class="font-semibold mb-4">Quick Links</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li><a href="#services" class="hover:text-pink-400">Services</a></li>
-                        <li><a href="#about" class="hover:text-pink-400">About Us</a></li>
+                        <li><a href="{{ route('services') }}" class="hover:text-pink-400">Services</a></li>
+                        <li><a href="{{ route('gallery') }}" class="hover:text-pink-400">Gallery</a></li>
+                        <li><a href="{{ route('contact') }}" class="hover:text-pink-400">Contact</a></li>
                         <li><a href="{{ route('booking') }}" class="hover:text-pink-400">Book Now</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="font-semibold mb-4">Services</h4>
+                    <h4 class="font-semibold mb-4">Account</h4>
                     <ul class="space-y-2 text-gray-400">
-                        <li>Hair Services</li>
-                        <li>Facial Treatments</li>
-                        <li>Nail Services</li>
+                        @auth
+                            <li><a href="{{ route('dashboard') }}" class="hover:text-pink-400">My Dashboard</a></li>
+                            <li>
+                                <form method="POST" action="{{ route('logout') }}" class="inline">
+                                    @csrf
+                                    <button type="submit" class="hover:text-pink-400 text-left">Logout</button>
+                                </form>
+                            </li>
+                        @else
+                            <li><a href="{{ route('login') }}" class="hover:text-pink-400">Login</a></li>
+                            <li><a href="{{ route('register') }}" class="hover:text-pink-400">Register</a></li>
+                        @endauth
                     </ul>
                 </div>
                 <div>

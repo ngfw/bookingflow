@@ -89,6 +89,12 @@
                 <a href="{{ route('blog') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Blog</a>
                 <a href="{{ route('contact') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Contact</a>
                 <a href="{{ route('booking') }}" class="block bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-center">Book Now</a>
+                @auth
+                    <a href="{{ route('dashboard') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Dashboard</a>
+                @else
+                    <a href="{{ route('login') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Login</a>
+                    <a href="{{ route('register') }}" class="block text-gray-700 hover:text-pink-600 font-medium">Register</a>
+                @endauth
             </div>
         </div>
     </nav>
