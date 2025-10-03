@@ -101,11 +101,6 @@ class User extends Authenticatable
         return $this->role === 'client';
     }
 
-    public function hasRole($role)
-    {
-        return $this->role === $role;
-    }
-
     public function primaryLocation()
     {
         return $this->belongsTo(Location::class, 'primary_location_id');
