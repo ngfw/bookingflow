@@ -155,6 +155,32 @@ class DynamicPageController extends Controller
     }
 
     /**
+     * Display about us page
+     */
+    public function about(Request $request)
+    {
+        // Track page view
+        $this->analyticsService->trackPageView($request, 'About Us');
+
+        $settings = SalonSetting::getDefault();
+
+        // Get team members if enabled
+        $teamMembers = collect();
+        if ($settings->show_team_on_about) {
+            $teamMembers = \App\Models\Staff::where('display_on_website', true)
+                ->with('user')
+                ->orderBy('display_order')
+                ->orderBy('created_at')
+                ->get();
+        }
+
+        $seoData = $this->seoService->generateMetaTags(null, 'website');
+        $structuredData = $this->seoService->generateStructuredData(null, 'website');
+
+        return view('pages.about', compact('settings', 'teamMembers', 'seoData', 'structuredData'));
+    }
+
+    /**
      * Default homepage fallback
      */
     private function defaultHomepage(Request $request, $settings)

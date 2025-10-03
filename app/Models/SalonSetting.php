@@ -23,6 +23,12 @@ class SalonSetting extends Model
         'seo_settings',
         'homepage_settings',
         'booking_settings',
+        'about_us_title',
+        'about_us_content',
+        'about_us_mission',
+        'about_us_vision',
+        'show_team_on_about',
+        'about_us_image',
         'is_active',
     ];
 

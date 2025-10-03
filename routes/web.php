@@ -197,6 +197,9 @@ Route::middleware(['auth', 'role:admin|super_admin'])->prefix('admin')->name('ad
 
         // Contact Submissions
         Route::get('/contact-submissions', \App\Livewire\Admin\ContactSubmissions::class)->name('contact-submissions.index');
+
+        // About Us Management
+        Route::get('/about-us', \App\Livewire\Admin\AboutUsManager::class)->name('about-us.index');
 });
 
 // Dynamic pages
@@ -208,5 +211,6 @@ Route::get('/gallery', [App\Http\Controllers\DynamicPageController::class, 'gall
 Route::get('/blog', [App\Http\Controllers\DynamicPageController::class, 'blog'])->name('blog');
 Route::get('/blog/{slug}', [App\Http\Controllers\DynamicPageController::class, 'blogPost'])->name('blog.post');
 Route::get('/contact', [App\Http\Controllers\DynamicPageController::class, 'contact'])->name('contact');
+Route::get('/about', [App\Http\Controllers\DynamicPageController::class, 'about'])->name('about');
 
 require __DIR__.'/auth.php';
