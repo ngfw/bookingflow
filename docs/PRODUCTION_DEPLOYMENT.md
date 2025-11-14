@@ -12,7 +12,8 @@
 8. [Monitoring & Logging](#monitoring--logging)
 9. [Backup Configuration](#backup-configuration)
 10. [Post-Deployment Testing](#post-deployment-testing)
-11. [Troubleshooting](#troubleshooting)
+11. [Automated Deployment (GitHub Actions)](#automated-deployment-github-actions)
+12. [Troubleshooting](#troubleshooting)
 
 ---
 
@@ -516,6 +517,236 @@ php artisan test
 ```bash
 ab -n 100 -c 10 https://yourdomain.com/
 ```
+
+
+---
+
+## Automated Deployment (GitHub Actions)
+
+### Overview
+
+The project includes an automated deployment workflow that deploys on version tag pushes. This is the recommended method for production deployments.
+
+### Setup GitHub Secrets
+
+Before using automated deployment, configure these secrets in your GitHub repository:
+
+**Settings → Secrets and variables → Actions → New repository secret**
+
+| Secret Name | Description | Example |
+|------------|-------------|---------|
+| `SERVER_HOST` | Your production server IP or domain | `203.0.113.42` or `yourdomain.com` |
+| `SERVER_USER` | SSH username (usually `ubuntu` or `www-data`) | `ubuntu` |
+| `SERVER_SSH_KEY` | Private SSH key for authentication | Contents of `~/.ssh/id_rsa` |
+
+### Generate SSH Key Pair (if needed)
+
+On your local machine:
+
+```bash
+# Generate SSH key pair
+ssh-keygen -t rsa -b 4096 -C "deployment@yourdomain.com" -f ~/.ssh/salon_deploy_key
+
+# Copy public key to server
+ssh-copy-id -i ~/.ssh/salon_deploy_key.pub ubuntu@your-server-ip
+
+# Test connection
+ssh -i ~/.ssh/salon_deploy_key ubuntu@your-server-ip
+
+# Add private key to GitHub Secrets
+cat ~/.ssh/salon_deploy_key
+# Copy the entire output and paste into SERVER_SSH_KEY secret
+```
+
+### Deployment Workflow
+
+The automated deployment (`.github/workflows/deploy.yml`) performs these steps:
+
+1. **Checkout Code** - Fetches the tagged version
+2. **SSH to Server** - Connects to production server
+3. **Fetch & Checkout Tag** - Downloads and switches to the tagged version
+4. **Install Dependencies** - Runs `composer install` (production mode)
+5. **Build Assets** - Runs `npm install` and `npm run build`
+6. **Run Migrations** - Applies database changes (if `.env` exists)
+7. **Clear Caches** - Clears Laravel caches and optimizes
+8. **Set Permissions** - Ensures correct file permissions
+9. **Reload PHP-FPM** - Applies changes
+
+### How to Deploy
+
+#### 1. Create a Version Tag
+
+```bash
+# Ensure all changes are committed
+git add .
+git commit -m "Prepare release v1.0.0"
+
+# Create and push tag
+git tag -a v1.0.0 -m "Release version 1.0.0"
+git push origin v1.0.0
+```
+
+#### 2. Monitor Deployment
+
+- Go to GitHub → Actions tab
+- Watch the deployment workflow run
+- Check for any errors
+
+#### 3. Verify Deployment
+
+```bash
+# SSH to server
+ssh ubuntu@your-server-ip
+
+# Check deployed version
+cd /var/www/salon
+git describe --tags
+
+# Check application
+curl -I https://yourdomain.com
+```
+
+### Deployment Configuration
+
+The workflow expects:
+
+- **Application Directory**: `/var/www/salon` (customize in `deploy.yml` if different)
+- **Web Server User**: `www-data` (Ubuntu/Nginx default)
+- **PHP Version**: 8.2 (adjust in workflow if using different version)
+
+### Customize Deployment Path
+
+If your application is in a different directory, edit `.github/workflows/deploy.yml`:
+
+```yaml
+script: |
+  APP_DIR=/your/custom/path  # Change this line
+  cd "$APP_DIR" || exit 1
+  ...
+```
+
+### Rollback to Previous Version
+
+If a deployment fails:
+
+```bash
+# SSH to server
+ssh ubuntu@your-server-ip
+cd /var/www/salon
+
+# List available tags
+git tag -l
+
+# Rollback to previous tag
+git fetch --all --tags
+git checkout v1.0.0  # Replace with previous version
+
+# Reinstall dependencies
+composer install --no-dev --optimize-autoloader
+npm install && npm run build
+
+# Clear caches
+php artisan optimize
+
+# Set permissions
+sudo chown -R www-data:www-data /var/www/salon
+sudo chmod -R 775 /var/www/salon/storage
+```
+
+### Manual Deployment (Alternative)
+
+If you prefer manual deployment without GitHub Actions:
+
+```bash
+# SSH to server
+ssh ubuntu@your-server-ip
+cd /var/www/salon
+
+# Pull latest changes
+git fetch --all
+git checkout main  # or your branch
+git pull origin main
+
+# Update dependencies
+composer install --no-dev --optimize-autoloader
+npm install && npm run build
+
+# Run migrations
+php artisan migrate --force
+
+# Clear caches
+php artisan config:clear
+php artisan cache:clear
+php artisan route:clear
+php artisan view:clear
+php artisan optimize
+
+# Set permissions
+sudo chown -R www-data:www-data /var/www/salon
+sudo find /var/www/salon -type f -exec chmod 664 {} \;
+sudo find /var/www/salon -type d -exec chmod 775 {} \;
+sudo chmod -R ug+rwx /var/www/salon/storage
+sudo chmod -R ug+rwx /var/www/salon/bootstrap/cache
+
+# Reload PHP-FPM
+sudo systemctl reload php8.2-fpm
+```
+
+### Zero-Downtime Deployment (Advanced)
+
+For mission-critical deployments with zero downtime:
+
+1. **Use Laravel Envoyer or Deployer** - Professional deployment tools
+2. **Implement Blue-Green Deployment** - Two identical environments
+3. **Use Symlink Strategy** - Point web server to different releases
+
+Example symlink strategy:
+
+```bash
+/var/www/
+├── salon-releases/
+│   ├── 20241215-120000/
+│   ├── 20241215-130000/
+│   └── 20241215-140000/
+├── salon -> salon-releases/20241215-140000  # Symlink
+└── salon-shared/
+    ├── .env
+    └── storage/
+```
+
+### Deployment Best Practices
+
+- ✅ **Always tag releases** - Use semantic versioning (v1.0.0, v1.1.0)
+- ✅ **Test in staging first** - Deploy to staging before production
+- ✅ **Run tests before deploying** - CI/CD should pass all tests
+- ✅ **Keep rollback option ready** - Know how to revert quickly
+- ✅ **Monitor after deployment** - Watch logs and error tracking
+- ✅ **Deploy during low traffic** - Minimize user impact
+- ✅ **Communicate with team** - Notify stakeholders of deployments
+- ✅ **Document changes** - Maintain a changelog
+
+### Deployment Checklist
+
+Before deploying:
+
+- [ ] All tests pass (`php artisan test`)
+- [ ] Code reviewed and approved
+- [ ] Database migrations tested
+- [ ] `.env.production.example` updated if needed
+- [ ] Changelog updated
+- [ ] Team notified
+- [ ] Backup created
+- [ ] Staging deployment successful
+
+After deploying:
+
+- [ ] Application accessible
+- [ ] No errors in logs
+- [ ] Database migrations applied
+- [ ] Caches cleared
+- [ ] Critical features tested
+- [ ] Performance acceptable
+- [ ] Monitoring shows healthy status
 
 ---
 
