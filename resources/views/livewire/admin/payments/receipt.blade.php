@@ -60,10 +60,10 @@
                     <div class="bg-white rounded-lg shadow p-8 print-receipt" id="receipt-content">
                         <!-- Receipt Header -->
                         <div class="text-center mb-8">
-                            <h1 class="text-3xl font-bold text-gray-900 mb-2">Beauty Salon Management</h1>
+                            <h1 class="text-3xl font-bold text-gray-900 mb-2">BookingFlow Management</h1>
                             <p class="text-gray-600">123 Beauty Street, City, State 12345</p>
-                            <p class="text-gray-600">Phone: (555) 123-4567 | Email: info@beautysalon.com</p>
-                            <p class="text-gray-600">Website: www.beautysalon.com</p>
+                            <p class="text-gray-600">Phone: (555) 123-4567 | Email: info@bookingflow.com</p>
+                            <p class="text-gray-600">Website: www.bookingflow.com</p>
                         </div>
 
                         <!-- Receipt Title -->

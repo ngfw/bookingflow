@@ -13,7 +13,7 @@ class FranchiseSeeder extends Seeder
     {
         // Corporate franchise
         $corporate = Franchise::create([
-            'name' => 'Beauty Salon Corporate',
+            'name' => 'service business Corporate',
             'franchise_code' => 'FR001',
             'franchise_type' => 'owned',
             'status' => 'active',

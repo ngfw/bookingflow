@@ -1,4 +1,4 @@
-# Beauty Salon Management System - Production Deployment Guide
+# BookingFlow - Production Deployment Guide
 
 ## 📋 Table of Contents
 
@@ -82,9 +82,9 @@ sudo mysql_secure_installation
 Create database and user:
 
 ```sql
-CREATE DATABASE beauty_salon_production CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE bookingflow_production CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'salon_user'@'localhost' IDENTIFIED BY 'strong_password_here';
-GRANT ALL PRIVILEGES ON beauty_salon_production.* TO 'salon_user'@'localhost';
+GRANT ALL PRIVILEGES ON bookingflow_production.* TO 'salon_user'@'localhost';
 FLUSH PRIVILEGES;
 ```
 
@@ -246,7 +246,7 @@ APP_URL=https://yourdomain.com
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
-DB_DATABASE=beauty_salon_production
+DB_DATABASE=bookingflow_production
 DB_USERNAME=salon_user
 DB_PASSWORD=your_secure_password
 
@@ -447,7 +447,7 @@ Create backup script `/usr/local/bin/salon-backup.sh`:
 #!/bin/bash
 DATE=$(date +%Y%m%d_%H%M%S)
 BACKUP_DIR="/var/backups/salon"
-DB_NAME="beauty_salon_production"
+DB_NAME="bookingflow_production"
 DB_USER="salon_user"
 DB_PASS="your_password"
 
@@ -828,7 +828,7 @@ If deployment fails:
 
 ```bash
 # 1. Restore database backup
-gunzip < /var/backups/salon/db_TIMESTAMP.sql.gz | mysql -u salon_user -p beauty_salon_production
+gunzip < /var/backups/salon/db_TIMESTAMP.sql.gz | mysql -u salon_user -p bookingflow_production
 
 # 2. Restore application
 tar -xzf /var/backups/salon/app_TIMESTAMP.tar.gz -C /

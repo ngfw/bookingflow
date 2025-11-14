@@ -1,4 +1,4 @@
-// Performance Optimizer for Beauty Salon Management System
+// Performance Optimizer for BookingFlow Management System
 
 class PerformanceOptimizer {
     constructor() {

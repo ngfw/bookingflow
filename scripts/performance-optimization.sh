@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Beauty Salon Management System - Performance Optimization Script
+# BookingFlow - Performance Optimization Script
 # This script optimizes system performance for production deployment
 
 set -e
@@ -390,7 +390,7 @@ configure_system_limits() {
     # Configure system limits
     cat >> "/etc/security/limits.conf" << 'EOF'
 
-# Beauty Salon Management System limits
+# BookingFlow limits
 www-data soft nofile 65535
 www-data hard nofile 65535
 nginx soft nofile 65535
@@ -427,7 +427,7 @@ configure_kernel_parameters() {
     # Configure kernel parameters
     cat >> "/etc/sysctl.conf" << 'EOF'
 
-# Beauty Salon Management System kernel optimizations
+# BookingFlow kernel optimizations
 # Network optimizations
 net.core.rmem_default = 262144
 net.core.rmem_max = 16777216
@@ -559,7 +559,7 @@ create_performance_monitor() {
 
 # Performance Monitoring Script
 LOG_FILE="/var/log/performance-monitor.log"
-ALERT_EMAIL="admin@beautysalon.com"
+ALERT_EMAIL="admin@bookingflow.com"
 
 log() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"
@@ -601,7 +601,7 @@ check_performance() {
         log "Performance alerts: ${alerts[*]}"
         
         if command -v mail >/dev/null 2>&1; then
-            echo -e "$alert_message" | mail -s "Performance Alert - Beauty Salon System" "$ALERT_EMAIL"
+            echo -e "$alert_message" | mail -s "Performance Alert - BookingFlow System" "$ALERT_EMAIL"
         fi
     else
         log "System performance is normal (CPU: ${cpu_usage}%, Memory: ${memory_usage}%, Disk: ${disk_usage}%, Load: $load_average)"
@@ -616,12 +616,12 @@ check_application_performance() {
     if [ "$http_status" != "200" ]; then
         log "Application health check failed (HTTP: $http_status)"
         if command -v mail >/dev/null 2>&1; then
-            echo "Application health check failed with HTTP status $http_status" | mail -s "Application Alert - Beauty Salon System" "$ALERT_EMAIL"
+            echo "Application health check failed with HTTP status $http_status" | mail -s "Application Alert - BookingFlow System" "$ALERT_EMAIL"
         fi
     elif (( $(echo "$response_time > 2" | bc -l) )); then
         log "Application response time is slow: ${response_time}s"
         if command -v mail >/dev/null 2>&1; then
-            echo "Application response time is slow: ${response_time}s" | mail -s "Performance Alert - Beauty Salon System" "$ALERT_EMAIL"
+            echo "Application response time is slow: ${response_time}s" | mail -s "Performance Alert - BookingFlow System" "$ALERT_EMAIL"
         fi
     else
         log "Application performance is normal (Response time: ${response_time}s)"
@@ -637,7 +637,7 @@ check_database_performance() {
     if [ -n "$slow_queries" ] && [ "$slow_queries" -gt 100 ]; then
         log "High number of slow queries: $slow_queries"
         if command -v mail >/dev/null 2>&1; then
-            echo "High number of slow queries detected: $slow_queries" | mail -s "Database Alert - Beauty Salon System" "$ALERT_EMAIL"
+            echo "High number of slow queries detected: $slow_queries" | mail -s "Database Alert - BookingFlow System" "$ALERT_EMAIL"
         fi
     fi
     
@@ -646,7 +646,7 @@ check_database_performance() {
         if [ "$connection_usage" -gt 80 ]; then
             log "High database connection usage: ${connection_usage}%"
             if command -v mail >/dev/null 2>&1; then
-                echo "High database connection usage: ${connection_usage}%" | mail -s "Database Alert - Beauty Salon System" "$ALERT_EMAIL"
+                echo "High database connection usage: ${connection_usage}%" | mail -s "Database Alert - BookingFlow System" "$ALERT_EMAIL"
             fi
         fi
     fi

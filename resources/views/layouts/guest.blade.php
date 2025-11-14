@@ -22,7 +22,7 @@
                 <a href="/" wire:navigate class="flex flex-col items-center">
                     <x-salon-logo class="w-16 h-16 fill-current text-pink-600 mb-2" />
                     @php
-                        $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'Beauty Salon';
+                        $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'BookingFlow';
                     @endphp
                     <h1 class="text-2xl font-bold text-gray-900">{{ $salonName }}</h1>
                     <p class="text-sm text-gray-600">Management System</p>
@@ -40,7 +40,7 @@
                 <!-- Footer -->
                 <div class="text-center mt-6">
                     <p class="text-xs text-gray-500">
-                        © {{ date('Y') }} Beauty Salon Management System. All rights reserved.
+                        © {{ date('Y') }} BookingFlow. All rights reserved.
                     </p>
                 </div>
             </div>

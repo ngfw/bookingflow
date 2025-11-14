@@ -24,7 +24,7 @@ class PushNotificationSeeder extends Seeder
         foreach ($users as $user) {
             // Welcome notification
             PushNotification::createNotification(
-                'Welcome to Beauty Salon!',
+                'Welcome to service business!',
                 'Thank you for joining us. Book your first appointment and enjoy our services.',
                 [
                     'user_id' => $user->id,

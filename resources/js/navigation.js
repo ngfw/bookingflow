@@ -1,4 +1,4 @@
-// Enhanced Navigation JavaScript for Beauty Salon Management System
+// Enhanced Navigation JavaScript for BookingFlow Management System
 
 class NavigationManager {
     constructor() {

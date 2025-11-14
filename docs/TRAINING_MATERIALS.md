@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Training Materials
+# BookingFlow - Training Materials
 
 ## Overview
-This comprehensive training materials guide provides structured learning resources for all users of the Beauty Salon Management System. These materials are designed to ensure effective onboarding, skill development, and ongoing education for clients, staff, and administrators.
+This comprehensive training materials guide provides structured learning resources for all users of the BookingFlow. These materials are designed to ensure effective onboarding, skill development, and ongoing education for clients, staff, and administrators.
 
 ## Table of Contents
 1. [Training Program Structure](#training-program-structure)
@@ -56,7 +56,7 @@ Each level consists of multiple modules covering different aspects of the system
 
 #### Content
 1. **System Introduction** (10 minutes)
-   - What is the Beauty Salon Management System
+   - What is the BookingFlow
    - Benefits for clients
    - System features overview
    - Security and privacy
@@ -764,7 +764,7 @@ Each level consists of multiple modules covering different aspects of the system
 
 ## Conclusion
 
-This comprehensive training materials guide provides structured learning resources for all users of the Beauty Salon Management System. The training program is designed to ensure effective onboarding, skill development, and ongoing education.
+This comprehensive training materials guide provides structured learning resources for all users of the BookingFlow. The training program is designed to ensure effective onboarding, skill development, and ongoing education.
 
 ### Key Benefits
 - **Structured Learning**: Organized modules with clear objectives

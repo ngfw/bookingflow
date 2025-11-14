@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Troubleshooting Guide
+# BookingFlow - Troubleshooting Guide
 
 ## Overview
-This guide provides comprehensive troubleshooting procedures for common issues that may occur with the Beauty Salon Management System.
+This guide provides comprehensive troubleshooting procedures for common issues that may occur with the BookingFlow.
 
 ## Table of Contents
 1. [General Troubleshooting](#general-troubleshooting)
@@ -148,10 +148,10 @@ docker-compose -f docker/docker-compose.yml restart db
 docker-compose -f docker/docker-compose.yml exec app php artisan config:show database
 
 # Test database credentials
-docker-compose -f docker/docker-compose.yml exec db mysql -u beauty_salon_user -p
+docker-compose -f docker/docker-compose.yml exec db mysql -u bookingflow_user -p
 
 # Check database permissions
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW GRANTS FOR 'beauty_salon_user'@'%';"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW GRANTS FOR 'bookingflow_user'@'%';"
 ```
 
 ### 3. Session and Cache Issues
@@ -204,19 +204,19 @@ docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW GL
 docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW PROCESSLIST;"
 
 # Check table status
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW TABLE STATUS FROM beauty_salon;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW TABLE STATUS FROM bookingflow;"
 ```
 
 **Solutions:**
 ```bash
 # Optimize tables
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "OPTIMIZE TABLE beauty_salon.appointments, beauty_salon.clients, beauty_salon.staff;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "OPTIMIZE TABLE bookingflow.appointments, bookingflow.clients, bookingflow.staff;"
 
 # Analyze tables
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "ANALYZE TABLE beauty_salon.appointments, beauty_salon.clients, beauty_salon.staff;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "ANALYZE TABLE bookingflow.appointments, bookingflow.clients, bookingflow.staff;"
 
 # Check indexes
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW INDEX FROM beauty_salon.appointments;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW INDEX FROM bookingflow.appointments;"
 ```
 
 ### 2. Database Corruption
@@ -229,7 +229,7 @@ docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW IN
 **Diagnosis:**
 ```bash
 # Check table integrity
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "CHECK TABLE beauty_salon.appointments, beauty_salon.clients, beauty_salon.staff;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "CHECK TABLE bookingflow.appointments, bookingflow.clients, bookingflow.staff;"
 
 # Check database status
 docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW ENGINE INNODB STATUS;"
@@ -238,7 +238,7 @@ docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW EN
 **Solutions:**
 ```bash
 # Repair tables
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "REPAIR TABLE beauty_salon.appointments, beauty_salon.clients, beauty_salon.staff;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "REPAIR TABLE bookingflow.appointments, bookingflow.clients, bookingflow.staff;"
 
 # Restore from backup
 ./scripts/restore.sh --date <backup-date>
@@ -761,7 +761,7 @@ sudo crontab -e
 
 ## Conclusion
 
-This troubleshooting guide covers the most common issues that may occur with the Beauty Salon Management System. Always:
+This troubleshooting guide covers the most common issues that may occur with the BookingFlow. Always:
 
 1. Check logs first
 2. Verify system status

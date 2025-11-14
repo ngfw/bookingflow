@@ -14,7 +14,7 @@ class LocationSeeder extends Seeder
     {
         $locations = [
             [
-                'name' => 'Beauty Salon Downtown',
+                'name' => 'service business Downtown',
                 'code' => 'SF001',
                 'description' => 'Our flagship location in the heart of downtown San Francisco',
                 'address' => '123 Market Street',
@@ -58,7 +58,7 @@ class LocationSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Beauty Salon Marina',
+                'name' => 'service business Marina',
                 'code' => 'SF002',
                 'description' => 'Upscale location in the Marina district with ocean views',
                 'address' => '456 Chestnut Street',
@@ -103,7 +103,7 @@ class LocationSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Beauty Salon Sunset',
+                'name' => 'service business Sunset',
                 'code' => 'SF003',
                 'description' => 'Community-focused location in the Sunset district',
                 'address' => '789 Irving Street',
@@ -147,7 +147,7 @@ class LocationSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Beauty Salon Los Angeles',
+                'name' => 'service business Los Angeles',
                 'code' => 'LA001',
                 'description' => 'Our first location in Los Angeles, Beverly Hills area',
                 'address' => '321 Rodeo Drive',
@@ -193,7 +193,7 @@ class LocationSeeder extends Seeder
                 ],
             ],
             [
-                'name' => 'Beauty Salon San Jose',
+                'name' => 'service business San Jose',
                 'code' => 'SJ001',
                 'description' => 'Tech-focused location in the heart of Silicon Valley',
                 'address' => '654 Santana Row',

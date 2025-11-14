@@ -1,8 +1,8 @@
-# Beauty Salon Management System - User Guide
+# BookingFlow - User Guide
 
-## Welcome to the Beauty Salon Management System
+## Welcome to the BookingFlow
 
-This comprehensive guide will help you navigate and use all the features of the Beauty Salon Management System. Whether you're a client booking an appointment or a staff member managing the salon, this guide has everything you need.
+This comprehensive guide will help you navigate and use all the features of the BookingFlow. Whether you're a client booking an appointment or a staff member managing the salon, this guide has everything you need.
 
 ## Table of Contents
 
@@ -570,7 +570,7 @@ This comprehensive guide will help you navigate and use all the features of the 
 
 ## Conclusion
 
-This user guide covers all the essential features of the Beauty Salon Management System. For additional help or questions not covered in this guide, please contact our support team.
+This user guide covers all the essential features of the BookingFlow. For additional help or questions not covered in this guide, please contact our support team.
 
 Remember to:
 - Keep your information updated

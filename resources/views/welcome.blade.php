@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     @php
         $settings = \App\Models\SalonSetting::getDefault();
-        $salonName = $settings->salon_name ?? 'Beauty Salon';
+        $salonName = $settings->salon_name ?? 'service business';
     @endphp
     <title>{{ $salonName }} - Professional Beauty Services</title>
 

@@ -128,9 +128,9 @@ sudo mysql -u root -p
 In MySQL console:
 
 ```sql
-CREATE DATABASE beauty_salon_production CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE DATABASE bookingflow_production CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 CREATE USER 'salon_user'@'localhost' IDENTIFIED BY 'your_strong_password_here';
-GRANT ALL PRIVILEGES ON beauty_salon_production.* TO 'salon_user'@'localhost';
+GRANT ALL PRIVILEGES ON bookingflow_production.* TO 'salon_user'@'localhost';
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -202,7 +202,7 @@ APP_URL=https://yourdomain.com
 
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
-DB_DATABASE=beauty_salon_production
+DB_DATABASE=bookingflow_production
 DB_USERNAME=salon_user
 DB_PASSWORD=your_strong_password_here
 
@@ -564,7 +564,7 @@ sudo chmod -R 775 /var/www/book.vai.me/bootstrap/cache
 
 ```bash
 # Test database connection
-mysql -u salon_user -p beauty_salon_production
+mysql -u salon_user -p bookingflow_production
 
 # Check .env database credentials
 nano /var/www/book.vai.me/.env

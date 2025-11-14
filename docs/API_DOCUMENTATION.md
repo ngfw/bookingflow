@@ -1,7 +1,7 @@
-# Beauty Salon Management System - API Documentation
+# BookingFlow - API Documentation
 
 ## Overview
-This comprehensive API documentation provides detailed information about all available endpoints, authentication methods, request/response formats, and integration examples for the Beauty Salon Management System.
+This comprehensive API documentation provides detailed information about all available endpoints, authentication methods, request/response formats, and integration examples for the BookingFlow.
 
 ## Table of Contents
 1. [Getting Started](#getting-started)
@@ -788,7 +788,7 @@ pip install beauty-salon-api
 ```
 
 ```python
-from beauty_salon_api import BeautySalonAPI
+from bookingflow_api import BeautySalonAPI
 
 api = BeautySalonAPI(
     base_url='https://yourdomain.com/api/v1',
@@ -923,7 +923,7 @@ https://yourdomain.com/api/docs
 
 ## Conclusion
 
-This API documentation provides comprehensive information for integrating with the Beauty Salon Management System. For additional support or questions, please contact the technical support team.
+This API documentation provides comprehensive information for integrating with the BookingFlow. For additional support or questions, please contact the technical support team.
 
 ### Support Resources
 - API Documentation: https://yourdomain.com/api/docs

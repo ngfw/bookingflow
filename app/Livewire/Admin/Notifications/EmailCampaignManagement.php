@@ -51,7 +51,7 @@ class EmailCampaignManagement extends Component
             'track_opens' => true,
             'track_clicks' => true,
             'unsubscribe_link' => true,
-            'from_name' => config('app.name', 'Beauty Salon'),
+            'from_name' => config('app.name', 'BookingFlow'),
             'from_email' => config('mail.from.address'),
         ];
     }

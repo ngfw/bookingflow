@@ -146,11 +146,11 @@ class Receipt extends Component
     public function getBusinessInfo()
     {
         return [
-            'name' => 'Beauty Salon Management',
+            'name' => 'service business Management',
             'address' => '123 Main Street, City, State 12345',
             'phone' => '(555) 123-4567',
-            'email' => 'info@beautysalon.com',
-            'website' => 'www.beautysalon.com',
+            'email' => 'info@bookingflow.com',
+            'website' => 'www.bookingflow.com',
             'tax_id' => 'TAX-123456789',
             'logo' => null, // You can add logo path here
         ];

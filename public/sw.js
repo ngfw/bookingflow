@@ -1,8 +1,8 @@
-// Service Worker for Beauty Salon Management System
+// Service Worker for BookingFlow Management System
 
-const CACHE_NAME = 'beauty-salon-v1';
-const STATIC_CACHE = 'beauty-salon-static-v1';
-const DYNAMIC_CACHE = 'beauty-salon-dynamic-v1';
+const CACHE_NAME = 'bookingflow-v1';
+const STATIC_CACHE = 'bookingflow-static-v1';
+const DYNAMIC_CACHE = 'bookingflow-dynamic-v1';
 
 // Assets to cache immediately
 const STATIC_ASSETS = [
@@ -334,7 +334,7 @@ self.addEventListener('push', event => {
     };
     
     event.waitUntil(
-        self.registration.showNotification('Beauty Salon', options)
+        self.registration.showNotification('BookingFlow', options)
     );
 });
 

@@ -12,9 +12,9 @@
 
     <!-- Logo/Brand -->
     <div class="nav-brand">
-        <a href="/" class="brand-link" aria-label="Beauty Salon - Home">
-            <img src="/images/logo.png" alt="Beauty Salon Logo" class="brand-logo">
-            <span class="brand-text">Beauty Salon</span>
+        <a href="/" class="brand-link" aria-label="BookingFlow - Home">
+            <img src="/images/logo.png" alt="BookingFlow Logo" class="brand-logo">
+            <span class="brand-text">BookingFlow</span>
         </a>
     </div>
 

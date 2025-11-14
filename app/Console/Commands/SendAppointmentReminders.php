@@ -210,7 +210,7 @@ class SendAppointmentReminders extends Command
             'appointment_time' => $appointment->appointment_time->format('g:i A'),
             'service_name' => $appointment->service->name,
             'staff_name' => $appointment->staff->name,
-            'salon_name' => config('app.name', 'Beauty Salon'),
+            'salon_name' => config('app.name', 'BookingFlow'),
             'appointment_id' => $appointment->id,
         ];
     }

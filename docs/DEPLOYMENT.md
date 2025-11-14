@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Deployment Guide
+# BookingFlow - Deployment Guide
 
 ## Overview
-This guide provides comprehensive instructions for deploying the Beauty Salon Management System to production environments.
+This guide provides comprehensive instructions for deploying the BookingFlow to production environments.
 
 ## Table of Contents
 1. [Prerequisites](#prerequisites)
@@ -149,7 +149,7 @@ sudo chmod -R 775 storage bootstrap/cache
 Edit the `.env` file with your production settings:
 
 ```env
-APP_NAME="Beauty Salon Management"
+APP_NAME="BookingFlow Management"
 APP_ENV=production
 APP_KEY=base64:your-generated-key
 APP_DEBUG=false
@@ -158,8 +158,8 @@ APP_URL=https://yourdomain.com
 DB_CONNECTION=mysql
 DB_HOST=db
 DB_PORT=3306
-DB_DATABASE=beauty_salon
-DB_USERNAME=beauty_salon_user
+DB_DATABASE=bookingflow
+DB_USERNAME=bookingflow_user
 DB_PASSWORD=your-secure-password
 
 REDIS_HOST=redis
@@ -188,9 +188,9 @@ docker-compose -f docker/docker-compose.yml exec db mysql -u root -p
 ```
 
 ```sql
-CREATE DATABASE beauty_salon CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'beauty_salon_user'@'%' IDENTIFIED BY 'your-secure-password';
-GRANT ALL PRIVILEGES ON beauty_salon.* TO 'beauty_salon_user'@'%';
+CREATE DATABASE bookingflow CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'bookingflow_user'@'%' IDENTIFIED BY 'your-secure-password';
+GRANT ALL PRIVILEGES ON bookingflow.* TO 'bookingflow_user'@'%';
 FLUSH PRIVILEGES;
 EXIT;
 ```
@@ -499,7 +499,7 @@ For technical support:
 
 ## Conclusion
 
-This deployment guide provides comprehensive instructions for setting up the Beauty Salon Management System in a production environment. Follow the steps carefully and ensure all security measures are implemented.
+This deployment guide provides comprehensive instructions for setting up the BookingFlow in a production environment. Follow the steps carefully and ensure all security measures are implemented.
 
 Remember to:
 - Keep the system updated

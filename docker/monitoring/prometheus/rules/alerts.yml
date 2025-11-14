@@ -99,7 +99,7 @@ groups:
           severity: critical
         annotations:
           summary: "Application is down"
-          description: "Beauty Salon application is not responding on {{ $labels.instance }}"
+          description: "BookingFlow application is not responding on {{ $labels.instance }}"
 
       # High response time
       - alert: HighResponseTime

@@ -46,7 +46,7 @@
                                 </svg>
                             </div>
                             <div>
-                                <h3 class="font-semibold text-gray-900">Beauty Salon</h3>
+                                <h3 class="font-semibold text-gray-900">BookingFlow</h3>
                                 <p class="text-sm text-gray-600">{{ $salonAddress }}</p>
                             </div>
                         </div>
@@ -71,7 +71,7 @@
                             </div>
                             <div>
                                 <h3 class="font-semibold text-gray-900">Contact</h3>
-                                <p class="text-sm text-gray-600">(555) 123-4567<br>info@beautysalon.com</p>
+                                <p class="text-sm text-gray-600">(555) 123-4567<br>info@bookingflow.com</p>
                             </div>
                         </div>
                     </div>

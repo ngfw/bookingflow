@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Frequently Asked Questions (FAQ)
+# BookingFlow - Frequently Asked Questions (FAQ)
 
 ## Overview
-This comprehensive FAQ addresses the most common questions about the Beauty Salon Management System. The questions are organized by category to help you quickly find the information you need.
+This comprehensive FAQ addresses the most common questions about the BookingFlow. The questions are organized by category to help you quickly find the information you need.
 
 ## Table of Contents
 1. [General Questions](#general-questions)
@@ -21,12 +21,12 @@ This comprehensive FAQ addresses the most common questions about the Beauty Salo
 
 ## General Questions
 
-### What is the Beauty Salon Management System?
-The Beauty Salon Management System is a comprehensive software solution designed specifically for beauty salons, spas, and wellness centers. It helps manage appointments, clients, staff, inventory, payments, and business operations all in one integrated platform.
+### What is the BookingFlow?
+The BookingFlow is a comprehensive software solution designed specifically for service businesss, spas, and wellness centers. It helps manage appointments, clients, staff, inventory, payments, and business operations all in one integrated platform.
 
 ### Who can use this system?
 The system is designed for:
-- **Beauty salons** of all sizes
+- **Service-based businesses** of all sizes
 - **Hair salons** and barbershops
 - **Nail salons** and spas
 - **Wellness centers** and massage therapy clinics
@@ -414,7 +414,7 @@ In the unlikely event of a data breach, we will:
 ## Mobile App
 
 ### Is there a mobile app?
-Yes, the Beauty Salon Management System has mobile apps for both iOS and Android devices.
+Yes, the BookingFlow has mobile apps for both iOS and Android devices.
 
 ### What can I do with the mobile app?
 The mobile app allows you to:
@@ -426,8 +426,8 @@ The mobile app allows you to:
 - Contact your salon
 
 ### How do I download the app?
-- **iOS**: Search "Beauty Salon Management" in the App Store
-- **Android**: Search "Beauty Salon Management" in Google Play
+- **iOS**: Search "BookingFlow Management" in the App Store
+- **Android**: Search "BookingFlow Management" in Google Play
 
 ### Is the app free?
 Yes, the mobile app is free to download and use for all system users.

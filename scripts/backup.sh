@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Beauty Salon Management System - Backup Script
+# BookingFlow - Backup Script
 # This script creates automated backups of the database, files, and configuration
 
 set -e
@@ -9,9 +9,9 @@ set -e
 BACKUP_DIR="/var/backups/beauty-salon"
 DATE=$(date +%Y%m%d_%H%M%S)
 RETENTION_DAYS=30
-DB_NAME="beauty_salon"
-DB_USER="beauty_salon_user"
-DB_PASSWORD="beauty_salon_password"
+DB_NAME="bookingflow"
+DB_USER="bookingflow_user"
+DB_PASSWORD="bookingflow_password"
 DB_HOST="localhost"
 DB_PORT="3306"
 
@@ -133,7 +133,7 @@ create_manifest() {
     log "Creating backup manifest..."
     
     cat > "$BACKUP_DIR/manifest_$DATE.txt" << EOF
-Beauty Salon Management System - Backup Manifest
+BookingFlow - Backup Manifest
 Generated: $(date)
 Backup Date: $DATE
 Retention: $RETENTION_DAYS days
@@ -210,7 +210,7 @@ send_notification() {
     
     # Send email notification (if configured)
     if command -v mail >/dev/null 2>&1; then
-        echo "$message" | mail -s "Backup $status - Beauty Salon System" admin@beautysalon.com
+        echo "$message" | mail -s "Backup $status - BookingFlow System" admin@bookingflow.com
     fi
     
     # Send Slack notification (if webhook is configured)

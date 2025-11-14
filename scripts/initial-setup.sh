@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Beauty Salon Management System - Initial Server Setup
+# BookingFlow - Initial Server Setup
 #
 # This script sets up the application directory and performs the first deployment
 # Run this ONCE on your production server before using automated deployments
@@ -10,7 +10,7 @@
 
 set -e  # Exit on any error
 
-echo "🚀 Beauty Salon Management System - Initial Setup"
+echo "🚀 BookingFlow - Initial Setup"
 echo "=================================================="
 echo ""
 

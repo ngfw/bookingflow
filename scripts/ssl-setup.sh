@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# Beauty Salon Management System - SSL Setup Script
+# BookingFlow - SSL Setup Script
 # This script configures SSL certificates and security settings
 
 set -e
 
 # Configuration
-DOMAIN="beautysalon.com"
-EMAIL="admin@beautysalon.com"
+DOMAIN="bookingflow.com"
+EMAIL="admin@bookingflow.com"
 SSL_DIR="/etc/nginx/ssl"
 NGINX_CONF="/etc/nginx/conf.d/default.conf"
 APP_DIR="/var/www/beauty-salon"
@@ -265,14 +265,14 @@ if certbot certificates | grep -q "VALID: 30 days"; then
         
         # Send notification
         if command -v mail >/dev/null 2>&1; then
-            echo "SSL certificate renewed successfully for $DOMAIN" | mail -s "SSL Renewal Success" admin@beautysalon.com
+            echo "SSL certificate renewed successfully for $DOMAIN" | mail -s "SSL Renewal Success" admin@bookingflow.com
         fi
     else
         log "ERROR: Certificate renewal failed"
         
         # Send error notification
         if command -v mail >/dev/null 2>&1; then
-            echo "SSL certificate renewal failed for $DOMAIN" | mail -s "SSL Renewal Failed" admin@beautysalon.com
+            echo "SSL certificate renewal failed for $DOMAIN" | mail -s "SSL Renewal Failed" admin@bookingflow.com
         fi
     fi
 else

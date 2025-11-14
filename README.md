@@ -1,6 +1,6 @@
-# Beauty Salon Management System
+# BookingFlow
 
-A comprehensive, enterprise-grade web application for managing beauty salons, spas, and similar service-based businesses. Built with Laravel 12, Livewire 3, and modern web technologies.
+A comprehensive, enterprise-grade web application for managing appointments, services, and bookings for service-based businesses. Built with Laravel 12, Livewire 3, and modern web technologies.
 
 ## 🌟 Features
 
@@ -101,9 +101,9 @@ After seeding the database, you can log in with:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@beautysalon.com | password |
-| Staff | staff@beautysalon.com | password |
-| Client | client@beautysalon.com | password |
+| Admin | admin@bookingflow.test | password |
+| Staff | staff@bookingflow.test | password |
+| Client | client@bookingflow.test | password |
 
 **⚠️ Important**: Change these passwords before deploying to production!
 
@@ -225,7 +225,7 @@ POST /api/v1/auth/login
 Content-Type: application/json
 
 {
-    "email": "admin@beautysalon.com",
+    "email": "admin@bookingflow.test",
     "password": "password"
 }
 ```

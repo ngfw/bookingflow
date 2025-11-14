@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Troubleshooting Guides
+# BookingFlow - Troubleshooting Guides
 
 ## Overview
-This comprehensive troubleshooting guide provides step-by-step solutions for common issues that users may encounter with the Beauty Salon Management System. The guides are organized by category and include detailed instructions for resolving problems.
+This comprehensive troubleshooting guide provides step-by-step solutions for common issues that users may encounter with the BookingFlow. The guides are organized by category and include detailed instructions for resolving problems.
 
 ## Table of Contents
 1. [Login and Authentication Issues](#login-and-authentication-issues)
@@ -730,7 +730,7 @@ This comprehensive troubleshooting guide provides step-by-step solutions for com
 4. Check if the issue is resolved
 
 ##### Step 4: Clear App Data
-1. **Android**: Go to Settings > Apps > Beauty Salon > Storage > Clear Data
+1. **Android**: Go to Settings > Apps > BookingFlow > Storage > Clear Data
 2. **iOS**: Delete and reinstall the app
 3. Log back in with your credentials
 4. Check if the app works properly
@@ -760,7 +760,7 @@ This comprehensive troubleshooting guide provides step-by-step solutions for com
 #### Solutions
 
 ##### Step 1: Check App Permissions
-1. **Android**: Go to Settings > Apps > Beauty Salon > Permissions
+1. **Android**: Go to Settings > Apps > BookingFlow > Permissions
 2. **iOS**: Go to Settings > Privacy & Security
 3. Ensure all required permissions are granted
 4. Restart the app after granting permissions
@@ -772,7 +772,7 @@ This comprehensive troubleshooting guide provides step-by-step solutions for com
 4. Test the app after updates
 
 ##### Step 3: Clear App Cache
-1. **Android**: Go to Settings > Apps > Beauty Salon > Storage > Clear Cache
+1. **Android**: Go to Settings > Apps > BookingFlow > Storage > Clear Cache
 2. **iOS**: Force close and reopen the app
 3. Log out and log back in
 4. Test the problematic features
@@ -1119,7 +1119,7 @@ This comprehensive troubleshooting guide provides step-by-step solutions for com
 
 ## Conclusion
 
-This troubleshooting guide provides comprehensive solutions for common issues with the Beauty Salon Management System. For issues not covered in this guide or for additional assistance, please contact our support team.
+This troubleshooting guide provides comprehensive solutions for common issues with the BookingFlow. For issues not covered in this guide or for additional assistance, please contact our support team.
 
 ### Support Resources
 - **Email Support**: support@beautysalon.com

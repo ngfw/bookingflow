@@ -1,4 +1,4 @@
-// Mobile UX Enhancements for Beauty Salon Management System
+// Mobile UX Enhancements for BookingFlow Management System
 
 class MobileUX {
     constructor() {

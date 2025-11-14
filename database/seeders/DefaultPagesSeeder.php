@@ -15,7 +15,7 @@ class DefaultPagesSeeder extends Seeder
     {
         // Create Homepage
         $homepage = Page::create([
-            'title' => 'Welcome to Our Beauty Salon',
+            'title' => 'Welcome to Our service business',
             'slug' => 'home',
             'excerpt' => 'Experience luxury beauty services in a relaxing environment. Our professional team is dedicated to making you look and feel your absolute best.',
             'content' => '',
@@ -29,7 +29,7 @@ class DefaultPagesSeeder extends Seeder
         PageSection::create([
             'page_id' => $homepage->id,
             'section_type' => 'hero',
-            'title' => 'Welcome to Our Beauty Salon',
+            'title' => 'Welcome to Our service business',
             'content' => 'Experience luxury beauty services in a relaxing environment. Our professional team is dedicated to making you look and feel your absolute best.',
             'sort_order' => 1,
             'is_active' => true,
@@ -67,7 +67,7 @@ class DefaultPagesSeeder extends Seeder
             'title' => 'About Us',
             'slug' => 'about',
             'excerpt' => 'Learn about our salon, our team, and our commitment to providing exceptional beauty services.',
-            'content' => '<p>Welcome to our beauty salon, where we believe that everyone deserves to look and feel their absolute best. With years of experience in the beauty industry, our team of skilled professionals is dedicated to providing you with exceptional services in a relaxing and welcoming environment.</p><p>We pride ourselves on using only the highest quality products and staying up-to-date with the latest beauty trends and techniques. Our goal is to help you discover your natural beauty and boost your confidence.</p>',
+            'content' => '<p>Welcome to our service business, where we believe that everyone deserves to look and feel their absolute best. With years of experience in the beauty industry, our team of skilled professionals is dedicated to providing you with exceptional services in a relaxing and welcoming environment.</p><p>We pride ourselves on using only the highest quality products and staying up-to-date with the latest beauty trends and techniques. Our goal is to help you discover your natural beauty and boost your confidence.</p>',
             'template' => 'default',
             'is_published' => true,
             'is_homepage' => false,
