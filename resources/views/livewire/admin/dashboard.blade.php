@@ -303,7 +303,7 @@
         <div class="p-6 border-b border-gray-200">
             <div class="flex items-center justify-between">
                 <h2 class="text-xl font-semibold text-gray-900">Popular Services</h2>
-                <span class="text-sm text-gray-400">Services management coming soon</span>
+                <a href="{{ route('admin.services.index') }}" class="text-sm text-pink-600 hover:text-pink-700">Manage Services →</a>
             </div>
         </div>
         <div class="p-6">
