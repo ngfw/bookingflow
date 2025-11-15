@@ -18,7 +18,7 @@
         <meta name="theme-color" content="#3B82F6">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
-        <meta name="apple-mobile-web-app-title" content="Beauty Salon Admin">
+        <meta name="apple-mobile-web-app-title" content="BookingFlow Admin">
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
@@ -46,7 +46,7 @@
                             <a href="{{ route('admin.dashboard') }}" class="flex items-center">
                                 <x-salon-logo class="h-8 w-auto mr-3" />
                                 @php
-                                    $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'Beauty Salon';
+                                    $salonName = \App\Models\SalonSetting::getDefault()->salon_name ?? 'BookingFlow';
                                 @endphp
                                 <span class="hidden sm:inline text-lg lg:text-xl font-bold text-gray-900">{{ $salonName }} Admin</span>
                                 <span class="sm:hidden text-lg font-bold text-gray-900">Admin</span>

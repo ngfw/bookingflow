@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Beauty Salon') }} - Book Appointment</title>
+        <title>{{ config('app.name', 'BookingFlow') }} - Book Appointment</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,7 +22,7 @@
                     <div class="flex justify-between items-center h-16">
                         <div class="flex items-center">
                             <a href="/" class="text-xl font-bold text-gray-900">
-                                Beauty Salon
+                                BookingFlow
                             </a>
                         </div>
                         <div class="flex items-center space-x-4">

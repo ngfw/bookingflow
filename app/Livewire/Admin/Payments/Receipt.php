@@ -52,11 +52,11 @@ class Receipt extends Component
             'invoice' => $this->invoice,
             'client' => $this->client,
             'salon' => [
-                'name' => 'Beauty Salon Management',
-                'address' => '123 Beauty Street, City, State 12345',
+                'name' => 'BookingFlow',
+                'address' => '123 Business Street, City, State 12345',
                 'phone' => '(555) 123-4567',
-                'email' => 'info@beautysalon.com',
-                'website' => 'www.beautysalon.com',
+                'email' => 'info@bookingflow.com',
+                'website' => 'www.bookingflow.com',
             ]
         ];
 

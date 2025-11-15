@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Beauty Salon Management') }}</title>
-    <meta name="description" content="Professional beauty salon services - book your appointment today">
-    <meta name="keywords" content="beauty salon, hair, nails, spa, appointments">
+    <title>{{ config('app.name', 'service business Management') }}</title>
+    <meta name="description" content="Professional service business services - book your appointment today">
+    <meta name="keywords" content="service business, hair, nails, spa, appointments">
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -24,7 +24,7 @@
                 <div class="flex items-center">
                     <!-- Logo -->
                     <div class="flex-shrink-0">
-                        <span class="text-2xl font-bold text-pink-600">{{ config('app.name', 'Beauty Salon') }}</span>
+                        <span class="text-2xl font-bold text-pink-600">{{ config('app.name', 'service business') }}</span>
                     </div>
 
                     <!-- Navigation Links -->
@@ -54,7 +54,7 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="text-center">
                     <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                        Welcome to <span class="text-pink-600">{{ config('app.name', 'Beauty Salon') }}</span>
+                        Welcome to <span class="text-pink-600">{{ config('app.name', 'service business') }}</span>
                     </h1>
                     <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
                         Professional beauty services tailored to make you look and feel your best. Book your appointment today!
@@ -126,7 +126,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <!-- Salon Info -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">{{ config('app.name', 'Beauty Salon') }}</h3>
+                    <h3 class="text-lg font-semibold mb-4">{{ config('app.name', 'service business') }}</h3>
                     <p class="text-gray-400 mb-4">Professional beauty services in a welcoming environment</p>
                 </div>
 
@@ -134,7 +134,7 @@
                 <div>
                     <h3 class="text-lg font-semibold mb-4">Contact</h3>
                     <p class="text-gray-400 mb-2">Phone: (555) 123-4567</p>
-                    <p class="text-gray-400 mb-2">Email: info@beautysalon.com</p>
+                    <p class="text-gray-400 mb-2">Email: info@bookingflow.com</p>
                 </div>
 
                 <!-- Hours -->
@@ -147,7 +147,7 @@
             </div>
 
             <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400">&copy; {{ date('Y') }} {{ config('app.name', 'Beauty Salon') }}. All rights reserved.</p>
+                <p class="text-gray-400">&copy; {{ date('Y') }} {{ config('app.name', 'service business') }}. All rights reserved.</p>
             </div>
         </div>
     </footer>

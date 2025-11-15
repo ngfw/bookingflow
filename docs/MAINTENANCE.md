@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Maintenance Guide
+# BookingFlow - Maintenance Guide
 
 ## Overview
-This guide provides comprehensive maintenance procedures for the Beauty Salon Management System to ensure optimal performance, security, and reliability.
+This guide provides comprehensive maintenance procedures for the BookingFlow to ensure optimal performance, security, and reliability.
 
 ## Table of Contents
 1. [Daily Maintenance](#daily-maintenance)
@@ -68,7 +68,7 @@ docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW PR
 docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SHOW GLOBAL STATUS LIKE 'Slow_queries';"
 
 # Check database size
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SELECT table_schema AS 'Database', ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)' FROM information_schema.tables WHERE table_schema = 'beauty_salon' GROUP BY table_schema;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SELECT table_schema AS 'Database', ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)' FROM information_schema.tables WHERE table_schema = 'bookingflow' GROUP BY table_schema;"
 ```
 
 ### 4. Cache and Session Check
@@ -162,13 +162,13 @@ find storage/logs -name "*.log.*" -mtime +30 -delete
 
 ```bash
 # Optimize database tables
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "OPTIMIZE TABLE beauty_salon.appointments, beauty_salon.clients, beauty_salon.staff, beauty_salon.services;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "OPTIMIZE TABLE bookingflow.appointments, bookingflow.clients, bookingflow.staff, bookingflow.services;"
 
 # Check table fragmentation
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SELECT table_name, ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'Size (MB)', ROUND((data_free / 1024 / 1024), 2) AS 'Free Space (MB)' FROM information_schema.tables WHERE table_schema = 'beauty_salon' AND data_free > 0;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SELECT table_name, ROUND(((data_length + index_length) / 1024 / 1024), 2) AS 'Size (MB)', ROUND((data_free / 1024 / 1024), 2) AS 'Free Space (MB)' FROM information_schema.tables WHERE table_schema = 'bookingflow' AND data_free > 0;"
 
 # Analyze tables
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "ANALYZE TABLE beauty_salon.appointments, beauty_salon.clients, beauty_salon.staff, beauty_salon.services;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "ANALYZE TABLE bookingflow.appointments, bookingflow.clients, bookingflow.staff, bookingflow.services;"
 ```
 
 ## Monthly Maintenance
@@ -228,7 +228,7 @@ du -sh /var/lib/mysql/
 du -sh /var/lib/redis/
 
 # Check database growth
-docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SELECT table_schema AS 'Database', ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)' FROM information_schema.tables WHERE table_schema = 'beauty_salon' GROUP BY table_schema;"
+docker-compose -f docker/docker-compose.yml exec db mysql -u root -p -e "SELECT table_schema AS 'Database', ROUND(SUM(data_length + index_length) / 1024 / 1024, 2) AS 'Size (MB)' FROM information_schema.tables WHERE table_schema = 'bookingflow' GROUP BY table_schema;"
 
 # Check log file sizes
 find /var/log -name "*.log" -exec ls -lh {} \; | sort -k5 -hr | head -10
@@ -606,7 +606,7 @@ sudo fail2ban-client status
 
 ## Conclusion
 
-Regular maintenance is essential for the optimal performance and security of the Beauty Salon Management System. Follow this guide to ensure your system remains healthy, secure, and performant.
+Regular maintenance is essential for the optimal performance and security of the BookingFlow. Follow this guide to ensure your system remains healthy, secure, and performant.
 
 Remember to:
 - Document all maintenance activities

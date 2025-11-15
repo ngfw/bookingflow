@@ -35,7 +35,7 @@ class NotificationService
             'appointment_time' => $appointment->appointment_time->format('g:i A'),
             'service_name' => $service->name,
             'staff_name' => $staff->name,
-            'salon_name' => config('app.name', 'Beauty Salon'),
+            'salon_name' => config('app.name', 'BookingFlow'),
             'appointment_id' => $appointment->id,
         ];
 
@@ -66,7 +66,7 @@ class NotificationService
             'appointment_time' => $appointment->appointment_time->format('g:i A'),
             'service_name' => $service->name,
             'staff_name' => $staff->name,
-            'salon_name' => config('app.name', 'Beauty Salon'),
+            'salon_name' => config('app.name', 'BookingFlow'),
             'appointment_id' => $appointment->id,
         ];
 
@@ -99,7 +99,7 @@ class NotificationService
             'payment_method' => ucfirst($paymentMethod),
             'payment_date' => Carbon::now()->format('M d, Y'),
             'services_list' => $services,
-            'salon_name' => config('app.name', 'Beauty Salon'),
+            'salon_name' => config('app.name', 'BookingFlow'),
             'invoice_id' => $invoice->id,
         ];
 
@@ -131,7 +131,7 @@ class NotificationService
             'service_name' => $service->name,
             'staff_name' => $staff->name,
             'cancellation_reason' => $reason,
-            'salon_name' => config('app.name', 'Beauty Salon'),
+            'salon_name' => config('app.name', 'BookingFlow'),
             'appointment_id' => $appointment->id,
         ];
 
@@ -146,7 +146,7 @@ class NotificationService
     {
         $data = [
             'client_name' => $client->name,
-            'salon_name' => config('app.name', 'Beauty Salon'),
+            'salon_name' => config('app.name', 'BookingFlow'),
             'client_id' => $client->id,
         ];
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Beauty Salon Management System - Disaster Recovery Script
+# BookingFlow - Disaster Recovery Script
 # This script handles disaster recovery scenarios and system restoration
 
 set -e
@@ -8,9 +8,9 @@ set -e
 # Configuration
 BACKUP_DIR="/var/backups/beauty-salon"
 APP_DIR="/var/www/beauty-salon"
-DB_NAME="beauty_salon"
-DB_USER="beauty_salon_user"
-DB_PASSWORD="beauty_salon_password"
+DB_NAME="bookingflow"
+DB_USER="bookingflow_user"
+DB_PASSWORD="bookingflow_password"
 DB_HOST="localhost"
 DB_PORT="3306"
 RECOVERY_LOG="/var/log/disaster-recovery.log"
@@ -355,7 +355,7 @@ send_emergency_notification() {
     
     # Send email notification
     if command -v mail >/dev/null 2>&1; then
-        echo "$message" | mail -s "EMERGENCY: $status - Beauty Salon System" admin@beautysalon.com
+        echo "$message" | mail -s "EMERGENCY: $status - BookingFlow System" admin@bookingflow.com
     fi
     
     # Send Slack notification
@@ -384,7 +384,7 @@ create_recovery_report() {
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
     
     cat > "$BACKUP_DIR/recovery_report_$(date +%Y%m%d_%H%M%S).txt" << EOF
-Beauty Salon Management System - Disaster Recovery Report
+BookingFlow - Disaster Recovery Report
 Generated: $timestamp
 Recovery Type: $recovery_type
 Status: $([ "$success" = true ] && echo "SUCCESS" || echo "FAILED")

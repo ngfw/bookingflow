@@ -1,7 +1,7 @@
 # User Stories for UAT Testing
 
 ## Overview
-This document contains user stories that will be used during User Acceptance Testing (UAT) to validate that the Beauty Salon Management System meets business requirements and user needs.
+This document contains user stories that will be used during User Acceptance Testing (UAT) to validate that the BookingFlow meets business requirements and user needs.
 
 ## User Story Format
 Each user story follows the format:

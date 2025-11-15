@@ -103,7 +103,7 @@ Route::prefix('v1')->middleware('auth:sanctum')->group(function () {
 Route::get('/v1/documentation', function () {
     return response()->json([
         'success' => true,
-        'message' => 'Beauty Salon Management API v1.0',
+        'message' => 'service business Management API v1.0',
         'data' => [
             'version' => '1.0.0',
             'base_url' => url('/api/v1'),

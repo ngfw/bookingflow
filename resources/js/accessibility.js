@@ -1,4 +1,4 @@
-// Accessibility Enhancements for Beauty Salon Management System
+// Accessibility Enhancements for BookingFlow Management System
 
 class AccessibilityManager {
     constructor() {

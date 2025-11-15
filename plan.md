@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Development Plan
+# BookingFlow - Development Plan
 
 ## Project Overview
-A comprehensive clinic scheduling and billing system adapted for beauty salons using Laravel Livewire and MySQL.
+A comprehensive booking and appointment management system for service-based businesses using Laravel Livewire and MySQL.
 
 ## 🚀 Current Status (Updated: December 2024)
 - **✅ COMPLETED**: Phases 1-14 (Foundation, Database, Authentication, Client Management, Service Management, Staff Management, Appointment Scheduling, Online Booking Portal, Inventory Management, Billing & Payment System, Reporting & Analytics, Point of Sale Integration, Notification & Communication, Loyalty Programs & Marketing)
@@ -20,10 +20,10 @@ A comprehensive clinic scheduling and billing system adapted for beauty salons u
 - **Email Campaigns**: `http://localhost:8000/admin/notifications/campaigns`
 - **Appointment Reminders**: `http://localhost:8000/admin/notifications/reminders`
 - **SMS Management**: `http://localhost:8000/admin/notifications/sms`
-- **Test Users**: 
-  - Admin: `admin@beautysalon.com` / `password`
-  - Staff: `staff@beautysalon.com` / `password`
-  - Client: `client@beautysalon.com` / `password`
+- **Test Users**:
+  - Admin: `admin@bookingflow.test` / `password`
+  - Staff: `staff@bookingflow.test` / `password`
+  - Client: `client@bookingflow.test` / `password`
 
 ### Phase 11: Reporting & Analytics - COMPLETED ✅
 **Comprehensive Business Intelligence System Implemented:**

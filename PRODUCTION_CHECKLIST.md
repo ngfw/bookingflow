@@ -1,6 +1,6 @@
 # 🚀 Production Deployment Checklist
 
-**Project**: Beauty Salon Management System
+**Project**: BookingFlow
 **Version**: 1.0.0
 **Date**: _______________
 **Deployed By**: _______________

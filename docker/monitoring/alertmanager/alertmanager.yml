@@ -1,7 +1,7 @@
 global:
   smtp_smarthost: 'localhost:587'
-  smtp_from: 'alerts@beautysalon.com'
-  smtp_auth_username: 'alerts@beautysalon.com'
+  smtp_from: 'alerts@bookingflow.com'
+  smtp_auth_username: 'alerts@bookingflow.com'
   smtp_auth_password: 'password'
 
 route:
@@ -25,7 +25,7 @@ receivers:
 
   - name: 'critical-alerts'
     email_configs:
-      - to: 'admin@beautysalon.com'
+      - to: 'admin@bookingflow.com'
         subject: 'CRITICAL: {{ .GroupLabels.alertname }}'
         body: |
           {{ range .Alerts }}
@@ -48,7 +48,7 @@ receivers:
 
   - name: 'warning-alerts'
     email_configs:
-      - to: 'admin@beautysalon.com'
+      - to: 'admin@bookingflow.com'
         subject: 'WARNING: {{ .GroupLabels.alertname }}'
         body: |
           {{ range .Alerts }}

@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# Beauty Salon Management System - Restore Script
+# BookingFlow - Restore Script
 # This script restores the system from backup files
 
 set -e
 
 # Configuration
 BACKUP_DIR="/var/backups/beauty-salon"
-DB_NAME="beauty_salon"
-DB_USER="beauty_salon_user"
-DB_PASSWORD="beauty_salon_password"
+DB_NAME="bookingflow"
+DB_USER="bookingflow_user"
+DB_PASSWORD="bookingflow_password"
 DB_HOST="localhost"
 DB_PORT="3306"
 APP_DIR="/var/www/beauty-salon"
@@ -263,7 +263,7 @@ send_notification() {
     
     # Send email notification (if configured)
     if command -v mail >/dev/null 2>&1; then
-        echo "$message" | mail -s "Restore $status - Beauty Salon System" admin@beautysalon.com
+        echo "$message" | mail -s "Restore $status - BookingFlow System" admin@bookingflow.com
     fi
     
     # Send Slack notification (if webhook is configured)

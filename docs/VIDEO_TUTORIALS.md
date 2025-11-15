@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Video Tutorials
+# BookingFlow - Video Tutorials
 
 ## Overview
-This guide provides a comprehensive list of video tutorials for the Beauty Salon Management System. These tutorials are designed to help users, staff, and administrators learn how to effectively use all system features.
+This guide provides a comprehensive list of video tutorials for the BookingFlow. These tutorials are designed to help users, staff, and administrators learn how to effectively use all system features.
 
 ## Table of Contents
 1. [Getting Started Videos](#getting-started-videos)
@@ -19,7 +19,7 @@ This guide provides a comprehensive list of video tutorials for the Beauty Salon
 ### System Overview
 **Duration**: 5 minutes  
 **Level**: Beginner  
-**Description**: Introduction to the Beauty Salon Management System, its features, and benefits.
+**Description**: Introduction to the BookingFlow, its features, and benefits.
 
 **Topics Covered**:
 - System introduction
@@ -580,7 +580,7 @@ We value your feedback on our video tutorials. Please help us improve by:
 
 ## Conclusion
 
-These video tutorials provide comprehensive training for all users of the Beauty Salon Management System. Whether you're a new user learning the basics or an experienced administrator exploring advanced features, these videos will help you make the most of the system.
+These video tutorials provide comprehensive training for all users of the BookingFlow. Whether you're a new user learning the basics or an experienced administrator exploring advanced features, these videos will help you make the most of the system.
 
 ### Getting Started
 1. Choose the appropriate training playlist for your role

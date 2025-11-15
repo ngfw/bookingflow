@@ -47,16 +47,16 @@ class SalonSetting extends Model
     public static function getDefault()
     {
         return static::where('is_active', true)->first() ?? static::create([
-            'salon_name' => 'Beauty Salon',
-            'salon_description' => 'Experience luxury beauty services in a relaxing environment.',
+            'salon_name' => 'BookingFlow',
+            'salon_description' => 'Professional appointment booking and management system.',
             'primary_color' => '#ec4899',
             'secondary_color' => '#8b5cf6',
             'accent_color' => '#f59e0b',
             'font_family' => 'Inter',
             'contact_info' => [
                 'phone' => '+1 (555) 123-4567',
-                'email' => 'info@beautysalon.com',
-                'address' => '123 Beauty Street, City, State 12345',
+                'email' => 'info@bookingflow.com',
+                'address' => '123 Business Street, City, State 12345',
                 'hours' => [
                     'monday' => '9:00 AM - 7:00 PM',
                     'tuesday' => '9:00 AM - 7:00 PM',
@@ -74,13 +74,13 @@ class SalonSetting extends Model
                 'youtube' => null,
             ],
             'seo_settings' => [
-                'meta_title' => 'Beauty Salon - Luxury Beauty Services',
-                'meta_description' => 'Experience luxury beauty services in a relaxing environment. Professional team dedicated to making you look and feel your best.',
-                'meta_keywords' => 'beauty salon, spa, hair, nails, massage, beauty services',
+                'meta_title' => 'BookingFlow - Appointment Booking System',
+                'meta_description' => 'Professional appointment booking and management system. Streamline your business operations with our comprehensive booking solution.',
+                'meta_keywords' => 'booking, appointments, scheduling, management, services',
             ],
             'homepage_settings' => [
-                'hero_title' => 'Welcome to Beauty Salon',
-                'hero_subtitle' => 'Experience luxury beauty services in a relaxing environment.',
+                'hero_title' => 'Welcome to BookingFlow',
+                'hero_subtitle' => 'Professional appointment booking and management made easy.',
                 'hero_button_text' => 'Book Appointment',
                 'hero_button_link' => '/book',
                 'featured_services' => true,

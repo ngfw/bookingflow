@@ -1,7 +1,7 @@
 # User Acceptance Testing (UAT) Protocols
 
 ## Overview
-This document outlines the User Acceptance Testing protocols for the Beauty Salon Management System. UAT ensures that the system meets business requirements and is ready for production deployment.
+This document outlines the User Acceptance Testing protocols for the BookingFlow. UAT ensures that the system meets business requirements and is ready for production deployment.
 
 ## Testing Objectives
 - Verify that the system meets business requirements
@@ -457,6 +457,6 @@ This document outlines the User Acceptance Testing protocols for the Beauty Salo
 
 ## Conclusion
 
-This UAT protocol ensures that the Beauty Salon Management System meets all business requirements and is ready for production deployment. The testing process is comprehensive, covering all aspects of the system from functionality to security to user experience.
+This UAT protocol ensures that the BookingFlow meets all business requirements and is ready for production deployment. The testing process is comprehensive, covering all aspects of the system from functionality to security to user experience.
 
 Regular updates to this protocol should be made as the system evolves and new requirements are identified. The success of the UAT process depends on thorough preparation, careful execution, and clear communication among all stakeholders.

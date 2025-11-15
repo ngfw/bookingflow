@@ -45,8 +45,8 @@ class TwoFactorAuthService
     public function getQRCodeUrl($user, $secretKey)
     {
         try {
-            $companyName = config('app.name', 'Beauty Salon Management');
-            $companyEmail = config('mail.from.address', 'admin@beautysalon.com');
+            $companyName = config('app.name', 'BookingFlow');
+            $companyEmail = config('mail.from.address', 'admin@bookingflow.com');
             
             $qrCodeUrl = $this->google2fa->getQRCodeUrl(
                 $companyName,

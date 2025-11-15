@@ -1,4 +1,4 @@
-// Enhanced Error Handling for Beauty Salon Management System
+// Enhanced Error Handling for BookingFlow Management System
 
 class ErrorHandler {
     constructor() {

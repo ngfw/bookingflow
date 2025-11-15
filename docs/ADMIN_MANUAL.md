@@ -1,7 +1,7 @@
-# Beauty Salon Management System - Administrator Manual
+# BookingFlow - Administrator Manual
 
 ## Overview
-This comprehensive administrator manual provides detailed instructions for managing and maintaining the Beauty Salon Management System. This guide is designed for system administrators, IT staff, and business owners who need to configure, maintain, and troubleshoot the system.
+This comprehensive administrator manual provides detailed instructions for managing and maintaining the BookingFlow. This guide is designed for system administrators, IT staff, and business owners who need to configure, maintain, and troubleshoot the system.
 
 ## Table of Contents
 1. [System Administration](#system-administration)
@@ -209,7 +209,7 @@ free -h
 
 #### General Settings
 ```env
-APP_NAME="Beauty Salon Management"
+APP_NAME="BookingFlow Management"
 APP_ENV=production
 APP_DEBUG=false
 APP_URL=https://yourdomain.com
@@ -220,8 +220,8 @@ APP_URL=https://yourdomain.com
 DB_CONNECTION=mysql
 DB_HOST=localhost
 DB_PORT=3306
-DB_DATABASE=beauty_salon
-DB_USERNAME=beauty_salon_user
+DB_DATABASE=bookingflow
+DB_USERNAME=bookingflow_user
 DB_PASSWORD=secure_password
 ```
 
@@ -323,13 +323,13 @@ TWILIO_FROM=+1234567890
 #### Database Maintenance
 ```bash
 # Optimize database tables
-mysql -u root -p -e "OPTIMIZE TABLE beauty_salon.appointments, beauty_salon.clients;"
+mysql -u root -p -e "OPTIMIZE TABLE bookingflow.appointments, bookingflow.clients;"
 
 # Check database status
-mysql -u root -p -e "SHOW TABLE STATUS FROM beauty_salon;"
+mysql -u root -p -e "SHOW TABLE STATUS FROM bookingflow;"
 
 # Analyze tables
-mysql -u root -p -e "ANALYZE TABLE beauty_salon.appointments;"
+mysql -u root -p -e "ANALYZE TABLE bookingflow.appointments;"
 ```
 
 #### Data Cleanup
@@ -722,7 +722,7 @@ docker-compose -f docker/docker-compose.yml restart
 
 ## Conclusion
 
-This administrator manual provides comprehensive guidance for managing the Beauty Salon Management System. Regular maintenance, monitoring, and optimization are essential for optimal system performance and user satisfaction.
+This administrator manual provides comprehensive guidance for managing the BookingFlow. Regular maintenance, monitoring, and optimization are essential for optimal system performance and user satisfaction.
 
 Remember to:
 - Follow security best practices

@@ -161,9 +161,9 @@ class EmailCampaign extends Model
         // Replace placeholders with sample data
         $placeholders = [
             '{{client_name}}' => 'John Doe',
-            '{{salon_name}}' => config('app.name', 'Beauty Salon'),
+            '{{salon_name}}' => config('app.name', 'BookingFlow'),
             '{{salon_phone}}' => '+1 (555) 123-4567',
-            '{{salon_email}}' => 'info@beautysalon.com',
+            '{{salon_email}}' => 'info@bookingflow.com',
             '{{salon_address}}' => '123 Beauty Street, City, State 12345',
             '{{current_date}}' => now()->format('M d, Y'),
             '{{current_year}}' => now()->year,

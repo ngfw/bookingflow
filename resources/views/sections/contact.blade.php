@@ -36,7 +36,7 @@
                     </div>
                     <div class="ml-4">
                         <h4 class="text-lg font-medium text-gray-900">Email</h4>
-                        <p class="text-gray-600">info@beautysalon.com</p>
+                        <p class="text-gray-600">info@bookingflow.com</p>
                     </div>
                 </div>
 

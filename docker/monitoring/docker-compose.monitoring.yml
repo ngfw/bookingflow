@@ -85,7 +85,7 @@ services:
     ports:
       - "9104:9104"
     environment:
-      - DATA_SOURCE_NAME=beauty_salon_user:beauty_salon_password@(db:3306)/beauty_salon
+      - DATA_SOURCE_NAME=bookingflow_user:bookingflow_password@(db:3306)/bookingflow
     networks:
       - monitoring
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>Beauty Salon Management - Professional Salon Services</title>
+    <title>service business Management - Professional Salon Services</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -16,7 +16,7 @@
     <meta name="theme-color" content="#EC4899">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Beauty Salon">
+    <meta name="apple-mobile-web-app-title" content="service business">
 </head>
 <body class="antialiased font-sans bg-gray-50">
     <!-- Mobile Navigation -->
@@ -24,7 +24,7 @@
         <div class="px-4 py-3">
             <div class="flex justify-between items-center">
                 <div class="flex-shrink-0">
-                    <h1 class="text-xl font-bold text-pink-600">Beauty Salon</h1>
+                    <h1 class="text-xl font-bold text-pink-600">service business</h1>
                 </div>
                 
                 <!-- Mobile Menu Button -->
@@ -86,7 +86,7 @@
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-3xl md:text-6xl font-bold text-gray-900 mb-4 md:mb-6">
-                    Welcome to <span class="text-pink-600">Beauty Salon</span>
+                    Welcome to <span class="text-pink-600">service business</span>
                 </h1>
                 <p class="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
                     Experience luxury beauty treatments in a relaxing environment. Book your appointment today and let us pamper you.
@@ -230,7 +230,7 @@
         <div class="px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
-                    <h3 class="text-xl font-bold text-pink-400 mb-4">Beauty Salon</h3>
+                    <h3 class="text-xl font-bold text-pink-400 mb-4">service business</h3>
                     <p class="text-gray-300 mb-4">Professional beauty services with mobile-first convenience.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="text-gray-400 hover:text-pink-400">
@@ -267,13 +267,13 @@
                         <p>123 Beauty Street</p>
                         <p>City, State 12345</p>
                         <p>Phone: (555) 123-4567</p>
-                        <p>Email: info@beautysalon.com</p>
+                        <p>Email: info@bookingflow.com</p>
                     </div>
                 </div>
             </div>
             
             <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400">&copy; 2024 Beauty Salon Management. All rights reserved.</p>
+                <p class="text-gray-400">&copy; 2024 service business Management. All rights reserved.</p>
             </div>
         </div>
     </footer>

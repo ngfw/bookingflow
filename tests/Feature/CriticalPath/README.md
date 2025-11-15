@@ -33,8 +33,8 @@ Before running the tests, ensure your environment has:
    **Option A: MySQL** (Recommended for production-like testing)
    ```bash
    # Create test database
-   mysql -u root -p -e "CREATE DATABASE beauty_salon_testing;"
-   mysql -u root -p -e "GRANT ALL ON beauty_salon_testing.* TO 'your_user'@'localhost';"
+   mysql -u root -p -e "CREATE DATABASE bookingflow_testing;"
+   mysql -u root -p -e "GRANT ALL ON bookingflow_testing.* TO 'your_user'@'localhost';"
    ```
 
    **Option B: SQLite** (Faster, in-memory testing)
@@ -68,7 +68,7 @@ Edit `phpunit.xml`, change these lines:
 <env name="DB_CONNECTION" value="mysql"/>
 <env name="DB_HOST" value="127.0.0.1"/>
 <env name="DB_PORT" value="3306"/>
-<env name="DB_DATABASE" value="beauty_salon_testing"/>
+<env name="DB_DATABASE" value="bookingflow_testing"/>
 <env name="DB_USERNAME" value="your_db_user"/>
 <env name="DB_PASSWORD" value="your_db_password"/>
 ```
