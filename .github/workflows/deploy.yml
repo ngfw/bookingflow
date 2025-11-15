@@ -22,7 +22,7 @@ jobs:
           port: 22
           script: |
             set -e
-            APP_DIR=/var/www/book.vai.me
+            APP_DIR=/var/www/bookingflow.gm-sunshine.com
             cd "$APP_DIR" || exit 1
 
             # Use the tag passed from GitHub Actions
@@ -39,8 +39,6 @@ jobs:
 
             # NPM - Build frontend assets
             npm install
-            # Fix node_modules/.bin permissions for executables
-            sudo chmod +x "$APP_DIR"/node_modules/.bin/*
             npm run build
 
             # Laravel commands
@@ -65,6 +63,6 @@ jobs:
             sudo chmod -R ug+rwx "$APP_DIR"/storage "$APP_DIR"/bootstrap/cache
 
             # Reload PHP-FPM
-            sudo systemctl reload php8.2-fpm || echo "PHP-FPM reload skipped"
+            sudo systemctl reload php8.3-fpm || echo "PHP-FPM reload skipped"
 
             echo "✅ Deployment of tag '$TAG_NAME' completed at $(date)"
