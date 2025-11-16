@@ -1,0 +1,159 @@
+# BookingFlow - Docker Ignore File
+# Files and directories to exclude from Docker build context
+
+# ============================================================================
+# Version Control
+# ============================================================================
+.git
+.github
+.gitignore
+.gitattributes
+
+# ============================================================================
+# Dependencies (will be installed during build)
+# ============================================================================
+/node_modules
+/vendor
+/bower_components
+
+# ============================================================================
+# Build Artifacts
+# ============================================================================
+/public/build
+/public/hot
+/public/storage
+/public/mix-manifest.json
+
+# ============================================================================
+# Laravel Storage & Cache
+# ============================================================================
+/storage/*.key
+/storage/app/*
+!/storage/app/.gitignore
+!/storage/app/public
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/testing/*
+!/storage/framework/testing/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+
+# ============================================================================
+# Environment & Configuration
+# ============================================================================
+.env
+.env.*
+!.env.example
+!.env.production.example
+!.env.testing
+
+# ============================================================================
+# IDE & Editor Files
+# ============================================================================
+.idea
+.vscode
+.vs
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ============================================================================
+# Testing & Coverage
+# ============================================================================
+/tests
+/phpunit.xml
+/.phpunit.result.cache
+/coverage
+/.phpunit.cache
+/pest
+/.pest
+
+# ============================================================================
+# Documentation
+# ============================================================================
+/docs
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+*.md
+!DEPLOYMENT.md
+
+# ============================================================================
+# Backup Files
+# ============================================================================
+*.backup
+*.bak
+*.tmp
+*.old
+*.orig
+
+# ============================================================================
+# Development Tools
+# ============================================================================
+/.claude
+/docker-compose.override.yml
+/docker-compose.dev.yml
+/docker-compose.local.yml
+Makefile
+docker-compose.yml.example
+
+# ============================================================================
+# CI/CD (not needed in production image)
+# ============================================================================
+.travis.yml
+.gitlab-ci.yml
+azure-pipelines.yml
+Jenkinsfile
+.circleci
+
+# ============================================================================
+# Static Analysis & Code Quality
+# ============================================================================
+phpstan.neon
+phpstan.neon.dist
+psalm.xml
+.php_cs
+.php_cs.cache
+.php-cs-fixer.php
+.php-cs-fixer.cache
+
+# ============================================================================
+# Logs
+# ============================================================================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+/logs
+
+# ============================================================================
+# Database
+# ============================================================================
+*.sql
+*.sqlite
+*.db
+
+# ============================================================================
+# Deployment Scripts (handled separately)
+# ============================================================================
+/scripts/initial-setup.sh
+/scripts/performance-optimization.sh
+/scripts/disaster-recovery.sh
+/scripts/ssl-setup.sh
+
+# ============================================================================
+# Misc
+# ============================================================================
+.editorconfig
+.styleci.yml
+cookies.txt
+bugs.md
+plan.md
+PRODUCTION_CHECKLIST.md

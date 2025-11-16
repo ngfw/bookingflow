@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Health Check Endpoints (for monitoring and load balancers)
+Route::get('/health', [App\Http\Controllers\HealthCheckController::class, 'index'])->name('health.check');
+Route::get('/ping', [App\Http\Controllers\HealthCheckController::class, 'ping'])->name('health.ping');
+
 // Dynamic homepage
 Route::get('/', [App\Http\Controllers\DynamicPageController::class, 'homepage'])->name('home');
 
