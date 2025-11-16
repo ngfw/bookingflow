@@ -22,6 +22,7 @@ class Client extends Model
         'loyalty_points',
         'preferred_contact',
         'is_vip',
+        'vip_reason',
         'notes',
     ];
 
@@ -219,5 +220,83 @@ class Client extends Model
         $preferences = $this->preferences ?? [];
         $preferences[$key] = $value;
         $this->update(['preferences' => $preferences]);
+    }
+
+    public function getStatistics(): array
+    {
+        return [
+            'total_appointments' => $this->appointments()->count(),
+            'completed_appointments' => $this->appointments()->where('status', 'completed')->count(),
+            'cancelled_appointments' => $this->appointments()->where('status', 'cancelled')->count(),
+            'total_spent' => $this->payments()->where('status', 'completed')->sum('amount'),
+            'average_spending' => $this->average_spending,
+        ];
+    }
+
+    public function getActivitySummary(): array
+    {
+        return [
+            'total_appointments' => $this->total_appointments,
+            'completed_appointments' => $this->completed_appointments,
+            'cancelled_appointments' => $this->cancelled_appointments,
+            'total_spent' => $this->total_spent,
+            'last_appointment' => $this->last_appointment,
+            'next_appointment' => $this->next_appointment,
+        ];
+    }
+
+    public function markAsVip(string $reason = null): void
+    {
+        $this->update([
+            'is_vip' => true,
+            'vip_reason' => $reason,
+        ]);
+    }
+
+    public function unmarkAsVip(): void
+    {
+        $this->update([
+            'is_vip' => false,
+            'vip_reason' => null,
+        ]);
+    }
+
+    public function addNote(string $note): void
+    {
+        $currentNotes = $this->notes ?? '';
+        $newNotes = trim($currentNotes . "\n" . $note);
+        $this->update(['notes' => $newNotes]);
+    }
+
+    public function addAllergy(string $allergy): void
+    {
+        $allergies = $this->allergies ?? [];
+        if (!in_array($allergy, $allergies)) {
+            $allergies[] = $allergy;
+            $this->update(['allergies' => $allergies]);
+        }
+    }
+
+    public function removeAllergy(string $allergy): void
+    {
+        $allergies = $this->allergies ?? [];
+        $allergies = array_values(array_filter($allergies, fn($a) => $a !== $allergy));
+        $this->update(['allergies' => $allergies]);
+    }
+
+    public function addMedicalCondition(string $condition): void
+    {
+        $conditions = $this->medical_conditions ?? [];
+        if (!in_array($condition, $conditions)) {
+            $conditions[] = $condition;
+            $this->update(['medical_conditions' => $conditions]);
+        }
+    }
+
+    public function removeMedicalCondition(string $condition): void
+    {
+        $conditions = $this->medical_conditions ?? [];
+        $conditions = array_values(array_filter($conditions, fn($c) => $c !== $condition));
+        $this->update(['medical_conditions' => $conditions]);
     }
 }

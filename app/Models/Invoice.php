@@ -25,6 +25,7 @@ class Invoice extends Model
         'total_amount',
         'amount_paid',
         'balance_due',
+        'line_items',
         'notes',
         'terms_conditions',
     ];
@@ -42,6 +43,7 @@ class Invoice extends Model
             'total_amount' => 'decimal:2',
             'amount_paid' => 'decimal:2',
             'balance_due' => 'decimal:2',
+            'line_items' => 'array',
         ];
     }
 

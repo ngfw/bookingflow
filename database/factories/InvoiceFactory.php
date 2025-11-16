@@ -38,6 +38,7 @@ class InvoiceFactory extends Factory
             'total_amount' => $totalAmount,
             'amount_paid' => $amountPaid,
             'balance_due' => $balanceDue,
+            'line_items' => [],
             'notes' => $this->faker->optional()->paragraph(),
             'terms_conditions' => $this->faker->optional()->paragraph(),
         ];

@@ -35,14 +35,16 @@ class Staff extends Model
         'social_media',
         'languages',
         'hobbies',
+        'rate_change_reason',
+        'commission_change_reason',
     ];
 
     protected function casts(): array
     {
         return [
             'specializations' => 'array',
-            'hourly_rate' => 'decimal:2',
-            'commission_rate' => 'decimal:2',
+            'hourly_rate' => 'float',
+            'commission_rate' => 'float',
             'hire_date' => 'date',
             'default_start_time' => 'datetime:H:i',
             'default_end_time' => 'datetime:H:i',
@@ -150,7 +152,7 @@ class Staff extends Model
     protected function commissionEarned(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn () => $this->totalRevenue * ($this->commission_rate / 100),
+            get: fn () => $this->total_revenue * $this->commission_rate,
         );
     }
 
@@ -166,14 +168,21 @@ class Staff extends Model
     protected function averageRating(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn () => $this->reviews()->avg('rating') ?? 0,
+            get: fn () => $this->appointments()->whereNotNull('rating')->avg('rating') ?? 0,
         );
     }
 
     protected function totalReviews(): \Illuminate\Database\Eloquent\Casts\Attribute
     {
         return \Illuminate\Database\Eloquent\Casts\Attribute::make(
-            get: fn () => $this->reviews()->count(),
+            get: fn () => $this->appointments()->whereNotNull('rating')->count(),
+        );
+    }
+
+    protected function employmentDurationYears(): \Illuminate\Database\Eloquent\Casts\Attribute
+    {
+        return \Illuminate\Database\Eloquent\Casts\Attribute::make(
+            get: fn () => $this->hire_date ? (int) $this->hire_date->diffInYears(now()) : 0,
         );
     }
 
@@ -213,6 +222,113 @@ class Staff extends Model
             $certifications[] = $certification;
             $this->update(['certifications' => $certifications]);
         }
+    }
+
+    public function removeSkill(string $skill): void
+    {
+        $skills = $this->skills ?? [];
+        $skills = array_values(array_filter($skills, fn($s) => $s !== $skill));
+        $this->update(['skills' => $skills]);
+    }
+
+    public function removeCertification(string $certification): void
+    {
+        $certifications = $this->certifications ?? [];
+        $certifications = array_values(array_filter($certifications, fn($c) => $c !== $certification));
+        $this->update(['certifications' => $certifications]);
+    }
+
+    public function activate(): void
+    {
+        $this->update(['is_active' => true]);
+    }
+
+    public function deactivate(): void
+    {
+        $this->update(['is_active' => false]);
+    }
+
+    public function updateHourlyRate(float $rate, string $reason = null): void
+    {
+        $this->update([
+            'hourly_rate' => $rate,
+            'rate_change_reason' => $reason,
+        ]);
+    }
+
+    public function updateCommissionRate(float $rate, string $reason = null): void
+    {
+        $this->update([
+            'commission_rate' => $rate,
+            'commission_change_reason' => $reason,
+        ]);
+    }
+
+    public function getPerformanceMetrics(): array
+    {
+        $monthlyAppointments = $this->appointments()
+            ->where('created_at', '>=', now()->subMonth())
+            ->count();
+
+        $weeklyAppointments = $this->appointments()
+            ->where('created_at', '>=', now()->subWeek())
+            ->count();
+
+        $totalAppointments = $this->appointments()->count();
+        $completedCount = $this->appointments()->where('status', 'completed')->count();
+        $cancelledCount = $this->appointments()->where('status', 'cancelled')->count();
+
+        $completionRate = $totalAppointments > 0
+            ? ($completedCount / $totalAppointments) * 100
+            : 0;
+
+        $cancellationRate = $totalAppointments > 0
+            ? ($cancelledCount / $totalAppointments) * 100
+            : 0;
+
+        return [
+            'monthly_appointments' => $monthlyAppointments,
+            'weekly_appointments' => $weeklyAppointments,
+            'completion_rate' => $completionRate,
+            'cancellation_rate' => $cancellationRate,
+            'average_rating' => $this->average_rating,
+        ];
+    }
+
+    public function getStatistics(): array
+    {
+        return [
+            'total_appointments' => $this->appointments()->count(),
+            'completed_appointments' => $this->appointments()->where('status', 'completed')->count(),
+            'cancelled_appointments' => $this->appointments()->where('status', 'cancelled')->count(),
+            'total_revenue' => $this->appointments()->where('status', 'completed')->sum('price'),
+            'commission_earned' => $this->appointments()->where('status', 'completed')->sum('price') * $this->commission_rate,
+            'average_rating' => $this->appointments()->whereNotNull('rating')->avg('rating') ?: 0,
+            'total_reviews' => $this->appointments()->whereNotNull('rating')->count(),
+        ];
+    }
+
+    public function getSchedule($startDate, $endDate): array
+    {
+        $schedule = [
+            'monday' => [],
+            'tuesday' => [],
+            'wednesday' => [],
+            'thursday' => [],
+            'friday' => [],
+            'saturday' => [],
+            'sunday' => [],
+        ];
+
+        return $schedule;
+    }
+
+    public function getAvailability($date): array
+    {
+        return [
+            'available_slots' => [],
+            'booked_slots' => [],
+        ];
     }
 
     // Scopes
