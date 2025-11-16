@@ -11,13 +11,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->text('two_factor_secret')->nullable()->after('remember_token');
-            $table->boolean('two_factor_enabled')->default(false)->after('two_factor_secret');
-            $table->timestamp('two_factor_enabled_at')->nullable()->after('two_factor_enabled');
-            $table->timestamp('two_factor_disabled_at')->nullable()->after('two_factor_enabled_at');
-            $table->json('two_factor_recovery_codes')->nullable()->after('two_factor_disabled_at');
-        });
+        if (Schema::hasTable('users')) {
+            Schema::table('users', function (Blueprint $table) {
+                if (!Schema::hasColumn('users', 'two_factor_secret')) {
+                    $table->text('two_factor_secret')->nullable()->after('remember_token');
+                }
+                if (!Schema::hasColumn('users', 'two_factor_enabled')) {
+                    $table->boolean('two_factor_enabled')->default(false)->after('two_factor_secret');
+                }
+                if (!Schema::hasColumn('users', 'two_factor_enabled_at')) {
+                    $table->timestamp('two_factor_enabled_at')->nullable()->after('two_factor_enabled');
+                }
+                if (!Schema::hasColumn('users', 'two_factor_disabled_at')) {
+                    $table->timestamp('two_factor_disabled_at')->nullable()->after('two_factor_enabled_at');
+                }
+                if (!Schema::hasColumn('users', 'two_factor_recovery_codes')) {
+                    $table->json('two_factor_recovery_codes')->nullable()->after('two_factor_disabled_at');
+                }
+            });
+        }
     }
 
     /**
@@ -25,14 +37,30 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn([
-                'two_factor_secret',
-                'two_factor_enabled',
-                'two_factor_enabled_at',
-                'two_factor_disabled_at',
-                'two_factor_recovery_codes',
-            ]);
-        });
+        if (Schema::hasTable('users')) {
+            Schema::table('users', function (Blueprint $table) {
+                $columnsToRemove = [];
+
+                if (Schema::hasColumn('users', 'two_factor_secret')) {
+                    $columnsToRemove[] = 'two_factor_secret';
+                }
+                if (Schema::hasColumn('users', 'two_factor_enabled')) {
+                    $columnsToRemove[] = 'two_factor_enabled';
+                }
+                if (Schema::hasColumn('users', 'two_factor_enabled_at')) {
+                    $columnsToRemove[] = 'two_factor_enabled_at';
+                }
+                if (Schema::hasColumn('users', 'two_factor_disabled_at')) {
+                    $columnsToRemove[] = 'two_factor_disabled_at';
+                }
+                if (Schema::hasColumn('users', 'two_factor_recovery_codes')) {
+                    $columnsToRemove[] = 'two_factor_recovery_codes';
+                }
+
+                if (!empty($columnsToRemove)) {
+                    $table->dropColumn($columnsToRemove);
+                }
+            });
+        }
     }
 };

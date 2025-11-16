@@ -11,7 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::rename('waitlist', 'waitlists');
+        if (Schema::hasTable('waitlist') && !Schema::hasTable('waitlists')) {
+            Schema::rename('waitlist', 'waitlists');
+        }
     }
 
     /**
@@ -19,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::rename('waitlists', 'waitlist');
+        if (Schema::hasTable('waitlists') && !Schema::hasTable('waitlist')) {
+            Schema::rename('waitlists', 'waitlist');
+        }
     }
 };

@@ -11,14 +11,28 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('salon_settings', function (Blueprint $table) {
-            $table->text('about_us_title')->nullable();
-            $table->longText('about_us_content')->nullable();
-            $table->text('about_us_mission')->nullable();
-            $table->text('about_us_vision')->nullable();
-            $table->boolean('show_team_on_about')->default(true);
-            $table->string('about_us_image')->nullable();
-        });
+        if (Schema::hasTable('salon_settings')) {
+            Schema::table('salon_settings', function (Blueprint $table) {
+                if (!Schema::hasColumn('salon_settings', 'about_us_title')) {
+                    $table->text('about_us_title')->nullable();
+                }
+                if (!Schema::hasColumn('salon_settings', 'about_us_content')) {
+                    $table->longText('about_us_content')->nullable();
+                }
+                if (!Schema::hasColumn('salon_settings', 'about_us_mission')) {
+                    $table->text('about_us_mission')->nullable();
+                }
+                if (!Schema::hasColumn('salon_settings', 'about_us_vision')) {
+                    $table->text('about_us_vision')->nullable();
+                }
+                if (!Schema::hasColumn('salon_settings', 'show_team_on_about')) {
+                    $table->boolean('show_team_on_about')->default(true);
+                }
+                if (!Schema::hasColumn('salon_settings', 'about_us_image')) {
+                    $table->string('about_us_image')->nullable();
+                }
+            });
+        }
     }
 
     /**
@@ -26,15 +40,33 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('salon_settings', function (Blueprint $table) {
-            $table->dropColumn([
-                'about_us_title',
-                'about_us_content',
-                'about_us_mission',
-                'about_us_vision',
-                'show_team_on_about',
-                'about_us_image'
-            ]);
-        });
+        if (Schema::hasTable('salon_settings')) {
+            Schema::table('salon_settings', function (Blueprint $table) {
+                $columnsToRemove = [];
+
+                if (Schema::hasColumn('salon_settings', 'about_us_title')) {
+                    $columnsToRemove[] = 'about_us_title';
+                }
+                if (Schema::hasColumn('salon_settings', 'about_us_content')) {
+                    $columnsToRemove[] = 'about_us_content';
+                }
+                if (Schema::hasColumn('salon_settings', 'about_us_mission')) {
+                    $columnsToRemove[] = 'about_us_mission';
+                }
+                if (Schema::hasColumn('salon_settings', 'about_us_vision')) {
+                    $columnsToRemove[] = 'about_us_vision';
+                }
+                if (Schema::hasColumn('salon_settings', 'show_team_on_about')) {
+                    $columnsToRemove[] = 'show_team_on_about';
+                }
+                if (Schema::hasColumn('salon_settings', 'about_us_image')) {
+                    $columnsToRemove[] = 'about_us_image';
+                }
+
+                if (!empty($columnsToRemove)) {
+                    $table->dropColumn($columnsToRemove);
+                }
+            });
+        }
     }
 };

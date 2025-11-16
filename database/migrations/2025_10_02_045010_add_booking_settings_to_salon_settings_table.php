@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('salon_settings', function (Blueprint $table) {
-            $table->json('booking_settings')->nullable()->after('homepage_settings');
-        });
+        if (Schema::hasTable('salon_settings')) {
+            Schema::table('salon_settings', function (Blueprint $table) {
+                if (!Schema::hasColumn('salon_settings', 'booking_settings')) {
+                    $table->json('booking_settings')->nullable()->after('homepage_settings');
+                }
+            });
+        }
     }
 
     /**
@@ -21,8 +25,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('salon_settings', function (Blueprint $table) {
-            $table->dropColumn('booking_settings');
-        });
+        if (Schema::hasTable('salon_settings')) {
+            Schema::table('salon_settings', function (Blueprint $table) {
+                if (Schema::hasColumn('salon_settings', 'booking_settings')) {
+                    $table->dropColumn('booking_settings');
+                }
+            });
+        }
     }
 };

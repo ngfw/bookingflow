@@ -11,9 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('analytics_events', function (Blueprint $table) {
-            $table->timestamp('updated_at')->nullable()->after('created_at');
-        });
+        if (Schema::hasTable('analytics_events')) {
+            Schema::table('analytics_events', function (Blueprint $table) {
+                if (!Schema::hasColumn('analytics_events', 'updated_at')) {
+                    $table->timestamp('updated_at')->nullable()->after('created_at');
+                }
+            });
+        }
     }
 
     /**
@@ -21,8 +25,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('analytics_events', function (Blueprint $table) {
-            $table->dropColumn('updated_at');
-        });
+        if (Schema::hasTable('analytics_events')) {
+            Schema::table('analytics_events', function (Blueprint $table) {
+                if (Schema::hasColumn('analytics_events', 'updated_at')) {
+                    $table->dropColumn('updated_at');
+                }
+            });
+        }
     }
 };
