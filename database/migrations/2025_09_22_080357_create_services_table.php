@@ -30,7 +30,13 @@ return new class extends Migration
             $table->text('aftercare_instructions')->nullable();
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_popular')->default(false);
+            $table->boolean('requires_consultation')->default(false);
+            $table->integer('duration')->nullable(); // Alias for duration_minutes
+            $table->text('price_change_reason')->nullable();
+            $table->text('duration_change_reason')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

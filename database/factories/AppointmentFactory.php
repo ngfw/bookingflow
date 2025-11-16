@@ -50,6 +50,8 @@ class AppointmentFactory extends Factory
             'reminder_sent' => $this->faker->boolean(),
             'reminder_sent_at' => $this->faker->optional()->dateTime(),
             'follow_up_required' => $this->faker->boolean(30),
+            'rating' => $this->faker->optional()->numberBetween(1, 5),
+            'review' => $this->faker->optional()->paragraph(),
         ];
     }
 

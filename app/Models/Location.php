@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Location extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -73,7 +75,8 @@ class Location extends Model
 
     public function services()
     {
-        return $this->hasMany(Service::class);
+        return $this->belongsToMany(Service::class, 'location_service')
+                    ->withTimestamps();
     }
 
     public function schedules()
@@ -91,44 +94,85 @@ class Location extends Model
         return $this->hasMany(User::class, 'primary_location_id');
     }
 
-    public function getFullAddressAttribute()
+    // Accessors
+    protected function fullAddress(): Attribute
     {
-        return "{$this->address}, {$this->city}, {$this->state} {$this->postal_code}, {$this->country}";
+        return Attribute::make(
+            get: fn () => "{$this->address}, {$this->city}, {$this->state} {$this->postal_code}, {$this->country}",
+        );
     }
 
-    public function getBusinessHoursFormattedAttribute()
+    protected function businessHoursFormatted(): Attribute
     {
-        if (!$this->business_hours) {
-            return null;
-        }
+        return Attribute::make(
+            get: function () {
+                if (!$this->business_hours) {
+                    return null;
+                }
 
-        $formatted = [];
-        $days = [
-            'monday' => 'Monday',
-            'tuesday' => 'Tuesday',
-            'wednesday' => 'Wednesday',
-            'thursday' => 'Thursday',
-            'friday' => 'Friday',
-            'saturday' => 'Saturday',
-            'sunday' => 'Sunday',
-        ];
+                $formatted = [];
+                $days = [
+                    'monday' => 'Monday',
+                    'tuesday' => 'Tuesday',
+                    'wednesday' => 'Wednesday',
+                    'thursday' => 'Thursday',
+                    'friday' => 'Friday',
+                    'saturday' => 'Saturday',
+                    'sunday' => 'Sunday',
+                ];
 
-        foreach ($this->business_hours as $day => $hours) {
-            if (isset($days[$day])) {
-                $formatted[$days[$day]] = $hours;
+                foreach ($this->business_hours as $day => $hours) {
+                    if (isset($days[$day])) {
+                        $formatted[$days[$day]] = $hours;
+                    }
+                }
+
+                return $formatted;
             }
-        }
-
-        return $formatted;
+        );
     }
 
-    public function getAmenitiesListAttribute()
+    protected function amenitiesList(): Attribute
     {
-        if (!$this->amenities) {
-            return [];
-        }
+        return Attribute::make(
+            get: fn () => $this->amenities ? array_values($this->amenities) : [],
+        );
+    }
 
-        return array_values($this->amenities);
+    protected function staffCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->staff()->count(),
+        );
+    }
+
+    protected function activeStaffCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->staff()->whereHas('user', function ($query) {
+                $query->where('is_active', true);
+            })->count(),
+        );
+    }
+
+    protected function todayAppointmentsCount(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->appointments()
+                ->whereDate('appointment_date', today())
+                ->where('status', '!=', 'cancelled')
+                ->count(),
+        );
+    }
+
+    protected function todayRevenue(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->payments()
+                ->whereDate('payment_date', today())
+                ->where('status', 'completed')
+                ->sum('amount'),
+        );
     }
 
     public function isOpen()
@@ -212,32 +256,111 @@ class Location extends Model
         return round($earthRadius * $c, 2);
     }
 
-    public function getStaffCount()
+    // Instance Methods
+    public function getStatistics()
     {
-        return $this->staff()->count();
+        $totalAppointments = $this->appointments()->count();
+        $completedAppointments = $this->appointments()->where('status', 'completed')->count();
+        $cancelledAppointments = $this->appointments()->where('status', 'cancelled')->count();
+        $totalRevenue = $this->payments()->where('status', 'completed')->sum('amount');
+        $averageRating = $this->appointments()->whereNotNull('rating')->avg('rating');
+
+        return [
+            'total_appointments' => $totalAppointments,
+            'completed_appointments' => $completedAppointments,
+            'cancelled_appointments' => $cancelledAppointments,
+            'total_staff' => $this->staff()->count(),
+            'active_staff' => $this->staff()->whereHas('user', function ($query) {
+                $query->where('is_active', true);
+            })->count(),
+            'total_revenue' => $totalRevenue,
+            'average_rating' => $averageRating ? (float) $averageRating : 0,
+        ];
     }
 
-    public function getActiveStaffCount()
+    public function getPerformanceMetrics()
     {
-        return $this->staff()->whereHas('user', function ($query) {
-            $query->where('is_active', true);
-        })->count();
+        $totalAppointments = $this->appointments()->count();
+        $completedAppointments = $this->appointments()->where('status', 'completed')->count();
+        $cancelledAppointments = $this->appointments()->where('status', 'cancelled')->count();
+
+        $completionRate = $totalAppointments > 0
+            ? ($completedAppointments / $totalAppointments) * 100
+            : 0;
+
+        $cancellationRate = $totalAppointments > 0
+            ? ($cancelledAppointments / $totalAppointments) * 100
+            : 0;
+
+        return [
+            'monthly_appointments' => $this->appointments()
+                ->where('created_at', '>=', now()->subMonth())
+                ->count(),
+            'weekly_appointments' => $this->appointments()
+                ->where('created_at', '>=', now()->subWeek())
+                ->count(),
+            'monthly_revenue' => $this->payments()
+                ->where('payment_date', '>=', now()->subMonth())
+                ->where('status', 'completed')
+                ->sum('amount'),
+            'weekly_revenue' => $this->payments()
+                ->where('payment_date', '>=', now()->subWeek())
+                ->where('status', 'completed')
+                ->sum('amount'),
+            'completion_rate' => round($completionRate, 2),
+            'cancellation_rate' => round($cancellationRate, 2),
+        ];
     }
 
-    public function getTodayAppointmentsCount()
+    public function activate()
     {
-        return $this->appointments()
-            ->whereDate('appointment_date', today())
-            ->where('status', '!=', 'cancelled')
-            ->count();
+        $this->is_active = true;
+        $this->save();
     }
 
-    public function getTodayRevenue()
+    public function deactivate()
     {
-        return $this->payments()
-            ->whereDate('payment_date', today())
-            ->where('status', 'completed')
-            ->sum('amount');
+        $this->is_active = false;
+        $this->save();
+    }
+
+    public function setAsHeadquarters()
+    {
+        $this->is_headquarters = true;
+        $this->save();
+    }
+
+    public function unsetAsHeadquarters()
+    {
+        $this->is_headquarters = false;
+        $this->save();
+    }
+
+    public function updateBusinessHours(array $hours)
+    {
+        $this->business_hours = $hours;
+        $this->save();
+    }
+
+    public function addAmenity(string $amenity)
+    {
+        $amenities = $this->amenities ?? [];
+        if (!in_array($amenity, $amenities)) {
+            $amenities[] = $amenity;
+            $this->amenities = $amenities;
+            $this->save();
+        }
+    }
+
+    public function removeAmenity(string $amenity)
+    {
+        $amenities = $this->amenities ?? [];
+        $key = array_search($amenity, $amenities);
+        if ($key !== false) {
+            unset($amenities[$key]);
+            $this->amenities = array_values($amenities);
+            $this->save();
+        }
     }
 
     public function scopeActive($query)

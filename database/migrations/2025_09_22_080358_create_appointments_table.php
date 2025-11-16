@@ -43,6 +43,8 @@ return new class extends Migration
             $table->boolean('reminder_sent')->default(false);
             $table->dateTime('reminder_sent_at')->nullable();
             $table->boolean('follow_up_required')->default(false);
+            $table->integer('rating')->nullable(); // Rating out of 5
+            $table->text('review')->nullable(); // Customer review
             $table->timestamps();
             $table->softDeletes();
         });

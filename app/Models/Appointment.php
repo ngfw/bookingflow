@@ -42,6 +42,8 @@ class Appointment extends Model
         'reminder_sent',
         'reminder_sent_at',
         'follow_up_required',
+        'rating',
+        'review',
     ];
 
     protected function casts(): array
@@ -63,6 +65,7 @@ class Appointment extends Model
             'reminder_sent' => 'boolean',
             'reminder_sent_at' => 'datetime',
             'follow_up_required' => 'boolean',
+            'rating' => 'integer',
         ];
     }
 

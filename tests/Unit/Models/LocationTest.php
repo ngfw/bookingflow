@@ -76,7 +76,8 @@ class LocationTest extends TestCase
     public function it_can_have_many_services()
     {
         $location = Location::factory()->create();
-        $services = Service::factory()->count(3)->create(['location_id' => $location->id]);
+        $services = Service::factory()->count(3)->create();
+        $location->services()->attach($services->pluck('id'));
 
         $this->assertCount(3, $location->services);
         $this->assertInstanceOf(Service::class, $location->services->first());

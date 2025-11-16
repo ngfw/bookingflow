@@ -37,6 +37,7 @@ return new class extends Migration
             $table->integer('max_clients_per_day')->nullable(); // Maximum daily client capacity
             $table->json('settings')->nullable(); // Additional location-specific settings
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

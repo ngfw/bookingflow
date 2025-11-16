@@ -21,12 +21,14 @@ class ServiceTest extends TestCase
     /** @test */
     public function it_can_create_a_service()
     {
+        $category = Category::factory()->create();
+
         $serviceData = [
             'name' => 'Hair Cut',
             'description' => 'Professional hair cutting service',
             'price' => 50.00,
             'duration' => 60,
-            'category_id' => 1,
+            'category_id' => $category->id,
             'is_active' => true,
         ];
 
@@ -373,6 +375,7 @@ class ServiceTest extends TestCase
         Appointment::factory()->create([
             'service_id' => $service->id,
             'status' => 'cancelled',
+            'rating' => null,
         ]);
 
         $stats = $service->getStatistics();

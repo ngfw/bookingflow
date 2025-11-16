@@ -12,12 +12,15 @@ class ServiceFactory extends Factory
 
     public function definition(): array
     {
+        $duration = $this->faker->randomElement([30, 45, 60, 90, 120, 180]);
+
         return [
             'category_id' => Category::factory(),
             'name' => $this->faker->words(3, true),
             'description' => $this->faker->paragraph(),
             'price' => $this->faker->randomFloat(2, 50, 500),
-            'duration_minutes' => $this->faker->randomElement([30, 45, 60, 90, 120, 180]),
+            'duration_minutes' => $duration,
+            'duration' => $duration,
             'buffer_time_minutes' => $this->faker->randomElement([0, 15, 30]),
             'requires_deposit' => $this->faker->boolean(30),
             'deposit_amount' => $this->faker->randomFloat(2, 10, 100),
@@ -30,6 +33,8 @@ class ServiceFactory extends Factory
             'aftercare_instructions' => $this->faker->optional()->paragraph(),
             'image' => $this->faker->optional()->imageUrl(640, 480, 'beauty'),
             'is_active' => $this->faker->boolean(90),
+            'is_popular' => $this->faker->boolean(30),
+            'requires_consultation' => $this->faker->boolean(20),
         ];
     }
 }
