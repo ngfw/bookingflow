@@ -19,13 +19,18 @@ class ClientFactory extends Factory
                 'preferred_time' => $this->faker->time('H:i'),
                 'communication_method' => $this->faker->randomElement(['email', 'sms', 'phone']),
             ],
-            'allergies' => $this->faker->optional()->sentence(),
-            'medical_conditions' => $this->faker->optional()->sentence(),
+            'allergies' => $this->faker->optional()->randomElements(['latex', 'perfume', 'pollen', 'dust'], $this->faker->numberBetween(0, 2)),
+            'medical_conditions' => $this->faker->optional()->randomElements(['sensitive skin', 'asthma', 'diabetes'], $this->faker->numberBetween(0, 2)),
+            'emergency_contact' => $this->faker->boolean(70) ? [
+                'name' => $this->faker->name(),
+                'phone' => $this->faker->phoneNumber(),
+            ] : null,
             'last_visit' => $this->faker->optional()->dateTimeBetween('-6 months', 'now'),
             'total_spent' => $this->faker->randomFloat(2, 0, 5000),
             'visit_count' => $this->faker->numberBetween(0, 50),
             'loyalty_points' => $this->faker->numberBetween(0, 1000),
-            'preferred_contact' => $this->faker->randomElement(['email', 'sms', 'phone', 'whatsapp']),
+            'preferred_contact' => $this->faker->randomElement(['email', 'sms', 'phone']),
+            'is_vip' => $this->faker->boolean(20),
             'notes' => $this->faker->optional()->paragraph(),
         ];
     }
