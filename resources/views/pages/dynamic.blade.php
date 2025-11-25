@@ -28,6 +28,74 @@
     <!-- Salon Theme CSS -->
     <style>
         {!! $settings->getThemeCss() !!}
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.5); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .animate-delay-100 { animation-delay: 0.1s; }
+        .animate-delay-200 { animation-delay: 0.2s; }
+        .animate-delay-300 { animation-delay: 0.3s; }
+        .animate-delay-400 { animation-delay: 0.4s; }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Card hover effects */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Staff card image */
+        .staff-image {
+            transition: transform 0.3s ease;
+        }
+        .staff-card:hover .staff-image {
+            transform: scale(1.05);
+        }
+
+        /* Feature icon animation */
+        .feature-icon {
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+        }
+        .feature-card:hover .feature-icon svg {
+            color: white;
+        }
+
+        /* Service card overlay */
+        .service-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+        }
     </style>
 
     <!-- Fonts -->
@@ -36,61 +104,81 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
+
     <!-- Favicon -->
     @if($settings->favicon_path)
         <link rel="icon" type="image/x-icon" href="{{ asset('storage/' . $settings->favicon_path) }}">
     @endif
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased bg-gray-50">
     <!-- Navigation -->
-    <nav class="bg-white shadow-sm">
+    <nav class="bg-white shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-16 lg:h-20">
                 <div class="flex items-center">
                     <!-- Logo -->
                     <div class="flex-shrink-0">
                         @if($settings->logo_path)
-                            <img class="h-8 w-auto" src="{{ asset('storage/' . $settings->logo_path) }}" alt="{{ $settings->salon_name }}">
+                            <img class="h-8 lg:h-10 w-auto" src="{{ asset('storage/' . $settings->logo_path) }}" alt="{{ $settings->salon_name }}">
                         @else
-                            <span class="text-2xl font-bold text-pink-600">{{ $settings->salon_name }}</span>
+                            <span class="text-xl lg:text-2xl font-bold gradient-text">{{ $settings->salon_name }}</span>
                         @endif
                     </div>
 
-                    <!-- Navigation Links -->
-                    <div class="hidden md:ml-6 md:flex md:space-x-8">
-                        <a href="/" class="text-gray-900 hover:text-pink-600 px-3 py-2 text-sm font-medium">Home</a>
-                        <a href="/services" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium">Services</a>
-                        <a href="/gallery" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium">Gallery</a>
-                        <a href="/blog" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium">Blog</a>
-                        <a href="/contact" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium">Contact</a>
+                    <!-- Desktop Navigation Links -->
+                    <div class="hidden lg:ml-10 lg:flex lg:space-x-8">
+                        <a href="/" class="text-gray-900 hover:text-pink-600 px-3 py-2 text-sm font-medium border-b-2 border-pink-600">Home</a>
+                        <a href="/services" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-pink-300 transition-colors">Services</a>
+                        <a href="/gallery" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-pink-300 transition-colors">Gallery</a>
+                        <a href="/blog" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-pink-300 transition-colors">Blog</a>
+                        <a href="/contact" class="text-gray-500 hover:text-pink-600 px-3 py-2 text-sm font-medium border-b-2 border-transparent hover:border-pink-300 transition-colors">Contact</a>
                     </div>
                 </div>
 
-                <div class="flex items-center">
-                    <!-- Social Links -->
-                    <div class="hidden md:flex md:space-x-4">
-                        @if($settings->social_links['facebook'])
-                            <a href="{{ $settings->social_links['facebook'] }}" target="_blank" class="text-gray-400 hover:text-pink-600">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
+                <div class="flex items-center space-x-4">
+                    <!-- Social Links (Desktop) -->
+                    <div class="hidden lg:flex lg:items-center lg:space-x-3">
+                        @if($settings->social_links['facebook'] ?? null)
+                            <a href="{{ $settings->social_links['facebook'] }}" target="_blank" class="text-gray-400 hover:text-pink-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
                             </a>
                         @endif
-                        @if($settings->social_links['instagram'])
-                            <a href="{{ $settings->social_links['instagram'] }}" target="_blank" class="text-gray-400 hover:text-pink-600">
-                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.647.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281c-.49 0-.928-.175-1.297-.49-.368-.315-.49-.753-.49-1.243 0-.49.122-.928.49-1.243.369-.315.807-.49 1.297-.49s.928.175 1.297.49c.368.315.49.753.49 1.243 0 .49-.122.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
-                                </svg>
+                        @if($settings->social_links['instagram'] ?? null)
+                            <a href="{{ $settings->social_links['instagram'] }}" target="_blank" class="text-gray-400 hover:text-pink-600 transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
                             </a>
                         @endif
                     </div>
+
+                    <!-- Contact Number (Desktop) -->
+                    @if($settings->contact_info['phone'] ?? null)
+                        <a href="tel:{{ $settings->contact_info['phone'] }}" class="hidden lg:flex items-center text-gray-600 hover:text-pink-600 transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                            <span class="text-sm font-medium">{{ $settings->contact_info['phone'] }}</span>
+                        </a>
+                    @endif
 
                     <!-- Book Appointment Button -->
-                    <a href="/book" class="ml-4 bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                        Book Appointment
+                    <a href="/book" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-4 py-2 lg:px-6 lg:py-2.5 rounded-full text-sm font-medium shadow-lg shadow-pink-500/25 hover:shadow-pink-500/40 transition-all">
+                        Book Now
                     </a>
+
+                    <!-- Mobile Menu Button -->
+                    <button type="button" class="lg:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100" x-data="{ open: false }" @click="open = !open">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                    </button>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="lg:hidden" x-data="{ open: false }">
+            <div x-show="open" class="px-2 pt-2 pb-3 space-y-1 bg-white border-t">
+                <a href="/" class="block px-3 py-2 text-base font-medium text-pink-600 bg-pink-50 rounded-md">Home</a>
+                <a href="/services" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-gray-50 rounded-md">Services</a>
+                <a href="/gallery" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-gray-50 rounded-md">Gallery</a>
+                <a href="/blog" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-gray-50 rounded-md">Blog</a>
+                <a href="/contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-pink-600 hover:bg-gray-50 rounded-md">Contact</a>
             </div>
         </div>
     </nav>
@@ -100,177 +188,578 @@
         @if(isset($page))
             <!-- Dynamic Page Content -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <!-- Page Header -->
                 <div class="text-center mb-12">
                     <h1 class="text-4xl font-bold text-gray-900 mb-4">{{ $page->title }}</h1>
                     @if($page->excerpt)
                         <p class="text-xl text-gray-600 max-w-3xl mx-auto">{{ $page->excerpt }}</p>
                     @endif
                 </div>
-
-                <!-- Page Sections -->
                 @if($page->sections->count() > 0)
                     @foreach($page->sections as $section)
                         @include('sections.' . $section->section_type, $section->getRenderData())
                     @endforeach
                 @else
-                    <!-- Fallback to page content -->
-                    <div class="prose max-w-none">
-                        {!! $page->content !!}
-                    </div>
+                    <div class="prose max-w-none">{!! $page->content !!}</div>
                 @endif
             </div>
         @else
-            <!-- Homepage Content -->
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <!-- Hero Section -->
-                <section class="bg-gradient-to-r from-pink-100 to-purple-100 py-20 rounded-lg mb-12">
-                    <div class="text-center">
-                        <h1 class="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-                            Welcome to <span class="text-pink-600">{{ $settings->salon_name }}</span>
-                        </h1>
-                        <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                            {{ $settings->salon_description }}
-                        </p>
-                        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                            <a href="/book" class="bg-pink-600 hover:bg-pink-700 text-white px-8 py-3 rounded-lg text-lg font-medium">
-                                Book Appointment
-                            </a>
-                            <a href="/services" class="bg-white hover:bg-gray-50 text-pink-600 px-8 py-3 rounded-lg text-lg font-medium border-2 border-pink-600">
-                                View Services
-                            </a>
+            <!-- ========================================
+                 HERO SECTION - Mobile First, Desktop Enhanced
+                 ======================================== -->
+            <section class="relative overflow-hidden bg-gradient-to-br from-pink-50 via-white to-purple-50">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 opacity-40">
+                    <div class="absolute top-0 right-0 w-72 h-72 lg:w-96 lg:h-96 bg-pink-200 rounded-full filter blur-3xl"></div>
+                    <div class="absolute bottom-0 left-0 w-72 h-72 lg:w-96 lg:h-96 bg-purple-200 rounded-full filter blur-3xl"></div>
+                </div>
+
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-24">
+                    <div class="lg:grid lg:grid-cols-2 lg:gap-12 lg:items-center">
+                        <!-- Text Content -->
+                        <div class="text-center lg:text-left mb-10 lg:mb-0">
+                            <span class="inline-block px-4 py-1.5 bg-pink-100 text-pink-700 text-sm font-medium rounded-full mb-4 animate-fade-in-up">
+                                ✨ Welcome to Excellence
+                            </span>
+                            <h1 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold text-gray-900 mb-6 animate-fade-in-up animate-delay-100">
+                                Your Beauty,<br>
+                                <span class="gradient-text">Our Passion</span>
+                            </h1>
+                            <p class="text-base sm:text-lg lg:text-xl text-gray-600 mb-8 max-w-xl mx-auto lg:mx-0 animate-fade-in-up animate-delay-200">
+                                {{ $settings->salon_description ?? 'Experience premium beauty services tailored to make you look and feel your absolute best. Book your transformation today.' }}
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start animate-fade-in-up animate-delay-300">
+                                <a href="/book" class="inline-flex items-center justify-center bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-8 py-3.5 rounded-full text-base font-semibold shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 transition-all">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    Book Appointment
+                                </a>
+                                <a href="/services" class="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-gray-800 px-8 py-3.5 rounded-full text-base font-semibold border-2 border-gray-200 hover:border-pink-300 transition-all">
+                                    <svg class="w-5 h-5 mr-2 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+                                    View Services
+                                </a>
+                            </div>
+
+                            <!-- Trust Indicators -->
+                            <div class="mt-8 pt-8 border-t border-gray-200 animate-fade-in-up animate-delay-400">
+                                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-6">
+                                    <div class="flex items-center">
+                                        <div class="flex -space-x-2">
+                                            <div class="w-8 h-8 rounded-full bg-pink-200 border-2 border-white flex items-center justify-center text-xs font-medium text-pink-700">A</div>
+                                            <div class="w-8 h-8 rounded-full bg-purple-200 border-2 border-white flex items-center justify-center text-xs font-medium text-purple-700">B</div>
+                                            <div class="w-8 h-8 rounded-full bg-indigo-200 border-2 border-white flex items-center justify-center text-xs font-medium text-indigo-700">C</div>
+                                        </div>
+                                        <span class="ml-3 text-sm text-gray-600">500+ Happy Clients</span>
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="flex text-yellow-400">
+                                            @for($i = 0; $i < 5; $i++)
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                            @endfor
+                                        </div>
+                                        <span class="ml-2 text-sm text-gray-600">4.9/5 Rating</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hero Image / Booking Preview (Desktop) -->
+                        <div class="relative hidden lg:block">
+                            <div class="relative bg-white rounded-2xl shadow-2xl p-6 transform rotate-1 hover:rotate-0 transition-transform duration-300">
+                                <!-- Quick Booking Card -->
+                                <div class="text-center mb-4">
+                                    <h3 class="text-lg font-semibold text-gray-900">Quick Booking</h3>
+                                    <p class="text-sm text-gray-500">Select a service to get started</p>
+                                </div>
+                                <div class="space-y-3">
+                                    @foreach(\App\Models\ServiceCategory::where('is_active', true)->limit(4)->get() as $category)
+                                        <a href="/book?category={{ $category->id }}" class="flex items-center p-3 bg-gray-50 hover:bg-pink-50 rounded-xl transition-colors group">
+                                            <div class="w-12 h-12 bg-gradient-to-br from-pink-100 to-purple-100 rounded-lg flex items-center justify-center mr-4 group-hover:from-pink-200 group-hover:to-purple-200 transition-colors">
+                                                <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                                            </div>
+                                            <div class="flex-1">
+                                                <span class="font-medium text-gray-900 group-hover:text-pink-700">{{ $category->name }}</span>
+                                                <p class="text-xs text-gray-500">{{ $category->services_count ?? $category->services->count() }} services</p>
+                                            </div>
+                                            <svg class="w-5 h-5 text-gray-400 group-hover:text-pink-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <a href="/book" class="mt-4 w-full inline-flex items-center justify-center bg-gradient-to-r from-pink-600 to-purple-600 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:from-pink-700 hover:to-purple-700 transition-all">
+                                    View All Services
+                                    <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                </a>
+                            </div>
+                            <!-- Decorative Elements -->
+                            <div class="absolute -top-4 -right-4 w-24 h-24 bg-gradient-to-br from-yellow-200 to-orange-200 rounded-full opacity-60 blur-xl"></div>
+                            <div class="absolute -bottom-4 -left-4 w-32 h-32 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full opacity-60 blur-xl"></div>
                         </div>
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Services Section -->
-                <section class="mb-12">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Services</h2>
-                        <p class="text-lg text-gray-600">Professional beauty services tailored to your needs</p>
+            <!-- ========================================
+                 FEATURES / WHY CHOOSE US SECTION
+                 ======================================== -->
+            <section class="py-12 lg:py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-10 lg:mb-16">
+                        <span class="inline-block px-4 py-1.5 bg-purple-100 text-purple-700 text-sm font-medium rounded-full mb-4">
+                            Why Choose Us
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                            Experience the <span class="gradient-text">Difference</span>
+                        </h2>
+                        <p class="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto">
+                            We combine expertise, premium products, and personalized care to deliver exceptional results every time.
+                        </p>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @foreach(\App\Models\Service::where('is_active', true)->limit(6)->get() as $service)
-                            <div class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow">
-                                <h3 class="text-xl font-semibold text-gray-900 mb-2">{{ $service->name }}</h3>
-                                <p class="text-gray-600 mb-4">{{ Str::limit($service->description, 100) }}</p>
-                                <div class="flex items-center justify-between">
-                                    <span class="text-2xl font-bold text-pink-600">${{ number_format($service->price, 2) }}</span>
-                                    <span class="text-sm text-gray-500">{{ $service->duration_minutes }} min</span>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8">
+                        <!-- Feature 1 -->
+                        <div class="feature-card bg-gray-50 hover:bg-white rounded-2xl p-4 lg:p-6 text-center card-hover border border-transparent hover:border-pink-100">
+                            <div class="feature-icon w-12 h-12 lg:w-16 lg:h-16 bg-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 lg:w-8 lg:h-8 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </div>
+                            <h3 class="text-sm lg:text-lg font-semibold text-gray-900 mb-2">Online Booking</h3>
+                            <p class="text-xs lg:text-sm text-gray-600">Book appointments 24/7 from anywhere</p>
+                        </div>
+
+                        <!-- Feature 2 -->
+                        <div class="feature-card bg-gray-50 hover:bg-white rounded-2xl p-4 lg:p-6 text-center card-hover border border-transparent hover:border-pink-100">
+                            <div class="feature-icon w-12 h-12 lg:w-16 lg:h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 lg:w-8 lg:h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
+                            </div>
+                            <h3 class="text-sm lg:text-lg font-semibold text-gray-900 mb-2">Expert Stylists</h3>
+                            <p class="text-xs lg:text-sm text-gray-600">Certified professionals with years of experience</p>
+                        </div>
+
+                        <!-- Feature 3 -->
+                        <div class="feature-card bg-gray-50 hover:bg-white rounded-2xl p-4 lg:p-6 text-center card-hover border border-transparent hover:border-pink-100">
+                            <div class="feature-icon w-12 h-12 lg:w-16 lg:h-16 bg-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 lg:w-8 lg:h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                            </div>
+                            <h3 class="text-sm lg:text-lg font-semibold text-gray-900 mb-2">Premium Products</h3>
+                            <p class="text-xs lg:text-sm text-gray-600">Only the finest quality products used</p>
+                        </div>
+
+                        <!-- Feature 4 -->
+                        <div class="feature-card bg-gray-50 hover:bg-white rounded-2xl p-4 lg:p-6 text-center card-hover border border-transparent hover:border-pink-100">
+                            <div class="feature-icon w-12 h-12 lg:w-16 lg:h-16 bg-rose-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <svg class="w-6 h-6 lg:w-8 lg:h-8 text-rose-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+                            </div>
+                            <h3 class="text-sm lg:text-lg font-semibold text-gray-900 mb-2">Satisfaction</h3>
+                            <p class="text-xs lg:text-sm text-gray-600">100% satisfaction guaranteed always</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 SERVICES SECTION - Enhanced Cards
+                 ======================================== -->
+            <section class="py-12 lg:py-20 bg-gray-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 lg:mb-12">
+                        <div class="mb-4 sm:mb-0">
+                            <span class="inline-block px-4 py-1.5 bg-pink-100 text-pink-700 text-sm font-medium rounded-full mb-4">
+                                Our Services
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                                Popular <span class="gradient-text">Services</span>
+                            </h2>
+                        </div>
+                        <a href="/services" class="inline-flex items-center text-pink-600 hover:text-pink-700 font-medium group">
+                            View All Services
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                        @foreach(\App\Models\Service::where('is_active', true)->limit(6)->get() as $index => $service)
+                            <div class="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden card-hover">
+                                <!-- Service Image Placeholder -->
+                                <div class="relative h-40 lg:h-48 bg-gradient-to-br from-pink-100 via-purple-50 to-indigo-100 overflow-hidden">
+                                    @if($service->image_path)
+                                        <img src="{{ asset('storage/' . $service->image_path) }}" alt="{{ $service->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                    @else
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <svg class="w-16 h-16 text-pink-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                                        </div>
+                                    @endif
+                                    <!-- Duration Badge -->
+                                    <div class="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-medium text-gray-700">
+                                        <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        {{ $service->duration_minutes }} min
+                                    </div>
+                                </div>
+                                <!-- Service Content -->
+                                <div class="p-4 lg:p-6">
+                                    <div class="flex items-start justify-between mb-2">
+                                        <h3 class="text-lg lg:text-xl font-semibold text-gray-900 group-hover:text-pink-600 transition-colors">{{ $service->name }}</h3>
+                                        <span class="text-lg lg:text-xl font-bold text-pink-600">${{ number_format($service->price, 0) }}</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mb-4 line-clamp-2">{{ Str::limit($service->description, 80) }}</p>
+                                    <a href="/book?service={{ $service->id }}" class="inline-flex items-center justify-center w-full bg-gray-100 hover:bg-gradient-to-r hover:from-pink-600 hover:to-purple-600 text-gray-700 hover:text-white px-4 py-2.5 rounded-xl text-sm font-medium transition-all">
+                                        Book Now
+                                    </a>
                                 </div>
                             </div>
                         @endforeach
                     </div>
-                </section>
+                </div>
+            </section>
 
-                <!-- Gallery Section -->
-                <section class="mb-12">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">Our Work</h2>
-                        <p class="text-lg text-gray-600">See the beautiful transformations we create</p>
+            <!-- ========================================
+                 STATISTICS COUNTER SECTION
+                 ======================================== -->
+            <section class="py-12 lg:py-16 bg-gradient-to-r from-pink-600 via-purple-600 to-indigo-600 relative overflow-hidden">
+                <!-- Background Pattern -->
+                <div class="absolute inset-0 opacity-10">
+                    <div class="absolute top-0 left-1/4 w-64 h-64 bg-white rounded-full"></div>
+                    <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full"></div>
+                </div>
+
+                <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+                        <!-- Stat 1 -->
+                        <div class="text-center">
+                            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">500+</div>
+                            <div class="text-pink-200 text-sm lg:text-base">Happy Clients</div>
+                        </div>
+                        <!-- Stat 2 -->
+                        <div class="text-center">
+                            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">50+</div>
+                            <div class="text-pink-200 text-sm lg:text-base">Services Offered</div>
+                        </div>
+                        <!-- Stat 3 -->
+                        <div class="text-center">
+                            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">15+</div>
+                            <div class="text-pink-200 text-sm lg:text-base">Expert Stylists</div>
+                        </div>
+                        <!-- Stat 4 -->
+                        <div class="text-center">
+                            <div class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">5</div>
+                            <div class="text-pink-200 text-sm lg:text-base">Years Experience</div>
+                        </div>
                     </div>
-                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        @foreach(\App\Models\Gallery::where('is_active', true)->limit(8)->get() as $gallery)
+                </div>
+            </section>
+
+            <!-- ========================================
+                 STAFF SHOWCASE SECTION
+                 ======================================== -->
+            <section class="py-12 lg:py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-10 lg:mb-16">
+                        <span class="inline-block px-4 py-1.5 bg-indigo-100 text-indigo-700 text-sm font-medium rounded-full mb-4">
+                            Our Team
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                            Meet Our <span class="gradient-text">Expert Stylists</span>
+                        </h2>
+                        <p class="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto">
+                            Our talented team of professionals is dedicated to making you look and feel amazing.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+                        @foreach(\App\Models\Staff::where('is_active', true)->limit(4)->get() as $staff)
+                            <div class="staff-card group bg-gray-50 rounded-2xl overflow-hidden card-hover">
+                                <!-- Staff Image -->
+                                <div class="relative h-48 sm:h-56 lg:h-64 overflow-hidden bg-gradient-to-br from-pink-100 to-purple-100">
+                                    @if($staff->photo_path)
+                                        <img src="{{ asset('storage/' . $staff->photo_path) }}" alt="{{ $staff->name }}" class="staff-image w-full h-full object-cover">
+                                    @else
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <div class="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-pink-200 to-purple-200 rounded-full flex items-center justify-center">
+                                                <span class="text-2xl lg:text-3xl font-bold text-pink-600">{{ substr($staff->name, 0, 1) }}</span>
+                                            </div>
+                                        </div>
+                                    @endif
+                                    <!-- Hover Overlay -->
+                                    <div class="absolute inset-0 bg-gradient-to-t from-pink-600/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+                                        <a href="/book?staff={{ $staff->id }}" class="bg-white text-pink-600 px-4 py-2 rounded-full text-sm font-medium transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                                            Book with {{ $staff->first_name ?? explode(' ', $staff->name)[0] }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <!-- Staff Info -->
+                                <div class="p-4 text-center">
+                                    <h3 class="font-semibold text-gray-900 text-sm lg:text-base">{{ $staff->name }}</h3>
+                                    <p class="text-xs lg:text-sm text-pink-600">{{ $staff->specialization ?? 'Stylist' }}</p>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <div class="text-center mt-8">
+                        <a href="/staff" class="inline-flex items-center text-pink-600 hover:text-pink-700 font-medium group">
+                            View All Team Members
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 TESTIMONIALS SECTION - Enhanced
+                 ======================================== -->
+            <section class="py-12 lg:py-20 bg-gradient-to-br from-gray-50 to-pink-50">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-10 lg:mb-16">
+                        <span class="inline-block px-4 py-1.5 bg-rose-100 text-rose-700 text-sm font-medium rounded-full mb-4">
+                            Testimonials
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4">
+                            What Our <span class="gradient-text">Clients Say</span>
+                        </h2>
+                        <p class="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto">
+                            Don't just take our word for it - hear from our happy customers.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                        @forelse(\App\Models\Testimonial::where('is_active', true)->limit(3)->get() as $testimonial)
+                            <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-sm hover:shadow-lg transition-shadow relative">
+                                <!-- Quote Icon -->
+                                <div class="absolute top-4 right-4 text-pink-100">
+                                    <svg class="w-10 h-10 lg:w-12 lg:h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                                </div>
+                                <!-- Rating -->
+                                <div class="flex text-yellow-400 mb-4">
+                                    @for($i = 0; $i < 5; $i++)
+                                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                    @endfor
+                                </div>
+                                <!-- Content -->
+                                <p class="text-gray-600 mb-6 text-sm lg:text-base leading-relaxed">"{{ $testimonial->content }}"</p>
+                                <!-- Author -->
+                                <div class="flex items-center">
+                                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mr-3 lg:mr-4">
+                                        <span class="text-pink-600 font-semibold text-sm lg:text-base">{{ $testimonial->client_initials ?? substr($testimonial->client_name, 0, 1) }}</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-gray-900 text-sm lg:text-base">{{ $testimonial->client_name }}</h4>
+                                        <p class="text-xs lg:text-sm text-gray-500">Verified Client</p>
+                                    </div>
+                                </div>
+                            </div>
+                        @empty
+                            <!-- Placeholder testimonials if none exist -->
+                            @for($i = 0; $i < 3; $i++)
+                                <div class="bg-white rounded-2xl p-6 lg:p-8 shadow-sm hover:shadow-lg transition-shadow relative">
+                                    <div class="absolute top-4 right-4 text-pink-100">
+                                        <svg class="w-10 h-10 lg:w-12 lg:h-12" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                                    </div>
+                                    <div class="flex text-yellow-400 mb-4">
+                                        @for($j = 0; $j < 5; $j++)
+                                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                        @endfor
+                                    </div>
+                                    <p class="text-gray-600 mb-6 text-sm lg:text-base leading-relaxed">"Amazing experience! The staff was incredibly professional and the results exceeded my expectations. Will definitely be coming back!"</p>
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-pink-100 to-purple-100 rounded-full flex items-center justify-center mr-3 lg:mr-4">
+                                            <span class="text-pink-600 font-semibold text-sm lg:text-base">{{ ['S', 'M', 'J'][$i] }}</span>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-semibold text-gray-900 text-sm lg:text-base">{{ ['Sarah M.', 'Michael R.', 'Jennifer L.'][$i] }}</h4>
+                                            <p class="text-xs lg:text-sm text-gray-500">Verified Client</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endfor
+                        @endforelse
+                    </div>
+                </div>
+            </section>
+
+            <!-- ========================================
+                 GALLERY PREVIEW SECTION
+                 ======================================== -->
+            @php
+                $galleryItems = \App\Models\Gallery::where('is_active', true)->limit(8)->get();
+            @endphp
+            @if($galleryItems->count() > 0)
+            <section class="py-12 lg:py-20 bg-white">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-10 lg:mb-12">
+                        <div class="mb-4 sm:mb-0">
+                            <span class="inline-block px-4 py-1.5 bg-purple-100 text-purple-700 text-sm font-medium rounded-full mb-4">
+                                Our Work
+                            </span>
+                            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+                                Browse Our <span class="gradient-text">Gallery</span>
+                            </h2>
+                        </div>
+                        <a href="/gallery" class="inline-flex items-center text-pink-600 hover:text-pink-700 font-medium group">
+                            View Full Gallery
+                            <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                        </a>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 lg:gap-4">
+                        @foreach($galleryItems as $gallery)
                             @if($gallery->thumbnail)
-                                <div class="aspect-w-1 aspect-h-1">
-                                    <img src="{{ asset('storage/' . $gallery->thumbnail) }}" 
-                                         alt="{{ $gallery->name }}" 
-                                         class="w-full h-full object-cover rounded-lg">
+                                <div class="group relative aspect-square overflow-hidden rounded-xl lg:rounded-2xl">
+                                    <img src="{{ asset('storage/' . $gallery->thumbnail) }}"
+                                         alt="{{ $gallery->name }}"
+                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <div class="absolute bottom-3 left-3 right-3">
+                                            <p class="text-white text-sm font-medium truncate">{{ $gallery->name }}</p>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                         @endforeach
                     </div>
-                </section>
+                </div>
+            </section>
+            @endif
 
-                <!-- Testimonials Section -->
-                <section class="mb-12">
-                    <div class="text-center mb-12">
-                        <h2 class="text-3xl font-bold text-gray-900 mb-4">What Our Clients Say</h2>
-                        <p class="text-lg text-gray-600">Real experiences from our satisfied customers</p>
+            <!-- ========================================
+                 CTA SECTION
+                 ======================================== -->
+            <section class="py-12 lg:py-20 bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 relative overflow-hidden">
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 right-0 w-64 h-64 bg-pink-200 rounded-full opacity-20 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-96 h-96 bg-purple-200 rounded-full opacity-20 blur-3xl"></div>
+
+                <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 lg:mb-6">
+                        Ready to Look Your <span class="gradient-text">Best</span>?
+                    </h2>
+                    <p class="text-base lg:text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
+                        Book your appointment today and experience the transformation. Our expert stylists are ready to make you shine!
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/book" class="inline-flex items-center justify-center bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-700 hover:to-purple-700 text-white px-8 py-4 rounded-full text-base lg:text-lg font-semibold shadow-lg shadow-pink-500/30 hover:shadow-pink-500/50 transition-all">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                            Book Your Appointment
+                        </a>
+                        @if($settings->contact_info['phone'] ?? null)
+                            <a href="tel:{{ $settings->contact_info['phone'] }}" class="inline-flex items-center justify-center bg-white hover:bg-gray-50 text-gray-800 px-8 py-4 rounded-full text-base lg:text-lg font-semibold border-2 border-gray-200 hover:border-pink-300 transition-all">
+                                <svg class="w-5 h-5 mr-2 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                Call Us Now
+                            </a>
+                        @endif
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        @foreach(\App\Models\Testimonial::where('is_active', true)->limit(3)->get() as $testimonial)
-                            <div class="bg-white rounded-lg shadow-sm p-6">
-                                <div class="flex items-center mb-4">
-                                    <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center mr-4">
-                                        <span class="text-pink-600 font-semibold">{{ $testimonial->client_initials }}</span>
-                                    </div>
-                                    <div>
-                                        <h4 class="font-semibold text-gray-900">{{ $testimonial->client_name }}</h4>
-                                        <div class="flex items-center">
-                                            {!! $testimonial->star_rating !!}
-                                        </div>
-                                    </div>
-                                </div>
-                                <p class="text-gray-600">"{{ $testimonial->content }}"</p>
-                            </div>
-                        @endforeach
-                    </div>
-                </section>
-            </div>
+                </div>
+            </section>
         @endif
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- Salon Info -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">{{ $settings->salon_name }}</h3>
-                    <p class="text-gray-400 mb-4">{{ $settings->salon_description }}</p>
-                    @if($settings->contact_info['address'])
-                        <p class="text-gray-400">{{ $settings->contact_info['address'] }}</p>
+    <!-- ========================================
+         FOOTER - Enhanced
+         ======================================== -->
+    <footer class="bg-gray-900 text-white">
+        <!-- Main Footer -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12">
+                <!-- Brand Column -->
+                <div class="col-span-2 md:col-span-1">
+                    @if($settings->logo_path)
+                        <img class="h-8 lg:h-10 w-auto mb-4 brightness-0 invert" src="{{ asset('storage/' . $settings->logo_path) }}" alt="{{ $settings->salon_name }}">
+                    @else
+                        <span class="text-xl lg:text-2xl font-bold text-white mb-4 block">{{ $settings->salon_name }}</span>
                     @endif
+                    <p class="text-gray-400 text-sm mb-6">{{ Str::limit($settings->salon_description ?? 'Professional beauty services in a welcoming environment', 100) }}</p>
+                    <!-- Social Links -->
+                    <div class="flex space-x-4">
+                        @if($settings->social_links['facebook'] ?? null)
+                            <a href="{{ $settings->social_links['facebook'] }}" target="_blank" class="w-10 h-10 bg-gray-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                            </a>
+                        @endif
+                        @if($settings->social_links['instagram'] ?? null)
+                            <a href="{{ $settings->social_links['instagram'] }}" target="_blank" class="w-10 h-10 bg-gray-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                            </a>
+                        @endif
+                        @if($settings->social_links['twitter'] ?? null)
+                            <a href="{{ $settings->social_links['twitter'] }}" target="_blank" class="w-10 h-10 bg-gray-800 hover:bg-pink-600 rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-sm lg:text-base font-semibold mb-4 lg:mb-6">Quick Links</h3>
+                    <ul class="space-y-2 lg:space-y-3">
+                        <li><a href="/" class="text-gray-400 hover:text-white text-sm transition-colors">Home</a></li>
+                        <li><a href="/services" class="text-gray-400 hover:text-white text-sm transition-colors">Services</a></li>
+                        <li><a href="/gallery" class="text-gray-400 hover:text-white text-sm transition-colors">Gallery</a></li>
+                        <li><a href="/book" class="text-gray-400 hover:text-white text-sm transition-colors">Book Online</a></li>
+                        <li><a href="/contact" class="text-gray-400 hover:text-white text-sm transition-colors">Contact</a></li>
+                    </ul>
                 </div>
 
                 <!-- Contact Info -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Contact</h3>
-                    @if($settings->contact_info['phone'])
-                        <p class="text-gray-400 mb-2">{{ $settings->contact_info['phone'] }}</p>
-                    @endif
-                    @if($settings->contact_info['email'])
-                        <p class="text-gray-400 mb-2">{{ $settings->contact_info['email'] }}</p>
-                    @endif
+                    <h3 class="text-sm lg:text-base font-semibold mb-4 lg:mb-6">Contact Us</h3>
+                    <ul class="space-y-2 lg:space-y-3 text-sm">
+                        @if($settings->contact_info['address'] ?? null)
+                            <li class="flex items-start text-gray-400">
+                                <svg class="w-5 h-5 mr-2 text-pink-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                {{ $settings->contact_info['address'] }}
+                            </li>
+                        @endif
+                        @if($settings->contact_info['phone'] ?? null)
+                            <li class="flex items-center text-gray-400">
+                                <svg class="w-5 h-5 mr-2 text-pink-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
+                                <a href="tel:{{ $settings->contact_info['phone'] }}" class="hover:text-white transition-colors">{{ $settings->contact_info['phone'] }}</a>
+                            </li>
+                        @endif
+                        @if($settings->contact_info['email'] ?? null)
+                            <li class="flex items-center text-gray-400">
+                                <svg class="w-5 h-5 mr-2 text-pink-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                                <a href="mailto:{{ $settings->contact_info['email'] }}" class="hover:text-white transition-colors">{{ $settings->contact_info['email'] }}</a>
+                            </li>
+                        @endif
+                    </ul>
                 </div>
 
-                <!-- Hours -->
+                <!-- Business Hours -->
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Hours</h3>
-                    @if($settings->contact_info['hours'])
-                        @foreach($settings->contact_info['hours'] as $day => $hours)
-                            <p class="text-gray-400 text-sm">{{ ucfirst($day) }}: {{ $hours }}</p>
-                        @endforeach
-                    @endif
+                    <h3 class="text-sm lg:text-base font-semibold mb-4 lg:mb-6">Business Hours</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        @if($settings->contact_info['hours'] ?? null)
+                            @foreach($settings->contact_info['hours'] as $day => $hours)
+                                <li class="flex justify-between">
+                                    <span>{{ ucfirst($day) }}</span>
+                                    <span>{{ $hours }}</span>
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="flex justify-between"><span>Mon - Fri</span><span>9AM - 7PM</span></li>
+                            <li class="flex justify-between"><span>Saturday</span><span>9AM - 6PM</span></li>
+                            <li class="flex justify-between"><span>Sunday</span><span>10AM - 5PM</span></li>
+                        @endif
+                    </ul>
                 </div>
+            </div>
+        </div>
 
-                <!-- Social Links -->
-                <div>
-                    <h3 class="text-lg font-semibold mb-4">Follow Us</h3>
-                    <div class="flex space-x-4">
-                        @if($settings->social_links['facebook'])
-                            <a href="{{ $settings->social_links['facebook'] }}" target="_blank" class="text-gray-400 hover:text-white">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
-                                </svg>
-                            </a>
-                        @endif
-                        @if($settings->social_links['instagram'])
-                            <a href="{{ $settings->social_links['instagram'] }}" target="_blank" class="text-gray-400 hover:text-white">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987s11.987-5.367 11.987-11.987C24.014 5.367 18.647.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.418-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.928.875 1.418 2.026 1.418 3.323s-.49 2.448-1.418 3.244c-.875.807-2.026 1.297-3.323 1.297zm7.83-9.281c-.49 0-.928-.175-1.297-.49-.368-.315-.49-.753-.49-1.243 0-.49.122-.928.49-1.243.369-.315.807-.49 1.297-.49s.928.175 1.297.49c.368.315.49.753.49 1.243 0 .49-.122.928-.49 1.243-.369.315-.807.49-1.297.49z"/>
-                                </svg>
-                            </a>
-                        @endif
+        <!-- Copyright Bar -->
+        <div class="border-t border-gray-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex flex-col sm:flex-row justify-between items-center text-sm text-gray-400">
+                    <p>&copy; {{ date('Y') }} {{ $settings->salon_name }}. All rights reserved.</p>
+                    <div class="flex space-x-6 mt-4 sm:mt-0">
+                        <a href="/privacy" class="hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="/terms" class="hover:text-white transition-colors">Terms of Service</a>
                     </div>
                 </div>
             </div>
-
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center">
-                <p class="text-gray-400">&copy; {{ date('Y') }} {{ $settings->salon_name }}. All rights reserved.</p>
-            </div>
         </div>
     </footer>
+
+    <!-- Floating Book Button (Mobile) -->
+    <div class="fixed bottom-6 right-6 lg:hidden z-40">
+        <a href="/book" class="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-full shadow-lg shadow-pink-500/40 hover:shadow-pink-500/60 transition-all">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </a>
+    </div>
 </body>
 </html>
